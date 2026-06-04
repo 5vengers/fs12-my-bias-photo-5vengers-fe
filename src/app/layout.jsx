@@ -1,14 +1,19 @@
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Noto_Sans_KR } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
+import './reset.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const notoSansKR = Noto_Sans_KR({
+  variable: '--font-noto-sans-kr',
   subsets: ['latin'],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const baskinRobbins = localFont({
+  src: './fonts/baskin_robbins_B.woff',
+  variable: '--font-baskin-robbins',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata = {
@@ -20,9 +25,9 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${notoSansKR.variable} ${baskinRobbins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
