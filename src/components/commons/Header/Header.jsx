@@ -31,10 +31,10 @@ const Header = ({ isLogin }) => {
         ) : (
           <>
             <li>
-              <Link href="login">로그인</Link>
+              <Link href="/login">로그인</Link>
             </li>
             <li>
-              <Link href="signin">회원가입</Link>
+              <Link href="/register">회원가입</Link>
             </li>
           </>
         )}
