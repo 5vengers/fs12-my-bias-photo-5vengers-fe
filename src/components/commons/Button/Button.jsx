@@ -1,5 +1,16 @@
-const Button = ({ text, size, isThick, active, btnType = 'button', type }) => {
+const Button = ({
+  text,
+  size = 'lg',
+  isThick,
+  active,
+  btnType = 'button',
+  type,
+}) => {
   const thickness = ['h-[43px]', 'h-[52px]'];
+  const sizing = {
+    sm: 'w-[150px]',
+    lg: 'w-[520px]',
+  };
 
   const typeColor = {
     pri: 'bg-main text-black',
@@ -9,7 +20,7 @@ const Button = ({ text, size, isThick, active, btnType = 'button', type }) => {
   return (
     <button
       type={btnType}
-      className={`w-[345px] rounded-xs md:w-[342px] 2xl:w-[520px] ${typeColor[type]} ${thickness[Number(isThick)]}`}
+      className={`rounded-xs ${sizing[size]} ${typeColor[type]} ${thickness[Number(isThick)]}`}
     >
       {text}
     </button>
