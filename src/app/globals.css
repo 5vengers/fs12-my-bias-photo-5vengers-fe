@@ -18,6 +18,24 @@
   --font-baskin: var(--font-baskin-robbins);
 }
 
+@theme inline {
+  --color-black: var(--black);
+  --color-gray-500: var(--gray500);
+  --color-gray-400: var(--gray400);
+  --color-gray-300: var(--gray300);
+  --color-gray-200: var(--gray200);
+  --color-gray-100: var(--gray100);
+  --color-white: var(--white);
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+  --color-purple: var(purple);
+  --color-pink: var(--pink);
+  --color-main: var(--main);
+
+  --font-noto: var(--font-noto-sans-kr);
+  --font-baskin: var(--font-baskin-robbins);
+}
+
 /* btns */
 
 .btn {
