@@ -1,5 +1,5 @@
 const Button = ({
-  text,
+  children,
   size = 'lg',
   isThick,
   active,
@@ -22,7 +22,7 @@ const Button = ({
       type={btnType}
       className={`rounded-xs ${sizing[size]} ${typeColor[type]} ${thickness[Number(isThick)]}`}
     >
-      {text}
+      {children}
     </button>
   );
 };
