@@ -16,7 +16,7 @@ const Header = ({ isLogin }) => {
       </div>
 
       <ul className={`flex items-center justify-center gap-[30px] text-sm`}>
-        {!isLogin ? (
+        {isLogin ? (
           <>
             <li>1500 p</li>
             <li className="cursor-pointer">
