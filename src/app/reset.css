@@ -6,7 +6,7 @@
 /* 모든 요소의 margin, padding 제거 + box-sizing으로 padding 포함한 너비 계산 */
 * {
   margin: 0;
-  padding: 0;
+
   box-sizing: border-box;
 }
 
@@ -53,11 +53,8 @@ img {
 
 /* 버튼 기본 테두리·배경 제거, 클릭 시 포인터 */
 button {
-  border: none;
-  background: none;
   font-family: inherit;
   cursor: pointer;
-  padding: 0;
 }
 
 /* 입력/선택 요소가 body 폰트를 따르도록 */
