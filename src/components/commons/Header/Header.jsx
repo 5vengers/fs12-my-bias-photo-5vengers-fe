@@ -12,7 +12,9 @@ const Header = ({ isLogin }) => {
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
-        <Image src={Logo} width={140} height={25} alt="최애의 포토 로고" />
+        <Link href="/">
+          <Image src={Logo} width={140} height={25} alt="최애의 포토 로고" />
+        </Link>
       </div>
 
       <ul className={`flex items-center justify-center gap-[30px] text-sm`}>

@@ -1,13 +1,14 @@
-const Modal = ({ children }) => {
-  return (
-    <>
-      <div className="fixed z-110 flex h-[100%] w-[100%] items-center justify-center bg-black/50">
-        <div className="flex flex-col rounded-xs bg-gray-500 p-[30px]">
-          <div>{children}</div>
-        </div>
-      </div>
-    </>
-  );
-};
+import Button from '../Button/Button';
+import ModalClose from './ModalClose';
+import ModalDescription from './ModalDescription';
+import ModalMain from './ModalMain';
+import ModalTitle from './ModalTitle';
+
+const Modal = Object.assign(ModalMain, {
+  Close: ModalClose,
+  Title: ModalTitle,
+  Desc: ModalDescription,
+  Button: Button,
+});
 
 export default Modal;

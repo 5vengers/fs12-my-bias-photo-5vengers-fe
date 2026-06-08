@@ -6,8 +6,9 @@ import UpIcon from '@/assets/icons/ic-up.svg';
 import DownIcon from '@/assets/icons/ic-down.svg';
 import { createContext, useState } from 'react';
 
-const SelectMain = ({ children, name, size = 'lg', value = '', onChange }) => {
+const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
   const sizeStyle = {
+    noLine: 'w-fit font-bold',
     sm: 'w-[345px]',
     md: 'w-[440px]',
     lg: 'w-[520px]',
@@ -19,10 +20,10 @@ const SelectMain = ({ children, name, size = 'lg', value = '', onChange }) => {
   return (
     <div ref={ref} className={`${sizeStyle[size]}`}>
       <button
-        className={`flex w-full items-center justify-between border border-white px-[20px] py-[18px]`}
+        className={`flex w-full items-center justify-between ${size !== 'noLine' && 'border border-white px-[20px] py-[18px]'}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {value ? value : `${name}을 선택해주세요`}{' '}
+        {value ? value : `${desc}`}{' '}
         {isOpen ? (
           <Image src={UpIcon} alt="옵션 닫기" width={24} height={24} />
         ) : (
@@ -31,7 +32,8 @@ const SelectMain = ({ children, name, size = 'lg', value = '', onChange }) => {
       </button>
       {isOpen && (
         <div
-          className={`my-[5px] flex flex-col gap-[20px] border border-white p-[20px]`}
+          className={`absolute z-[10] my-[5px] flex min-w-[100px] flex-col items-start gap-[20px] border border-white p-[20px]`}
+          onClick={() => setIsOpen(!isOpen)}
         >
           {children}
         </div>
