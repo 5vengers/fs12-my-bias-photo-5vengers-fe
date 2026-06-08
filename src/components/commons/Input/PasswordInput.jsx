@@ -29,7 +29,6 @@ const PasswordInput = ({
   };
 
   const errorPassword = (p) => {
-    console.log(p);
     if (type === 'check') {
       if (p !== checkPassword) {
         setError({
