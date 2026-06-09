@@ -1,0 +1,257 @@
+# ════════════════════════════════════════════════════════════
+#  CodeRabbit 설정 - Frontend
+#  Stack: Next.js (JSX) · Tailwind CSS v4 · Zustand
+# ════════════════════════════════════════════════════════════
+
+language: ko-KR
+
+reviews:
+  # assertive : 엄격한 리뷰
+  # chill : 부드러운 리뷰
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  changed_files_summary: true
+  poem: false
+
+  auto_review:
+    enabled: true
+    drafts: false
+    incremental_reviews: true
+
+  # ── 파일 필터 ──────────────────────────────────────────────
+  path_filters:
+    # Next.js 빌드 결과물
+    - '!**/.next/**'
+    - '!**/out/**'
+    - '!**/dist/**'
+    - '!**/build/**'
+
+    # 의존성 · 락 파일
+    - '!**/node_modules/**'
+    - '!**/package-lock.json'
+    - '!**/yarn.lock'
+    - '!**/pnpm-lock.yaml'
+
+    # 자동 생성 파일
+    - '!**/*.generated.*'
+    - '!**/__generated__/**'
+    - '!**/generated/**'
+
+    # 테스트 산출물
+    - '!**/__snapshots__/**'
+    - '!**/coverage/**'
+
+    # 바이너리 에셋
+    - '!**/*.{png,jpg,jpeg,gif,webp,ico,woff,woff2,ttf,eot}'
+
+    # 환경변수 샘플
+    - '!**/.env.example'
+
+  # ── 경로별 리뷰 지침 ──────────────────────────────────────
+  path_instructions:
+    # ── 1. 페이지 / 라우트 컴포넌트 ─────────────────────────
+    - path: '{pages,src/pages,app,src/app}/**/*.{js,jsx}'
+      instructions: |
+        Next.js 페이지·라우트 컴포넌트를 리뷰할 때 아래 사항을 확인해주세요.
+
+        [렌더링 전략]
+        - CSR·SSR·SSG·ISR 선택이 페이지 특성에 맞는지 (getServerSideProps / getStaticProps / generateStaticParams 등)
+        - App Router 사용 시 서버 컴포넌트와 클라이언트 컴포넌트('use client') 경계가 최소화되어 있는지
+        - 클라이언트 컴포넌트가 불필요하게 트리 상단에 선언되어 있지 않은지
+
+        [SEO · 메타데이터]
+        - metadata 객체 또는 generateMetadata 함수가 누락되지 않았는지
+        - 동적 라우트([slug])에서 파라미터 유효성 검사 여부
+
+      # 추후 추가할 부분 주석 처리함
+
+      # [에러 처리]
+      # - error.jsx, not-found.jsx, loading.jsx 파일이 적절히 배치되어 있는지
+      # - Suspense 경계가 스트리밍에 활용되는지
+
+    # ── 2. UI 컴포넌트 ────────────────────────────────────────
+    - path: '{components,src/components}/**/*.{js,jsx}'
+      instructions: |
+        React 컴포넌트를 리뷰할 때 아래 사항을 확인해주세요.
+
+        [구조 · 책임]
+        - 단일 책임 원칙: 하나의 컴포넌트가 너무 많은 역할을 하고 있지 않은지
+        - props 타입이 PropTypes 또는 JSDoc으로 명시되어 있는지
+        - children, className 등 공통 props가 적절히 전달(forwarding)되는지
+
+        [훅 사용]
+        - useEffect 내 클린업 함수 누락 여부
+        - 파생 상태는 useState 대신 계산값으로 처리했는지
+        - useMemo / useCallback / React.memo는 실제 병목이 있는 곳에만 사용했는지 (과도한 메모이제이션 지양)
+
+        [접근성 a11y]
+        - 버튼·링크에 aria-label 또는 명확한 텍스트 콘텐츠가 있는지
+        - img 요소에 alt 속성이 있는지 (next/image 사용 권장)
+        - 폼 요소와 label이 연결되어 있는지 (htmlFor / id)
+        - 키보드 탐색이 가능한 구조인지
+
+        [성능]
+        - next/image 대신 <img> 태그를 직접 사용하고 있지 않은지
+        - 대용량 컴포넌트는 dynamic import(next/dynamic)로 코드 스플리팅했는지
+        - 하드코딩된 문자열 대신 상수·i18n을 사용하는지
+
+    # ── 3. Tailwind CSS v4 스타일 ─────────────────────────────
+    - path: '**/*.{css,module.css,scss,module.scss}'
+      instructions: |
+        Tailwind CSS v4 기반 스타일 파일을 리뷰할 때 아래 사항을 확인해주세요.
+
+        [v4 CSS-first 설정]
+        - tailwind.config.js 대신 globals.css의 @theme 지시어로 디자인 토큰을 관리하는지
+        - @import "tailwindcss" 방식으로 임포트하는지 (v3의 @tailwind 지시어 혼용 금지)
+        - CSS 변수(--color-*, --spacing-* 등)를 @theme 블록 안에서 정의하는지
+
+        [유틸리티 사용]
+        - 동일한 유틸리티 조합이 3곳 이상 반복되면 @apply 또는 컴포넌트 추출을 제안
+        - 임의값(arbitrary value, [32px] 등)을 남발하지 않는지 — 디자인 토큰으로 대체 권장
+        - z-index, opacity 등 수치 계열 값이 @theme에 정의된 토큰을 사용하는지
+
+        [접근성]
+        - focus-visible: 스타일이 인터랙티브 요소에 있는지
+        - sr-only 클래스를 활용해 시각적으로 숨기되 스크린 리더에는 노출하는지
+
+    # ── 4. Zustand 스토어 ─────────────────────────────────────
+    - path: '{store,stores,src/store,src/stores}/**/*.{js,jsx}'
+      instructions: |
+        Zustand 스토어를 리뷰할 때 아래 사항을 확인해주세요.
+
+        [스토어 설계]
+        - 전역 상태에 포함할 필요가 없는 로컬 상태가 스토어에 혼입되어 있지 않은지
+        - 스토어를 기능 단위(feature slice)로 분리했는지 — God Store 지양
+        - 스토어 이름이 역할을 명확히 표현하는지 (use[Domain]Store 패턴 권장)
+
+        [상태 정의]
+        - 초기 상태(initialState)가 별도로 정의되어 있어 리셋(reset)이 가능한지
+        - 파생 데이터는 상태가 아닌 선택자(selector) 함수로 계산하는지
+        - 중첩 객체를 immer 없이 직접 spread 업데이트하면 깊이 문제가 없는지
+
+        [성능]
+        - 컴포넌트에서 스토어 전체를 구독하지 않고 필요한 slice만 선택하는지
+          예: `const count = useStore(s => s.count)` — 객체 전체 구독 금지
+        - 셀렉터 함수가 매 렌더마다 새로 생성되어 불필요한 리렌더를 유발하지 않는지
+          (useShallow 또는 useMemo로 안정화 권장)
+
+        [부수 효과]
+        - 비동기 액션은 스토어 내부(async action)에서 처리하고 컴포넌트 로직을 분리했는지
+        - 에러 상태(error)와 로딩 상태(isLoading)가 함께 관리되는지
+
+    # ── 5. 커스텀 훅 ──────────────────────────────────────────
+    - path: '{hooks,src/hooks}/**/*.{js,jsx}'
+      instructions: |
+        커스텀 훅을 리뷰할 때 아래 사항을 확인해주세요.
+
+        - 훅 이름이 'use'로 시작하는지
+        - 의존성 배열(deps)이 eslint-plugin-react-hooks exhaustive-deps 규칙을 준수하는지
+        - useEffect 클린업이 구독·타이머·이벤트 리스너 등을 올바르게 해제하는지
+        - 하나의 훅이 여러 관심사를 처리하면 분리를 제안
+        - 반환값에 에러·로딩 상태가 포함되어 있는지
+        - Zustand 스토어를 직접 접근하는 훅은 셀렉터를 활용해 구독 범위를 최소화했는지
+
+    # ── 6. 유틸리티 · 헬퍼 ───────────────────────────────────
+    - path: '{utils,lib,helpers,src/utils,src/lib,src/helpers}/**/*.{js,jsx}'
+      instructions: |
+        유틸리티 함수를 리뷰할 때 아래 사항을 확인해주세요.
+
+        - 순수 함수로 작성되어 있는지 (외부 상태 의존·사이드이펙트 없음)
+        - null, undefined, 빈 배열, 경계값 등 엣지 케이스 처리 여부
+        - 함수명이 동작을 명확히 설명하는지 (동사 + 목적어 패턴 권장)
+        - 동일 로직이 이미 다른 유틸에 있거나 lodash 등 라이브러리로 대체 가능한지
+
+    # ── 7. 에러 코드 · 메시지 상수 ───────────────────────────
+    - path: '**/{errorCodes,errorMessages,errors}.{js,jsx}'
+      instructions: |
+        에러 코드·메시지 상수 파일을 리뷰할 때 아래 사항을 확인해주세요.
+
+        [errorCodes.js — 프로젝트 컨벤션]
+        - ERROR_CODES 객체에 모든 서버 에러 코드가 상수로 정의되어 있는지
+        - 코드 값이 백엔드 컨벤션과 정확히 일치하는지 (대문자 스네이크 케이스)
+        - 백엔드에 새 에러 코드가 추가된 PR이라면 이 파일에도 반드시 추가되었는지
+
+        [errorMessages.js — 프로젝트 컨벤션]
+        - ERROR_MESSAGES가 ERROR_CODES를 키로 사용하는지
+          (문자열 리터럴 키 사용 금지 — 타입 불일치 위험)
+        - getErrorMessage(code) 함수가 존재하고, 매핑되지 않은 code에 대해
+          "알 수 없는 오류가 발생했습니다." 같은 기본값을 반환하는지
+        - 사용자에게 노출되는 메시지에 서버 내부 정보(경로, DB 필드명 등)가 없는지
+        - 새 에러 코드 추가 시 사용자 메시지도 함께 추가되었는지
+
+    # ── 8. API 클라이언트 · Axios 인터셉터 ──────────────────
+    - path: '**/{api,axios,http,interceptor,interceptors}/**/*.{js,jsx}'
+      instructions: |
+        Axios 설정 및 인터셉터 파일을 리뷰할 때 아래 사항을 확인해주세요.
+
+        [Response Interceptor — 프로젝트 컨벤션]
+        - 에러 처리 흐름이 아래 순서를 따르는지:
+            Axios Response Interceptor
+            → error.response?.data?.code 추출
+            → getErrorMessage(code)로 사용자 메시지 매핑
+            → error.userMessage에 할당 후 Promise.reject(error)
+        - error.response?.data?.message를 사용자에게 직접 노출하지 않는지
+          (message는 개발자 디버깅용 — 컨벤션 위반)
+        - code 추출 시 옵셔널 체이닝(?.)으로 네트워크 에러(response 없음)를 안전하게 처리하는지
+        - 401 응답 시 토큰 갱신 또는 로그아웃 처리 로직이 있는지
+
+        [Request Interceptor]
+        - 인증 토큰 주입이 Request Interceptor에서 처리되는지
+        - 토큰이 로그나 에러 메시지에 노출되지 않는지
+
+        [TanStack Query 연동]
+        - Axios가 HTTP 실패 응답을 rejected promise로 반환하는 점을 활용해
+          queryFn / mutationFn이 별도 에러 처리 없이 자연스럽게 연결되는지
+        - onError 콜백에서 error.userMessage를 사용해 Toast/Modal을 표시하는지
+          (error.response?.data?.message 직접 사용 금지)
+
+    # ── 9. 이미지 및 아이콘 ─────────────────────────────────────────────
+    - path: '{assets, src/assets}/**/*.{svg, png}'
+      instructions: |
+        이미지 및 아이콘 형식을 확인해주세요.
+
+        - 이미지 명이 kebab-case 인지
+        - icons 는 ic- 로 img 는 img- 접두어를 사용하였는지
+
+  # ── 전체 공통 지침 ────────────────────────────────────────
+  instructions: |
+    ## 프론트엔드 공통 리뷰 기준
+
+    ### 네이밍 컨벤션
+    - 변수·함수: camelCase
+    - 컴포넌트·클래스: PascalCase
+    - 상수(불변값): UPPER_SNAKE_CASE
+    - 불리언 변수: is / has / can 접두사 권장
+
+    ### 코드 품질
+    - console.log / console.error 잔류 코드는 반드시 지적
+    - TODO·FIXME 주석이 남아 있다면 언급하고 이슈 등록을 권장
+    - 매직 넘버는 상수로 추출 (예: 3000 → TOAST_DURATION_MS)
+    - 동일 코드 블록이 3회 이상 반복되면 공통 컴포넌트·훅으로 분리 제안
+
+    ### 보안
+    - NEXT_PUBLIC_ 접두사 없는 환경변수가 클라이언트 번들에 포함되는지 확인
+    - dangerouslySetInnerHTML 사용 시 DOMPurify 등으로 XSS 방지 처리 여부
+    - 외부 URL로의 redirect 시 화이트리스트 검증 여부
+
+    ### 성능
+    - 컴포넌트 외부에서 정의 가능한 객체·배열·함수를 렌더 함수 내에 선언하지 않았는지
+    - next/font로 폰트를 최적화하는지 (Google Fonts 직접 import 지양)
+
+    ### 일반
+    - 리뷰 코멘트는 반드시 한국어로 작성
+    - 제안 사항은 이유와 함께 설명 (단순 지적보다 개선 방향 제시)
+
+# ── 채팅 ──────────────────────────────────────────────────
+chat:
+  auto_reply: true
+
+# ── 지식 베이스 ───────────────────────────────────────────
+knowledge_base:
+  opt_out: false
+  learnings:
+    scope: auto
