@@ -15,7 +15,7 @@ const Button = ({
   disabled = false,
   btnType = 'button',
   type = 'pri',
-  onClick,
+  ...props
 }) => {
   // true 면 thick, false 면 thin
   const thickness = ['h-[43px]', 'h-[52px]'];
@@ -36,7 +36,7 @@ const Button = ({
     <button
       type={btnType}
       disabled={disabled}
-      onClick={() => onClick()}
+      {...props}
       className={`rounded-xs font-bold disabled:bg-gray-400 disabled:text-gray-300 ${sizing[size]} ${typeColor[type]} ${thickness[Number(isThick)]}`}
     >
       {children}

@@ -18,9 +18,10 @@ const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
   const { ref } = useMouseOut({ setIsOpen });
 
   return (
-    <div ref={ref} className={`${sizeStyle[size]}`}>
+    <div ref={ref} className={`relative ${sizeStyle[size]}`}>
       <button
-        className={`flex w-full items-center justify-between ${size !== 'noLine' && 'border border-white px-[20px] py-[18px]'}`}
+        type="button"
+        className={`flex w-full items-center justify-between ${size !== 'noLine' ? 'border border-white px-[20px] py-[18px]' : 'gap-[10px]'}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {value ? value : `${desc}`}{' '}
@@ -32,7 +33,7 @@ const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
       </button>
       {isOpen && (
         <div
-          className={`absolute z-[10] my-[5px] flex min-w-[100px] flex-col items-start gap-[20px] border border-white p-[20px]`}
+          className={`absolute z-[10] my-[5px] flex w-full min-w-[100px] flex-col items-start gap-[20px] border border-white bg-black p-[20px]`}
           onClick={() => setIsOpen(!isOpen)}
         >
           {children}
