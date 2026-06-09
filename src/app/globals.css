@@ -1,26 +1,74 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --black: #0f0f0f;
+  --gray500: #161616;
+  --gray400: #5a5a5a;
+  --gray300: #a4a4a4;
+  --gray200: #dddddd;
+  --gray100: #eeeeee;
+  --white: #ffffff;
+  --red: #ff483d;
+  --blue: #29c9f9;
+  --purple: #a77eff;
+  --pink: #ff2a6a;
+  --main: #efff04;
+
+  --font-noto: var(--font-noto-sans-kr);
+  --font-baskin: var(--font-baskin-robbins);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-black: var(--black);
+  --color-gray-500: var(--gray500);
+  --color-gray-400: var(--gray400);
+  --color-gray-300: var(--gray300);
+  --color-gray-200: var(--gray200);
+  --color-gray-100: var(--gray100);
+  --color-white: var(--white);
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+  --color-purple: var(--purple);
+  --color-pink: var(--pink);
+  --color-main: var(--main);
+
+  --font-noto: var(--font-noto-sans-kr);
+  --font-baskin: var(--font-baskin-robbins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.info-box > span:not(:last-child)::after {
+  content: '|';
+  margin-left: 10px;
+  color: var(--gray400);
+}
+
+/* btns */
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--main);
+  color: var(--white);
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+/* layout */
+.layout {
+}
+
+/* wrapper */
+.wrapper {
 }
