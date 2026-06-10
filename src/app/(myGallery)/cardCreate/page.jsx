@@ -29,7 +29,9 @@ const PhotoCardCreate = () => {
           <div>
             <label htmlFor="card-grade">등급</label>
             <Select id="card-grade" desc={'등급을 선택해 주세요.'}>
-              <Select.Option value={'All'}>전체</Select.Option>
+              <Select.Option value={'All'} onChange={onChangeTest}>
+                전체
+              </Select.Option>
               <Select.Option value={'COMMON'}>COMMON</Select.Option>
               <Select.Option value={'SUPER_RARE'}>SUPER_RARE</Select.Option>
               <Select.Option value={'RARE'}>RARE</Select.Option>
