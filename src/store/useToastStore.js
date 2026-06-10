@@ -11,7 +11,7 @@ const useToastStore = create((set) => ({
 
       if (toastLength >= 5) return state;
 
-      const id = Math.random();
+      const id = crypto.randomUUID();
       const newToast = { id, type, msg, contentType };
 
       setTimeout(
