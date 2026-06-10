@@ -153,7 +153,7 @@ function SaleCard({ card }) {
   const gradeStyle = GRADE_STYLE[card.grade] ?? { text: "#fff", border: "#fff" };
   const isSoldOut  = card.status === "SOLD_OUT";
   const isNew      = isNewCard(card.createdAt);
-  const remaining  = (card.quantity ?? 0) - (card.soldQuantity ?? 0);
+  const remaining  = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName   = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
   const imageUrl   = card.myCard?.photoCard?.imageUrl ?? null;
   const saleType   = card.saleType ?? "INSTANT";
