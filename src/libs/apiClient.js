@@ -41,7 +41,14 @@ export const executeRefresh = () => {
         const newAccessToken = res.data?.data?.accessToken;
         if (!newAccessToken)
           throw new Error('토큰 재발급 응답이 올바르지 않습니다.');
-        useAuthStore.getState().setAccessToken(newAccessToken); // 토큰 저장
+
+        const { user, setAccessToken } = useAuthStore.getState();
+        // refresh 요청 중 로그아웃되어 인증 상태가 초기화된 경우
+        if (!user) {
+          
+          throw new Error('Refresh 응답 수신 전 인증 상태가 초기화되었습니다.');
+        }
+        setAccessToken(newAccessToken); // 토큰 저장
         return { accessToken: newAccessToken };
       })
       .catch((err) => {
