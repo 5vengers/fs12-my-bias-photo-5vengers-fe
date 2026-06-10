@@ -13,7 +13,8 @@ const LOCAL_IMAGES = [
 
 function getCardImage(card) {
   if (card.photoCard?.imageUrl) return card.photoCard.imageUrl;
-  return LOCAL_IMAGES[(card.photoCardId - 1) % LOCAL_IMAGES.length];
+  const index = Math.abs((card.photoCardId || 1) - 1) % LOCAL_IMAGES.length;
+  return LOCAL_IMAGES[index];
 }
 
 /* ─── NEW 뱃지 기준: 7일 이내 취득 ─── */
