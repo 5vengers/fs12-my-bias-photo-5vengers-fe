@@ -8,22 +8,11 @@ import alramIcon from '@/assets/icons/ic-alarm-default.svg';
 import useAuthStore from '@/store/useAuthStore';
 import { logout as logoutApi } from '@/libs/authApi';
 import styles from './Header.module.css';
-
-const Header = () => {
-  const router = useRouter();
-  const { isLoggedIn, user, point, logout } = useAuthStore();
-
-  const handleLogout = async () => {
-    try {
-      await logoutApi();
-    } catch {
-      // 서버 오류여도 클라이언트 상태는 초기화
-    } finally {
-      logout();
-      router.push('/login');
-    }
-  };
-
+/*
+  user = 유저 정보
+  isLogin = 로그인이 되어있는지
+*/
+const Header = ({ user, isLogin }) => {
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
