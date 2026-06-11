@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import useAuthStore from "@/store/useAuthStore";
 import { getMyCards } from "@/libs/myCardApi";
+import Search from "@/components/commons/Input/Search";
+import Select from "@/components/commons/Select/Select";
+import Pagination from "@/components/commons/Pagination/Pagination";
+import Badge from "@/components/commons/Badge/Badge";
+import Card from "@/components/commons/Card/Card";
 
 /* ─── 로컬 이미지 폴백 (DB 이미지 연결 전 임시) ─── */
 const LOCAL_IMAGES = [
@@ -31,13 +36,6 @@ const GRADE_LABEL = {
   LEGENDARY:  "LEGENDARY",
 };
 
-const GRADE_STYLE = {
-  COMMON:     { text: "#EFFF04", border: "#EFFF04" },
-  RARE:       { text: "#00D1FF", border: "#00D1FF" },
-  SUPER_RARE: { text: "#9B7FE8", border: "#9B7FE8" },
-  LEGENDARY:  { text: "#FF7B00", border: "#FF7B00" },
-};
-
 /* ─── 장르 ─── */
 const GENRE_LABEL = {
   ALBUM:           "앨범",
@@ -57,61 +55,6 @@ const FILTER_OPTIONS = {
   장르: ["전체", ...Object.keys(GENRE_LABEL)],
 };
 
-/* ─── 드롭다운 필터 ─── */
-function DropdownFilter({ label, options, value, onChange, displayMap }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const isFiltered = value !== "전체";
-  const displayValue = displayMap?.[value] ?? value;
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className={`flex items-center gap-1.5 px-3.5 py-[7px] bg-transparent border border-white/20 rounded text-[13px] cursor-pointer whitespace-nowrap transition-colors duration-150 ${
-          isFiltered ? "text-main font-semibold" : "text-white/70 font-normal"
-        }`}
-      >
-        {label}
-        {isFiltered && <span className="text-[11px]">({displayValue})</span>}
-        <svg
-          width="10" height="6" viewBox="0 0 10 6" fill="none"
-          className={`opacity-50 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
-        >
-          <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute top-[calc(100%+6px)] left-0 min-w-[140px] bg-[#1A1A1A] border border-white/15 rounded-md overflow-hidden z-50 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
-          {options.map((opt) => (
-            <button
-              key={opt}
-              onClick={() => { onChange(opt); setOpen(false); }}
-              className={`block w-full text-left px-4 py-[9px] text-[13px] cursor-pointer border-none transition-colors duration-100 hover:bg-white/[0.06] ${
-                value === opt
-                  ? "bg-main/8 text-main font-semibold"
-                  : "bg-transparent text-white/70 font-normal"
-              }`}
-            >
-              {displayMap?.[opt] ?? opt}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /* ─── 로딩 스켈레톤 ─── */
 function CardSkeleton() {
   return (
@@ -127,12 +70,11 @@ function CardSkeleton() {
 
 /* ─── 카드 컴포넌트 ─── */
 function MyCard({ card }) {
-  const grade      = card.photoCard?.grade;
-  const genre      = card.photoCard?.genre;
-  const cardName   = card.photoCard?.name ?? `카드 #${card.id}`;
-  const imageUrl   = getCardImage(card);
-  const gradeStyle = GRADE_STYLE[grade] ?? { text: "#fff", border: "#fff" };
-  const isNew      = isNewCard(card.acquiredAt);
+  const grade    = card.photoCard?.grade;
+  const genre    = card.photoCard?.genre;
+  const cardName = card.photoCard?.name ?? `카드 #${card.id}`;
+  const imageUrl = getCardImage(card);
+  const isNew    = isNewCard(card.acquiredAt);
 
   return (
     <div className="border border-white/10 hover:border-white/25 transition-all flex flex-col bg-[#111] rounded-lg overflow-hidden cursor-pointer">
@@ -158,10 +100,7 @@ function MyCard({ card }) {
         </h3>
 
         <div className="flex items-center gap-[5px] mb-2.5">
-          {/* 등급 색상은 런타임 동적값이므로 inline style 유지 */}
-          <span className="font-bold text-[11px]" style={{ color: gradeStyle.text }}>
-            {GRADE_LABEL[grade] ?? grade}
-          </span>
+          <Card.Grade>{grade}</Card.Grade>
           <span className="text-white/20 text-[11px]">|</span>
           <span className="text-white/45 text-[11px]">
             {GENRE_LABEL[genre] ?? genre}
@@ -256,21 +195,16 @@ export default function MyCardsPage() {
             <span className="text-white font-bold">(총 {totalQuantity}장)</span>
           </span>
           <div className="flex items-center gap-[10px]">
-            {Object.entries(GRADE_STYLE).map(([grade, style]) => {
+            {Object.keys(GRADE_LABEL).map((grade) => {
               const count    = gradeCounts[grade] || 0;
               const isActive = selectedGrade === grade;
               return (
                 <button
                   key={grade}
                   onClick={() => setSelectedGrade(isActive ? null : grade)}
-                  className="grade-button"
-                  style={{
-                    border: `1px solid ${style.border}`,
-                    color: style.text,
-                    background: isActive ? `${style.border}25` : "transparent",
-                  }}
+                  className={`transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
                 >
-                  {GRADE_LABEL[grade]}&nbsp;{count}장
+                  <Badge grade={grade} count={count} />
                 </button>
               );
             })}
@@ -281,25 +215,31 @@ export default function MyCardsPage() {
 
         {/* 검색 + 필터 */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="relative w-[260px]">
-            <input
-              type="text"
-              placeholder="검색"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#1A1A1A] border border-white/15 rounded-md py-2 pl-3.5 pr-10 text-[13px] text-white outline-none"
-            />
-            <svg className="absolute right-3 top-1/2 -translate-y-1/2 opacity-40"
-              width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="7" cy="7" r="5" stroke="white" strokeWidth="1.5"/>
-              <path d="M11 11L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-          </div>
+          <Search size="sm" onChange={(e) => setSearchQuery(e.target.value)} />
 
-          <DropdownFilter label="등급" options={FILTER_OPTIONS["등급"]}
-            value={filterGrade} onChange={setFilterGrade} displayMap={GRADE_LABEL} />
-          <DropdownFilter label="장르" options={FILTER_OPTIONS["장르"]}
-            value={filterGenre} onChange={setFilterGenre} displayMap={GENRE_LABEL} />
+          <Select
+            size="noLine"
+            desc="등급"
+            value={filterGrade !== "전체" ? (GRADE_LABEL[filterGrade] ?? filterGrade) : ""}
+          >
+            {FILTER_OPTIONS["등급"].map((opt) => (
+              <Select.Option key={opt} value={opt} onChange={setFilterGrade}>
+                {GRADE_LABEL[opt] ?? opt}
+              </Select.Option>
+            ))}
+          </Select>
+
+          <Select
+            size="noLine"
+            desc="장르"
+            value={filterGenre !== "전체" ? (GENRE_LABEL[filterGenre] ?? filterGenre) : ""}
+          >
+            {FILTER_OPTIONS["장르"].map((opt) => (
+              <Select.Option key={opt} value={opt} onChange={setFilterGenre}>
+                {GENRE_LABEL[opt] ?? opt}
+              </Select.Option>
+            ))}
+          </Select>
         </div>
 
         {error && (
@@ -328,36 +268,12 @@ export default function MyCardsPage() {
         )}
 
         {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-12 mb-8">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className={`w-8 h-8 rounded-full border border-white/20 bg-transparent text-white/50 text-base transition-opacity ${
-                currentPage === 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-              }`}
-            >‹</button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 rounded-full border text-[13px] cursor-pointer ${
-                  page === currentPage
-                    ? "border-main bg-main text-black font-bold"
-                    : "border-white/15 bg-transparent text-white/50 font-normal"
-                }`}
-              >
-                {page}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className={`w-8 h-8 rounded-full border border-white/20 bg-transparent text-white/50 text-base transition-opacity ${
-                currentPage === totalPages ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-              }`}
-            >›</button>
+          <div className="mt-12 mb-8">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         )}
 
