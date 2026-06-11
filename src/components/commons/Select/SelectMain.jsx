@@ -15,10 +15,18 @@ import { createContext, useState } from 'react';
 */
 const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
   const sizeStyle = {
-    noLine: 'w-fit font-bold',
+    noLine: 'w-fit',
+    xs: 'w-[180px] h-[50px]',
     sm: 'w-[345px]',
     md: 'w-[440px]',
     lg: 'w-[520px]',
+  };
+  const buttonStyle = {
+    noLine: 'font-bold gap-[10px]',
+    xs: 'border border-white px-[20px] py-[13px]',
+    sm: 'border border-white px-[20px] py-[18px]',
+    md: 'border border-white px-[20px] py-[18px]',
+    lg: 'border border-white px-[20px] py-[18px]',
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +36,7 @@ const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
     <div ref={ref} className={`relative ${sizeStyle[size]}`}>
       <button
         type="button"
-        className={`flex w-full items-center justify-between ${size !== 'noLine' ? 'border border-white px-[20px] py-[18px]' : 'gap-[10px]'}`}
+        className={`flex w-full items-center justify-between transition ${buttonStyle[size] || buttonStyle.lg}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {value !== '' ? value : `${desc}`}{' '}
