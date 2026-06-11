@@ -6,6 +6,16 @@ import VisibleIcon from '@/assets/icons/ic-visible.svg';
 import InVisibleIcon from '@/assets/icons/ic-invisible.svg';
 import { useState } from 'react';
 
+/*
+  password = 패스워드
+  setPassword = 패스워드 입력
+  checkPassword = 비밀번호 확인일 경우
+  type = 'text' or 'password'
+  placeholder = input 에 들어갈 placeholder
+  id = input id 
+  size = 'lg' or 'sm' | 'sm'일 시 text 크기 작아짐
+*/
+
 const PasswordInput = ({
   password,
   setPassword,

@@ -7,8 +7,11 @@ import Logo from '@/assets/images/img-logo.svg';
 import alramIcon from '@/assets/icons/ic-alarm-default.svg';
 
 import styles from './Header.module.css';
-
-const Header = ({ isLogin }) => {
+/*
+  user = 유저 정보
+  isLogin = 로그인이 되어있는지
+*/
+const Header = ({ user, isLogin }) => {
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">

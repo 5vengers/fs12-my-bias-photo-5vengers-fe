@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import SearchIcon from '@/assets/icons/ic-search.svg';
 
-const Search = ({ onChange, size }) => {
+const Search = ({ size, ...props }) => {
   const sizeStyle = {
     sm: 'px-[20px] py-[11px] text-sm w-[200px]',
     md: 'px-[20px] py-[13px] text-sm w-[320px]',
@@ -18,7 +18,7 @@ const Search = ({ onChange, size }) => {
         id="search-input"
         name="search-input"
         placeholder="검색"
-        onChange={(e) => onChange(e)}
+        {...props}
       />
       <Image src={SearchIcon} alt="검색 아이콘" width={20} height={20} />
     </div>

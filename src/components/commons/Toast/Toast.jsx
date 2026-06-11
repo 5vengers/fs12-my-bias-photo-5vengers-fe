@@ -5,7 +5,7 @@ import Alret from '@/assets/icons/ic-alert.svg';
     toast ui 를 추가합니다.
 
     toastType = 'success' or 'error'
-    toastMsg = toast에 들어갈 메시지 (예: 집중이 중단되었습니다.)
+    toastMsg = toast에 들어갈 메시지 
 */
 
 const Toast = ({ children }) => {
