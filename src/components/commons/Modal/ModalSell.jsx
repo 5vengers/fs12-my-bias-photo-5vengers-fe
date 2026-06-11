@@ -165,7 +165,7 @@ function GalleryStep({
 
       {/* 카드 리스트 영역 (스크롤바 적용) */}
 
-      <div className="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2">
+      <div className="custom-scrollbar grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2">
         {MOCK_MY_CARDS.map((card) => (
           <div key={card.id} onClick={() => onSelect(card)}>
             <Card>
