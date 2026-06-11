@@ -93,11 +93,6 @@ const MOCK_DATA = [
   },
 ];
 export default function MarketListPage() {
-  const [items, setItems] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-
   const fetchMarketItems = async ({ pageParam = 1 }) => {
     const LIMIT = 6;
     const startIndex = (pageParam - 1) * LIMIT;
@@ -122,6 +117,11 @@ export default function MarketListPage() {
     queryFn: fetchMarketItems,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
+  const { observerRef } = useInfiniteScroll({
+    loading: isFetchingNextPage,
+    hasMore: hasNextPage,
+    onIntersect: fetchNextPage,
   });
 
   if (status === 'pending')
@@ -164,19 +164,14 @@ export default function MarketListPage() {
         ))}
       </div>
 
-      {/* 하단 페이지 트리거 버튼 (아직 스크롤 감지 센서를 안 달았으니 임시로 버튼 클릭!) */}
-      <div className="mt-[30px] flex flex-col items-center gap-[10px]">
-        <button
-          onClick={() => fetchNextPage()} // ➔ 이 버튼을 누르면 다음 페이지 데이터가 추가되어 저장됨!
-          disabled={!hasNextPage || isFetchingNextPage}
-          className="rounded-[4px] bg-white px-[20px] py-[10px] text-black disabled:bg-gray-600 disabled:text-gray-400"
-        >
-          {isFetchingNextPage
-            ? '불러오는 중...'
-            : hasNextPage
-              ? '더보기'
-              : '마지막 상품입니다'}
-        </button>
+      <div
+        ref={observerRef}
+        className="mt-[50px] flex h-[40px] w-full items-center justify-center text-[14px] text-gray-400"
+      >
+        {isFetchingNextPage && <p>로딩중...</p>}
+        {!hasNextPage && (
+          <p className="font-medium text-gray-500"> 마지막 상품입니다.</p>
+        )}
       </div>
     </div>
   );
