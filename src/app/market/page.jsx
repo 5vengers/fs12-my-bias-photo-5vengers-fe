@@ -3,26 +3,9 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import Card from '../../components/commons/Card/Card';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import DownIchon from '@/assets/icons/ic-down.svg';
 import Select from '@/components/commons/Select/Select';
-const MOCK_DATA = [
-  {
-    id: 1,
-    title: '제니 포토카드',
-    price: 25000,
-    artist: 'BLACKPINK',
-    imageUrl: '/testCard.jpg',
-  },
-  {
-    id: 2,
-    title: '지수 포토카드',
-    price: 18000,
-    artist: 'BLACKPINK',
-    imageUrl: '/testCard.jpg',
-  },
-];
+import MarketListPage from '@/components/MarketPage/MarketListPage';
 
 function Page() {
   const [grade, setGrade] = useState('');
@@ -154,6 +137,7 @@ function Page() {
           <Select.Option value="priceDesc">높은 가격순</Select.Option>
         </Select>
       </div>
+      <MarketListPage />
     </div>
   );
 }

@@ -22,7 +22,7 @@ const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
     lg: 'w-[520px]',
   };
   const buttonStyle = {
-    noLine: 'font-bold',
+    noLine: 'font-bold gap-[10px]',
     xs: 'border border-white px-[20px] py-[13px]',
     sm: 'border border-white px-[20px] py-[18px]',
     md: 'border border-white px-[20px] py-[18px]',
