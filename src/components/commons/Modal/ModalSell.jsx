@@ -5,6 +5,9 @@ import Image from 'next/image';
 import CloseIcon from '@/assets/icons/ic-close.svg';
 import SearchIcon from '@/assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
+import { MOCK_MY_CARDS } from '@/data/mockCards';
+import Card from '../Card/Card';
+import logoImage from '@/assets/images/img-logo.svg';
 
 export default function ModalSell({ isOpen, onClose }) {
   const [step, setStep] = useState('gallery');
@@ -163,15 +166,32 @@ function GalleryStep({
       {/* 카드 리스트 영역 (스크롤바 적용) */}
 
       <div className="grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2">
-        {/* 임시 카드 박스 2열 */}
-
-        {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div
-            key={i}
-            onClick={() => onSelect({ id: i })}
-            className="h-[200px] cursor-pointer border border-white p-4 hover:bg-white/10"
-          >
-            내 카드 {i}
+        {MOCK_MY_CARDS.map((card) => (
+          <div key={card.id} onClick={() => onSelect(card)}>
+            <Card>
+              <Card.Image src={card.photoCard.imageUrl} alt={'테스트이미지'} />
+              <Card.Title className="mt-5 mb-[0px]">
+                {card.photoCard.name}
+              </Card.Title>
+              <Card.InfoLayout>
+                <Card.Info nickname={'닉네임'}>
+                  <Card.Grade>{card.photoCard.grade}</Card.Grade>
+                  <span className="text-gray-300">{card.photoCard.genre}</span>
+                </Card.Info>
+              </Card.InfoLayout>
+              <Card.SaleInfoLayout>
+                <Card.SaleInfo title={'5'} type={'point'} count={7} />
+                <Card.SaleInfo title={card.quantity} count={1} />
+              </Card.SaleInfoLayout>
+              <div className="mt-[20px] flex items-center justify-center pt-[15px]">
+                <Image
+                  src={logoImage}
+                  alt="브랜드 로고"
+                  width={99}
+                  height={18}
+                />
+              </div>
+            </Card>
           </div>
         ))}
       </div>
