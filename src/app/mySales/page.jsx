@@ -43,12 +43,6 @@ function isNewCard(createdAt) {
   return Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000;
 }
 
-/* ─── 가격 포맷 ─── */
-function formatPrice(price) {
-  if (price == null) return "-";
-  return `${Number(price).toLocaleString()}P`;
-}
-
 const FILTER_OPTIONS = {
   등급:    ["전체", ...Object.keys(GRADE_LABEL)],
   장르:    ["전체", ...Object.keys(GENRE_LABEL)],
@@ -59,91 +53,65 @@ const FILTER_OPTIONS = {
 /* ─── 로딩 스켈레톤 ─── */
 function CardSkeleton() {
   return (
-    <div className="bg-[#111] rounded-lg overflow-hidden border border-white/[0.07]">
-      <div className="w-full h-[170px] bg-white/5 animate-pulse" />
-      <div className="px-3.5 py-3">
-        <div className="h-4 bg-white/5 rounded mb-2 w-[65%]" />
-        <div className="h-3 bg-white/5 rounded w-[45%]" />
-      </div>
+    <div className="flex min-h-[600px] max-w-[440px] flex-col items-center rounded-xs border-[2px] border-white/10 bg-gray-500 p-[40px] animate-pulse">
+      <div className="h-6 bg-white/5 rounded w-[70%] mb-4" />
+      <div className="h-[270px] w-[360px] bg-white/5 mb-4" />
+      <div className="h-4 bg-white/5 rounded w-full mb-2" />
+      <div className="h-4 bg-white/5 rounded w-full" />
     </div>
   );
 }
 
 /* ─── 카드 컴포넌트 ─── */
-function SaleCard({ card }) {
+function SaleCard({ card, nickname }) {
   const isSoldOut = card.status === "SOLD_OUT";
   const isNew     = isNewCard(card.createdAt);
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
-  const imageUrl  = card.myCard?.photoCard?.imageUrl ?? null;
+  const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
   const saleType  = card.saleType ?? "INSTANT";
 
   return (
-    <div className="border border-white/10 hover:border-white/25 transition-all flex flex-col bg-[#111] rounded-lg overflow-hidden cursor-pointer">
-      {/* 이미지 영역 — 동적 URL이므로 inline style 유지 */}
-      <div
-        className="w-full h-[170px] relative flex-shrink-0"
-        style={{
-          background: imageUrl
-            ? `url(${imageUrl}) lightgray 50% / cover no-repeat`
-            : "rgba(255,255,255,0.05)",
-        }}
-      >
-        {isNew && !isSoldOut && (
-          <div className="absolute top-2 left-2 bg-main text-black text-[10px] font-extrabold px-[7px] py-0.5 rounded-sm tracking-[0.05em]">
-            NEW
-          </div>
-        )}
-        {isSoldOut && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <div className="w-[72px] h-[72px] rounded-full border-[3px] border-red-500 bg-red-500/15 flex items-center justify-center -rotate-[20deg]">
-              <span className="text-red-500 font-black text-[12px] leading-tight text-center">
-                SOLD<br />OUT
-              </span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* 카드 정보 */}
-      <div className="px-3.5 py-3">
-        <h3 className="text-white font-bold truncate text-[14px] mb-1.5">
-          {cardName}
-        </h3>
-
-        <div className="flex items-center justify-between mb-2.5">
-          <div className="flex items-center gap-[5px]">
-            <Card.Grade>{card.grade}</Card.Grade>
-            <span className="text-white/20 text-[11px]">|</span>
-            <span className="text-white/45 text-[11px]">
-              {GENRE_LABEL[card.genre] ?? card.genre}
-            </span>
-          </div>
-          {!isSoldOut && (
-            /* 판매유형 색상은 런타임 동적값이므로 inline style 유지 */
+    <Card>
+      <Card.Title>{cardName}</Card.Title>
+      <Card.Image
+        src={imageUrl}
+        alt={cardName}
+        state={isSoldOut ? "soldOut" : "sale"}
+      />
+      <Card.InfoLayout>
+        <Card.Info nickname={nickname}>
+          <Card.Grade>{card.grade}</Card.Grade>
+          <span className="text-gray-300">{GENRE_LABEL[card.genre] ?? card.genre}</span>
+        </Card.Info>
+      </Card.InfoLayout>
+      <Card.SaleInfoLayout>
+        {/* 판매유형 색상은 런타임 동적값이므로 inline style 유지 */}
+        {!isSoldOut && (
+          <div className="flex w-full justify-end">
             <span
               className="text-[10px] font-semibold"
               style={{ color: saleType === "AUCTION" ? "#9B7FE8" : "#00D1FF" }}
             >
               {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
             </span>
-          )}
-        </div>
-
-        <div className="h-px bg-white/[0.07] mb-2" />
-
-        <div className="flex flex-col gap-1">
-          <div className="flex justify-between">
-            <span className="text-white/35 text-[11px]">가격</span>
-            <span className="text-white text-[11px] font-semibold">{formatPrice(card.pricePerCard)}</span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-white/35 text-[11px]">잔여</span>
-            <span className="text-white text-[11px] font-semibold">{remaining}</span>
+        )}
+        {isNew && !isSoldOut && (
+          <div className="flex w-full">
+            <span className="bg-main text-black text-[10px] font-extrabold px-[7px] py-0.5 rounded-sm tracking-[0.05em]">
+              NEW
+            </span>
           </div>
-        </div>
-      </div>
-    </div>
+        )}
+        <Card.SaleInfo
+          title="가격"
+          type="point"
+          count={Number(card.pricePerCard).toLocaleString()}
+        />
+        <Card.SaleInfo title="잔여" count={remaining} />
+      </Card.SaleInfoLayout>
+    </Card>
   );
 }
 
@@ -314,10 +282,12 @@ export default function MySalesPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-3 gap-x-5 gap-y-5">
+        <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
           {isLoading
             ? Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} />)
-            : pagedCards.map((card) => <SaleCard key={card.id} card={card} />)
+            : pagedCards.map((card) => (
+                <SaleCard key={card.id} card={card} nickname={user?.nickname ?? "회원"} />
+              ))
           }
         </div>
 
