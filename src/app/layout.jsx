@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import './reset.css';
 import Header from '@/components/commons/Header/Header';
+import Providers from './providers';
 
 const notoSansKR = Noto_Sans_KR({
   variable: '--font-noto-sans-kr',
@@ -28,9 +29,11 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${notoSansKR.variable} ${baskinRobbins.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
-        <Header />
-        {children}
+      <body className="flex min-h-full flex-col bg-gray-100">
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );
