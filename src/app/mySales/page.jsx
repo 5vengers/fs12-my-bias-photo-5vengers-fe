@@ -42,11 +42,10 @@ const SALE_TYPE_LABEL = {
 /* ─── NEW 뱃지 기준: 7일 이내 등록 ─── */
 function isNewCard(createdAt) {
   if (!createdAt) return false;
-  const diff = Date.now() - new Date(createdAt).getTime();
-  return diff < 7 * 24 * 60 * 60 * 1000;
+  return Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000;
 }
 
-/* ─── 가격 포맷 (포인트 단위) ─── */
+/* ─── 가격 포맷 ─── */
 function formatPrice(price) {
   if (price == null) return "-";
   return `${Number(price).toLocaleString()}P`;
@@ -76,54 +75,34 @@ function DropdownFilter({ label, options, value, onChange, displayMap }) {
   const displayValue = displayMap?.[value] ?? value;
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
+    <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        style={{
-          display: "flex", alignItems: "center", gap: "6px",
-          padding: "7px 14px",
-          background: "transparent",
-          border: "1px solid rgba(255,255,255,0.2)",
-          borderRadius: "4px",
-          color: isFiltered ? "#EFFF04" : "rgba(255,255,255,0.7)",
-          fontSize: "13px",
-          fontWeight: isFiltered ? "600" : "400",
-          cursor: "pointer",
-          whiteSpace: "nowrap",
-          transition: "border-color 0.15s",
-        }}
+        className={`flex items-center gap-1.5 px-3.5 py-[7px] bg-transparent border border-white/20 rounded text-[13px] cursor-pointer whitespace-nowrap transition-colors duration-150 ${
+          isFiltered ? "text-main font-semibold" : "text-white/70 font-normal"
+        }`}
       >
         {label}
-        {isFiltered && <span style={{ fontSize: "11px" }}>({displayValue})</span>}
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none"
-          style={{ opacity: 0.5, transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}>
+        {isFiltered && <span className="text-[11px]">({displayValue})</span>}
+        <svg
+          width="10" height="6" viewBox="0 0 10 6" fill="none"
+          className={`opacity-50 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+        >
           <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </button>
 
       {open && (
-        <div style={{
-          position: "absolute", top: "calc(100% + 6px)", left: 0,
-          minWidth: "140px", background: "#1A1A1A",
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "6px", overflow: "hidden", zIndex: 50,
-          boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
-        }}>
+        <div className="absolute top-[calc(100%+6px)] left-0 min-w-[140px] bg-[#1A1A1A] border border-white/15 rounded-md overflow-hidden z-50 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
           {options.map((opt) => (
             <button
               key={opt}
               onClick={() => { onChange(opt); setOpen(false); }}
-              style={{
-                display: "block", width: "100%", textAlign: "left",
-                padding: "9px 16px",
-                background: value === opt ? "rgba(239,255,4,0.08)" : "transparent",
-                color: value === opt ? "#EFFF04" : "rgba(255,255,255,0.7)",
-                fontSize: "13px",
-                fontWeight: value === opt ? "600" : "400",
-                cursor: "pointer", border: "none", transition: "background 0.1s",
-              }}
-              onMouseEnter={(e) => { if (value !== opt) e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = value === opt ? "rgba(239,255,4,0.08)" : "transparent"; }}
+              className={`block w-full text-left px-4 py-[9px] text-[13px] cursor-pointer border-none transition-colors duration-100 hover:bg-white/[0.06] ${
+                value === opt
+                  ? "bg-main/8 text-main font-semibold"
+                  : "bg-transparent text-white/70 font-normal"
+              }`}
             >
               {displayMap?.[opt] ?? opt}
             </button>
@@ -137,13 +116,12 @@ function DropdownFilter({ label, options, value, onChange, displayMap }) {
 /* ─── 로딩 스켈레톤 ─── */
 function CardSkeleton() {
   return (
-    <div style={{ background: "#111", borderRadius: "8px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.07)" }}>
-      <div style={{ width: "100%", height: "170px", background: "rgba(255,255,255,0.05)", animation: "pulse 1.5s ease-in-out infinite" }} />
-      <div style={{ padding: "12px 14px" }}>
-        <div style={{ height: "16px", background: "rgba(255,255,255,0.05)", borderRadius: "4px", marginBottom: "8px", width: "65%" }} />
-        <div style={{ height: "12px", background: "rgba(255,255,255,0.05)", borderRadius: "4px", width: "45%" }} />
+    <div className="bg-[#111] rounded-lg overflow-hidden border border-white/[0.07]">
+      <div className="w-full h-[170px] bg-white/5 animate-pulse" />
+      <div className="px-3.5 py-3">
+        <div className="h-4 bg-white/5 rounded mb-2 w-[65%]" />
+        <div className="h-3 bg-white/5 rounded w-[45%]" />
       </div>
-      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }`}</style>
     </div>
   );
 }
@@ -159,47 +137,25 @@ function SaleCard({ card }) {
   const saleType   = card.saleType ?? "INSTANT";
 
   return (
-    <div
-      className="border border-white/10 hover:border-white/25 transition-all flex flex-col"
-      style={{ background: "#111", borderRadius: "8px", overflow: "hidden", boxSizing: "border-box", cursor: "pointer" }}
-    >
-      {/* 이미지 영역 */}
+    <div className="border border-white/10 hover:border-white/25 transition-all flex flex-col bg-[#111] rounded-lg overflow-hidden cursor-pointer">
+      {/* 이미지 영역 — 동적 URL이므로 inline style 유지 */}
       <div
+        className="w-full h-[170px] relative flex-shrink-0"
         style={{
-          width: "100%", height: "170px", position: "relative", flexShrink: 0,
           background: imageUrl
             ? `url(${imageUrl}) lightgray 50% / cover no-repeat`
             : "rgba(255,255,255,0.05)",
         }}
       >
-        {/* NEW 뱃지 */}
         {isNew && !isSoldOut && (
-          <div style={{
-            position: "absolute", top: "8px", left: "8px",
-            background: "#EFFF04", color: "#000",
-            fontSize: "10px", fontWeight: "800",
-            padding: "2px 7px", borderRadius: "2px",
-            letterSpacing: "0.05em",
-          }}>
+          <div className="absolute top-2 left-2 bg-main text-black text-[10px] font-extrabold px-[7px] py-0.5 rounded-sm tracking-[0.05em]">
             NEW
           </div>
         )}
-
-        {/* SOLD OUT 오버레이 */}
         {isSoldOut && (
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <div style={{
-              width: "72px", height: "72px", borderRadius: "50%",
-              border: "3px solid #ef4444",
-              background: "rgba(239,68,68,0.15)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              transform: "rotate(-20deg)",
-            }}>
-              <span style={{ color: "#ef4444", fontWeight: "900", fontSize: "12px", lineHeight: 1.2, textAlign: "center" }}>
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <div className="w-[72px] h-[72px] rounded-full border-[3px] border-red-500 bg-red-500/15 flex items-center justify-center -rotate-[20deg]">
+              <span className="text-red-500 font-black text-[12px] leading-tight text-center">
                 SOLD<br />OUT
               </span>
             </div>
@@ -208,49 +164,42 @@ function SaleCard({ card }) {
       </div>
 
       {/* 카드 정보 */}
-      <div style={{ padding: "12px 14px" }}>
-        {/* 카드명 */}
-        <h3 className="text-white font-bold truncate" style={{ fontSize: "14px", marginBottom: "6px" }}>
+      <div className="px-3.5 py-3">
+        <h3 className="text-white font-bold truncate text-[14px] mb-1.5">
           {cardName}
         </h3>
 
-        {/* 등급 | 장르 + 판매방법 */}
-        <div className="flex items-center justify-between" style={{ marginBottom: "10px" }}>
-          <div className="flex items-center" style={{ gap: "5px" }}>
-            <span className="font-bold" style={{ color: gradeStyle.text, fontSize: "11px" }}>
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-[5px]">
+            {/* 등급 색상은 런타임 동적값이므로 inline style 유지 */}
+            <span className="font-bold text-[11px]" style={{ color: gradeStyle.text }}>
               {GRADE_LABEL[card.grade] ?? card.grade}
             </span>
-            <span style={{ color: "rgba(255,255,255,0.2)", fontSize: "11px" }}>|</span>
-            <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px" }}>
+            <span className="text-white/20 text-[11px]">|</span>
+            <span className="text-white/45 text-[11px]">
               {GENRE_LABEL[card.genre] ?? card.genre}
             </span>
           </div>
           {!isSoldOut && (
-            <span style={{
-              fontSize: "10px", fontWeight: "600",
-              color: saleType === "AUCTION" ? "#9B7FE8" : "#00D1FF",
-            }}>
+            <span
+              className="text-[10px] font-semibold"
+              style={{ color: saleType === "AUCTION" ? "#9B7FE8" : "#00D1FF" }}
+            >
               {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
             </span>
           )}
         </div>
 
-        {/* 구분선 */}
-        <div style={{ height: "1px", background: "rgba(255,255,255,0.07)", marginBottom: "8px" }} />
+        <div className="h-px bg-white/[0.07] mb-2" />
 
-        {/* 가격 / 잔여 */}
-        <div className="flex flex-col" style={{ gap: "4px" }}>
+        <div className="flex flex-col gap-1">
           <div className="flex justify-between">
-            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px" }}>가격</span>
-            <span style={{ color: "#fff", fontSize: "11px", fontWeight: "600" }}>
-              {formatPrice(card.pricePerCard)}
-            </span>
+            <span className="text-white/35 text-[11px]">가격</span>
+            <span className="text-white text-[11px] font-semibold">{formatPrice(card.pricePerCard)}</span>
           </div>
           <div className="flex justify-between">
-            <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px" }}>잔여</span>
-            <span style={{ color: "#fff", fontSize: "11px", fontWeight: "600" }}>
-              {remaining}
-            </span>
+            <span className="text-white/35 text-[11px]">잔여</span>
+            <span className="text-white text-[11px] font-semibold">{remaining}</span>
           </div>
         </div>
       </div>
@@ -262,21 +211,20 @@ function SaleCard({ card }) {
 export default function MySalesPage() {
   const { user } = useAuthStore();
 
-  const [cards, setCards] = useState([]);
+  const [cards, setCards]       = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError]       = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const PAGE_SIZE = 9;
 
-  const [searchQuery, setSearchQuery]   = useState("");
-  const [selectedGrade, setSelectedGrade] = useState(null);
-  const [filterGrade, setFilterGrade]   = useState("전체");
-  const [filterGenre, setFilterGenre]   = useState("전체");
+  const [searchQuery, setSearchQuery]       = useState("");
+  const [selectedGrade, setSelectedGrade]   = useState(null);
+  const [filterGrade, setFilterGrade]       = useState("전체");
+  const [filterGenre, setFilterGenre]       = useState("전체");
   const [filterSaleType, setFilterSaleType] = useState("전체");
   const [filterSoldOut, setFilterSoldOut]   = useState("전체");
 
-  /* ── API 호출 ── */
   useEffect(() => {
     if (!user?.id) { setIsLoading(false); return; }
     (async () => {
@@ -293,7 +241,6 @@ export default function MySalesPage() {
     })();
   }, [user?.id]);
 
-  /* ── 등급별 수량 합산 ── */
   const gradeCounts = useMemo(() =>
     cards.reduce((acc, c) => {
       acc[c.grade] = (acc[c.grade] || 0) + (c.quantity ?? 1);
@@ -301,20 +248,17 @@ export default function MySalesPage() {
     }, {}),
   [cards]);
 
-  /* ── 총 보유 수량 합산 ── */
   const totalQuantity = useMemo(() =>
     cards.reduce((sum, c) => sum + (c.quantity ?? 1), 0),
   [cards]);
 
-  /* ── 필터링 ── */
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
       if (selectedGrade && card.grade !== selectedGrade) return false;
       if (filterGrade !== "전체" && card.grade !== filterGrade) return false;
       if (filterGenre !== "전체" && card.genre !== filterGenre) return false;
       if (filterSaleType !== "전체") {
-        const st = card.saleType ?? "INSTANT";
-        if (st !== filterSaleType) return false;
+        if ((card.saleType ?? "INSTANT") !== filterSaleType) return false;
       }
       if (filterSoldOut === "판매중"  && card.status === "SOLD_OUT")  return false;
       if (filterSoldOut === "판매완료" && card.status !== "SOLD_OUT") return false;
@@ -326,29 +270,22 @@ export default function MySalesPage() {
     });
   }, [cards, selectedGrade, filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
 
-  /* ── 페이지네이션 ── */
-  const totalPages  = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
-  const pagedCards  = filteredCards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
+  const pagedCards = filteredCards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   useEffect(() => { setCurrentPage(1); },
     [filterGrade, filterGenre, filterSaleType, filterSoldOut, selectedGrade, searchQuery]);
 
   return (
-    <div className="min-h-screen w-full" style={{ background: "#0F0F0F" }}>
-      <main style={{ maxWidth: "1920px", margin: "0 auto", padding: "40px 220px" }}>
+    <div className="min-h-screen w-full bg-black">
+      <main className="max-w-[1920px] mx-auto px-[220px] py-10">
 
-        {/* 타이틀 */}
-        <h1 className="text-white text-[28px] font-bold" style={{ marginBottom: "32px" }}>
+        <h1 className="text-white text-[28px] font-bold mb-8">
           나의 판매 포토카드
         </h1>
 
         {/* 통계 박스 */}
-        <div style={{
-          width: "650px", minHeight: "95px",
-          border: "1px solid rgba(255,255,255,0.15)", borderRadius: "6px",
-          padding: "14px 20px", display: "flex", flexDirection: "column",
-          justifyContent: "space-between", gap: "10px", boxSizing: "border-box",
-        }}>
+        <div className="w-[650px] min-h-[95px] border border-white/15 rounded py-[14px] px-5 flex flex-col justify-between gap-2.5">
           <span className="text-white/70 text-sm font-medium">
             {user?.nickname ?? "회원"}님이 보유한 포토카드&nbsp;
             <span className="text-white font-bold">(총 {totalQuantity}장)</span>
@@ -361,13 +298,12 @@ export default function MySalesPage() {
                 <button
                   key={grade}
                   onClick={() => setSelectedGrade(isActive ? null : grade)}
-                  className="text-xs font-bold transition-all"
+                  /* 등급 border·color·background는 런타임 동적값이므로 inline style 유지 */
+                  className="grade-button"
                   style={{
                     border: `1px solid ${style.border}`,
                     color: style.text,
                     background: isActive ? `${style.border}25` : "transparent",
-                    borderRadius: "4px", padding: "3px 10px",
-                    letterSpacing: "0.05em", whiteSpace: "nowrap", cursor: "pointer",
                   }}
                 >
                   {GRADE_LABEL[grade]}&nbsp;{count}장
@@ -377,33 +313,25 @@ export default function MySalesPage() {
           </div>
         </div>
 
-        {/* 구분선 */}
-        <div style={{ width: "100%", height: "1px", background: "rgba(255,255,255,0.1)", margin: "40px 0" }} />
+        <div className="w-full h-px bg-white/10 my-10" />
 
         {/* 검색 + 필터 */}
         <div className="flex items-center gap-4 mb-8">
-          {/* 검색 */}
-          <div className="relative" style={{ width: "260px" }}>
+          <div className="relative w-[260px]">
             <input
               type="text"
               placeholder="검색"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: "100%", background: "#1A1A1A",
-                border: "1px solid rgba(255,255,255,0.15)",
-                borderRadius: "6px", padding: "8px 40px 8px 14px",
-                fontSize: "13px", color: "white", outline: "none", boxSizing: "border-box",
-              }}
+              className="w-full bg-[#1A1A1A] border border-white/15 rounded-md py-2 pl-3.5 pr-10 text-[13px] text-white outline-none"
             />
-            <svg style={{ position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", opacity: 0.4 }}
+            <svg className="absolute right-3 top-1/2 -translate-y-1/2 opacity-40"
               width="16" height="16" viewBox="0 0 16 16" fill="none">
               <circle cx="7" cy="7" r="5" stroke="white" strokeWidth="1.5"/>
               <path d="M11 11L14 14" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </div>
 
-          {/* 필터 4개 */}
           <DropdownFilter label="등급"    options={FILTER_OPTIONS["등급"]}
             value={filterGrade}    onChange={setFilterGrade}    displayMap={GRADE_LABEL} />
           <DropdownFilter label="장르"    options={FILTER_OPTIONS["장르"]}
@@ -414,66 +342,50 @@ export default function MySalesPage() {
             value={filterSoldOut}  onChange={setFilterSoldOut} />
         </div>
 
-        {/* 에러 */}
         {error && (
-          <div style={{ padding: "20px", background: "rgba(239,68,68,0.1)",
-            border: "1px solid rgba(239,68,68,0.3)", borderRadius: "8px",
-            color: "#f87171", fontSize: "14px", marginBottom: "24px" }}>
+          <div className="p-5 bg-red-500/10 border border-red-500/30 rounded-lg text-[#f87171] text-sm mb-6">
             ⚠️ {error}
           </div>
         )}
 
-        {/* 로그인 안내 */}
         {!user && !isLoading && (
-          <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.4)", fontSize: "15px" }}>
+          <div className="text-center py-20 text-white/40 text-[15px]">
             로그인 후 나의 판매 포토카드를 확인할 수 있습니다.
           </div>
         )}
 
-        {/* 카드 그리드 */}
-        <div className="grid gap-x-[20px] gap-y-[20px]"
-          style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+        <div className="grid grid-cols-3 gap-x-5 gap-y-5">
           {isLoading
             ? Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} />)
             : pagedCards.map((card) => <SaleCard key={card.id} card={card} />)
           }
         </div>
 
-        {/* 빈 상태 */}
         {!isLoading && !error && user && filteredCards.length === 0 && (
-          <div style={{ textAlign: "center", padding: "80px 0", color: "rgba(255,255,255,0.4)", fontSize: "15px" }}>
+          <div className="text-center py-20 text-white/40 text-[15px]">
             판매 중인 포토카드가 없습니다.
           </div>
         )}
 
-        {/* 페이지네이션 */}
         {!isLoading && totalPages > 1 && (
           <div className="flex items-center justify-center gap-2 mt-12 mb-8">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              style={{
-                width: "32px", height: "32px", borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.2)",
-                background: "transparent", color: "rgba(255,255,255,0.5)",
-                cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                opacity: currentPage === 1 ? 0.3 : 1,
-                fontSize: "16px",
-              }}
+              className={`w-8 h-8 rounded-full border border-white/20 bg-transparent text-white/50 text-base transition-opacity ${
+                currentPage === 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
+              }`}
             >‹</button>
 
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                style={{
-                  width: "32px", height: "32px", borderRadius: "50%",
-                  border: page === currentPage ? "1px solid #EFFF04" : "1px solid rgba(255,255,255,0.15)",
-                  background: page === currentPage ? "#EFFF04" : "transparent",
-                  color: page === currentPage ? "#000" : "rgba(255,255,255,0.5)",
-                  fontWeight: page === currentPage ? "700" : "400",
-                  cursor: "pointer", fontSize: "13px",
-                }}
+                className={`w-8 h-8 rounded-full border text-[13px] cursor-pointer ${
+                  page === currentPage
+                    ? "border-main bg-main text-black font-bold"
+                    : "border-white/15 bg-transparent text-white/50 font-normal"
+                }`}
               >
                 {page}
               </button>
@@ -482,14 +394,9 @@ export default function MySalesPage() {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              style={{
-                width: "32px", height: "32px", borderRadius: "50%",
-                border: "1px solid rgba(255,255,255,0.2)",
-                background: "transparent", color: "rgba(255,255,255,0.5)",
-                cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-                opacity: currentPage === totalPages ? 0.3 : 1,
-                fontSize: "16px",
-              }}
+              className={`w-8 h-8 rounded-full border border-white/20 bg-transparent text-white/50 text-base transition-opacity ${
+                currentPage === totalPages ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
+              }`}
             >›</button>
           </div>
         )}

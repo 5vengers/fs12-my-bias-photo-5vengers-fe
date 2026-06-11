@@ -52,6 +52,18 @@
   color: var(--gray400);
 }
 
+/* grade button — border·color·background는 JS에서 동적 주입 */
+.grade-button {
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 3px 10px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
 /* btns */
 
 .btn {
