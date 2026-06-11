@@ -36,7 +36,7 @@ const SelectMain = ({ children, desc, size = 'lg', value = '', onChange }) => {
     <div ref={ref} className={`relative ${sizeStyle[size]}`}>
       <button
         type="button"
-        className={`flex w-full items-center justify-between ${size !== 'noLine' && 'border border-white px-[20px] py-[18px]'}`}
+        className={`flex w-full items-center justify-between transition ${buttonStyle[size] || buttonStyle.lg}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {value !== '' ? value : `${desc}`}{' '}

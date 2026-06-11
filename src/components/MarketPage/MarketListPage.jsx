@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import Card from '../../components/commons/Card/Card';
 import Image from 'next/image';
