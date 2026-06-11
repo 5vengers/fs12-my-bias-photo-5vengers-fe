@@ -26,6 +26,8 @@ const PhotoCardCreate = () => {
 
   const router = useRouter();
 
+  // 추후 로딩 추가
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -60,7 +62,6 @@ const PhotoCardCreate = () => {
     if (!result.success) {
       setIsCreating(false);
       // message 에 따라서 해당 위치에 focus
-      console.log(result);
       return;
     }
 
