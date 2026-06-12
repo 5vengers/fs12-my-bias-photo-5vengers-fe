@@ -11,6 +11,12 @@ const OAuthCallbackPage = () => {
   useEffect(() => {
     const error = searchParams.get('error');
 
+    // OAuthError: 구글 로그인 취소 또는 실패
+    if (error === 'OAUTH_ERROR') {
+        router.replace('/login?error=oauth');
+        return;
+      }
+
     // OAuthConflictError: 동일 이메일 LOCAL 계정 존재
     if (error === 'OAUTH_CONFLICT') {
       router.replace('/login?error=email_conflict');

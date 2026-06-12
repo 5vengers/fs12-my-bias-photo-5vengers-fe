@@ -13,7 +13,7 @@ import GoogleIcon from '@/assets/icons/ic-google.svg';
 const EMAIL_REGEX =
   /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
-const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}/api/auth/google`;
+const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/api/auth/google`;
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');

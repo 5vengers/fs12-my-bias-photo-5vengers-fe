@@ -15,7 +15,7 @@ const EMAIL_REGEX =
   /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
 // Google OAuth: 브라우저를 BE 엔드포인트로 직접 이동시켜 리다이렉트 흐름 시작
-const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}/api/auth/google`;
+const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/api/auth/google`;
 
 const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -132,6 +132,13 @@ const LoginForm = () => {
 
         {/* API 에러 */}
         {apiErrorMsg && <p className="text-red mt-3 text-sm">{apiErrorMsg}</p>}
+
+        {/* Google 로그인 실패 또는 취소 */}
+        {oauthError === 'oauth' && (
+          <p className="mt-3 text-sm text-red-400">
+            구글 로그인에 실패했거나 취소되었습니다.
+          </p>
+        )}
 
         {/* OAuth 이메일 충돌 */}
         {oauthError === 'email_conflict' && (
