@@ -25,7 +25,8 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: authService.register,
     onSuccess: () => {
-      router.push('/login');
+      toast.success('회원가입이 완료되었습니다.');
+      router.replace('/login');
     },
   });
 };
@@ -55,7 +56,7 @@ export const useLogin = () => {
     },
     onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
-      router.push('/');
+      router.replace('/');
     },
   });
 };
