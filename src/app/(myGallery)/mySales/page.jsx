@@ -45,12 +45,6 @@ const SALE_TYPE_LABEL = {
   AUCTION: "경매",
 };
 
-/* ─── NEW 뱃지 기준: 7일 이내 등록 ─── */
-function isNewCard(createdAt) {
-  if (!createdAt) return false;
-  return Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000;
-}
-
 const FILTER_OPTIONS = {
   등급:    ["전체", ...Object.keys(GRADE_LABEL)],
   장르:    ["전체", ...Object.keys(GENRE_LABEL)],
@@ -73,7 +67,6 @@ function CardSkeleton() {
 /* ─── 카드 컴포넌트 ─── */
 function SaleCard({ card, nickname }) {
   const isSoldOut = card.status === "SOLD_OUT";
-  const isNew     = isNewCard(card.createdAt);
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
   const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
@@ -100,13 +93,6 @@ function SaleCard({ card, nickname }) {
           <div className="flex w-full justify-end">
             <span className={`text-[10px] font-semibold ${saleType === "AUCTION" ? styles.auction : styles.instant}`}>
               {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
-            </span>
-          </div>
-        )}
-        {isNew && !isSoldOut && (
-          <div className="flex w-full">
-            <span className="bg-main text-black text-[10px] font-extrabold px-[7px] py-0.5 rounded-sm tracking-[0.05em]">
-              NEW
             </span>
           </div>
         )}
