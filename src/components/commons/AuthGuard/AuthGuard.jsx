@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { useIsAuthenticated } from '../../../hooks/useAuth';
-import useAuthStore from '../../../store/authStore';
+import { useIsAuthenticated } from '@/hooks/useAuth';
+import useAuthStore from '@/store/authStore';
 
 // ─────────────────────────────────────────────
 // 공통 로딩 UI
@@ -53,18 +53,20 @@ export const PublicGuard = ({ children }) => {
   const accessToken = useAuthStore((state) => state.accessToken);
   const isAuthenticated = useIsAuthenticated();
   const router = useRouter();
+  const pathname = usePathname();
 
   const isRefreshing = !!user && !accessToken;
+  const isOAuthCallback = pathname === '/auth/callback';
 
   useEffect(() => {
-    if (hasHydrated && !isRefreshing && isAuthenticated) {
+    if (hasHydrated && !isRefreshing && isAuthenticated && !isOAuthCallback) {
       router.replace('/');
     }
-  }, [hasHydrated, isRefreshing, isAuthenticated, router]);
+  }, [hasHydrated, isRefreshing, isAuthenticated, router, isOAuthCallback]);
 
   if (!hasHydrated) return <AuthLoading />;
-  if (isRefreshing) return <AuthLoading />; 
-  if (isAuthenticated) return null; 
+  if (isRefreshing) return <AuthLoading />;
+  if (isAuthenticated && !isOAuthCallback) return null;
 
   return children;
 };
