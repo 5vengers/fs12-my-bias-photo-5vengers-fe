@@ -45,6 +45,7 @@ const PhotoCardCreate = () => {
     // image 파일 같이 보내기 위해 formData 사용
     const formData = new FormData();
     if (!file) {
+      setIsCreating(false);
       return;
     }
 
