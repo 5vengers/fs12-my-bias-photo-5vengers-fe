@@ -1,0 +1,9 @@
+/* 등급 텍스트 색상 — Tailwind CSS 변수로 표현 불가한 값 포함 */
+.common      { color: var(--main);   }
+.rare        { color: #00D1FF;       }
+.superRare   { color: var(--purple); }
+.legendary   { color: #FF7B00;       }
+
+/* 판매 유형 색상 */
+.auction     { color: var(--purple); }
+.instant     { color: #00D1FF;       }

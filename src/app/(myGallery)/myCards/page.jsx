@@ -1,13 +1,33 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import useAuthStore from "@/store/useAuthStore";
-import { getMyMarketItems } from "@/libs/marketApi";
+import useAuthStore from "@/store/authStore";
+import { getMyCards } from "@/libs/myCardApi";
 import Search from "@/components/commons/Input/Search";
 import Select from "@/components/commons/Select/Select";
 import Pagination from "@/components/commons/Pagination/Pagination";
 import Badge from "@/components/commons/Badge/Badge";
 import Card from "@/components/commons/Card/Card";
+import styles from "./myCards.module.css";
+
+/* ─── 로컬 이미지 폴백 (DB 이미지 연결 전 임시) ─── */
+const LOCAL_IMAGES = [
+  "/images/img-image1.png",
+  "/images/img-image2.png",
+  "/images/img-image3.png",
+];
+
+function getCardImage(card) {
+  if (card.photoCard?.imageUrl) return card.photoCard.imageUrl;
+  const index = Math.abs((card.photoCardId || 1) - 1) % LOCAL_IMAGES.length;
+  return LOCAL_IMAGES[index];
+}
+
+/* ─── NEW 뱃지 기준: 7일 이내 취득 ─── */
+function isNewCard(acquiredAt) {
+  if (!acquiredAt) return false;
+  return Date.now() - new Date(acquiredAt).getTime() < 7 * 24 * 60 * 60 * 1000;
+}
 
 /* ─── 등급 ─── */
 const GRADE_LABEL = {
@@ -15,6 +35,13 @@ const GRADE_LABEL = {
   RARE:       "RARE",
   SUPER_RARE: "SUPER RARE",
   LEGENDARY:  "LEGENDARY",
+};
+
+const GRADE_CLASS = {
+  COMMON:     styles.common,
+  RARE:       styles.rare,
+  SUPER_RARE: styles.superRare,
+  LEGENDARY:  styles.legendary,
 };
 
 /* ─── 장르 ─── */
@@ -31,23 +58,9 @@ const GENRE_LABEL = {
   ETC:             "기타",
 };
 
-/* ─── 판매방법 ─── */
-const SALE_TYPE_LABEL = {
-  INSTANT: "즉시구매",
-  AUCTION: "경매",
-};
-
-/* ─── NEW 뱃지 기준: 7일 이내 등록 ─── */
-function isNewCard(createdAt) {
-  if (!createdAt) return false;
-  return Date.now() - new Date(createdAt).getTime() < 7 * 24 * 60 * 60 * 1000;
-}
-
 const FILTER_OPTIONS = {
-  등급:    ["전체", ...Object.keys(GRADE_LABEL)],
-  장르:    ["전체", ...Object.keys(GENRE_LABEL)],
-  판매방법: ["전체", "INSTANT", "AUCTION"],
-  매진여부: ["전체", "판매중", "판매완료"],
+  등급: ["전체", ...Object.keys(GRADE_LABEL)],
+  장르: ["전체", ...Object.keys(GENRE_LABEL)],
 };
 
 /* ─── 로딩 스켈레톤 ─── */
@@ -63,75 +76,54 @@ function CardSkeleton() {
 }
 
 /* ─── 카드 컴포넌트 ─── */
-function SaleCard({ card, nickname }) {
-  const isSoldOut = card.status === "SOLD_OUT";
-  const isNew     = isNewCard(card.createdAt);
-  const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
-  const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
-  const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
-  const saleType  = card.saleType ?? "INSTANT";
+function MyCard({ card, nickname }) {
+  const grade    = card.photoCard?.grade;
+  const genre    = card.photoCard?.genre;
+  const cardName = card.photoCard?.name ?? `카드 #${card.id}`;
+  const imageUrl = getCardImage(card);
+  const isNew    = isNewCard(card.acquiredAt);
 
   return (
     <Card>
       <Card.Title>{cardName}</Card.Title>
-      <Card.Image
-        src={imageUrl}
-        alt={cardName}
-        state={isSoldOut ? "soldOut" : "sale"}
-      />
+      <Card.Image src={imageUrl} alt={cardName} />
       <Card.InfoLayout>
         <Card.Info nickname={nickname}>
-          <Card.Grade>{card.grade}</Card.Grade>
-          <span className="text-gray-300">{GENRE_LABEL[card.genre] ?? card.genre}</span>
+          <span className={`font-bold text-[11px] ${GRADE_CLASS[grade] ?? ""}`}>
+            {GRADE_LABEL[grade] ?? grade}
+          </span>
+          <span className="text-gray-300">{GENRE_LABEL[genre] ?? genre}</span>
         </Card.Info>
       </Card.InfoLayout>
       <Card.SaleInfoLayout>
-        {/* 판매유형 색상은 런타임 동적값이므로 inline style 유지 */}
-        {!isSoldOut && (
-          <div className="flex w-full justify-end">
-            <span
-              className="text-[10px] font-semibold"
-              style={{ color: saleType === "AUCTION" ? "#9B7FE8" : "#00D1FF" }}
-            >
-              {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
-            </span>
-          </div>
-        )}
-        {isNew && !isSoldOut && (
+        {isNew && (
           <div className="flex w-full">
             <span className="bg-main text-black text-[10px] font-extrabold px-[7px] py-0.5 rounded-sm tracking-[0.05em]">
               NEW
             </span>
           </div>
         )}
-        <Card.SaleInfo
-          title="가격"
-          type="point"
-          count={Number(card.pricePerCard).toLocaleString()}
-        />
-        <Card.SaleInfo title="잔여" count={remaining} />
+        <Card.SaleInfo title="보유 수량" count={card.quantity} />
       </Card.SaleInfoLayout>
     </Card>
   );
 }
 
 /* ─── 메인 페이지 ─── */
-export default function MySalesPage() {
-  const { user } = useAuthStore();
+export default function MyCardsPage() {
+  const user = useAuthStore((state) => state.user);
 
   const [cards, setCards]         = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError]         = useState(null);
 
-  const [currentPage, setCurrentPage]       = useState(1);
+  const [currentPage, setCurrentPage]     = useState(1);
   const PAGE_SIZE = 9;
 
-  const [searchQuery, setSearchQuery]       = useState("");
-  const [selectedGrade, setSelectedGrade]   = useState(null);
-  const [filterGrade, setFilterGrade]       = useState("전체");
-  const [filterGenre, setFilterGenre]       = useState("전체");
-  const [filterSaleType, setFilterSaleType] = useState("전체");
-  const [filterSoldOut, setFilterSoldOut]   = useState("전체");
+  const [searchQuery, setSearchQuery]     = useState("");
+  const [selectedGrade, setSelectedGrade] = useState(null);
+  const [filterGrade, setFilterGrade]     = useState("전체");
+  const [filterGenre, setFilterGenre]     = useState("전체");
 
   useEffect(() => {
     if (!user?.id) { setIsLoading(false); return; }
@@ -139,7 +131,7 @@ export default function MySalesPage() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await getMyMarketItems(user.id);
+        const data = await getMyCards();
         setCards(data);
       } catch (err) {
         setError(err.message);
@@ -151,45 +143,40 @@ export default function MySalesPage() {
 
   const gradeCounts = useMemo(() =>
     cards.reduce((acc, c) => {
-      acc[c.grade] = (acc[c.grade] || 0) + (c.quantity ?? 1);
+      const g = c.photoCard?.grade;
+      if (g) acc[g] = (acc[g] || 0) + 1;
       return acc;
     }, {}),
   [cards]);
 
   const totalQuantity = useMemo(() =>
-    cards.reduce((sum, c) => sum + (c.quantity ?? 1), 0),
+    cards.reduce((sum, c) => sum + (c.quantity || 0), 0),
   [cards]);
 
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
-      if (selectedGrade && card.grade !== selectedGrade) return false;
-      if (filterGrade !== "전체" && card.grade !== filterGrade) return false;
-      if (filterGenre !== "전체" && card.genre !== filterGenre) return false;
-      if (filterSaleType !== "전체") {
-        if ((card.saleType ?? "INSTANT") !== filterSaleType) return false;
-      }
-      if (filterSoldOut === "판매중"  && card.status === "SOLD_OUT")  return false;
-      if (filterSoldOut === "판매완료" && card.status !== "SOLD_OUT") return false;
-      if (searchQuery) {
-        const name = card.myCard?.photoCard?.name ?? "";
-        if (!name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-      }
+      const grade = card.photoCard?.grade;
+      const genre = card.photoCard?.genre;
+      const name  = card.photoCard?.name ?? "";
+      if (selectedGrade && grade !== selectedGrade) return false;
+      if (filterGrade !== "전체" && grade !== filterGrade) return false;
+      if (filterGenre !== "전체" && genre !== filterGenre) return false;
+      if (searchQuery && !name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
       return true;
     });
-  }, [cards, selectedGrade, filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
+  }, [cards, selectedGrade, filterGrade, filterGenre, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
   const pagedCards = filteredCards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-  useEffect(() => { setCurrentPage(1); },
-    [filterGrade, filterGenre, filterSaleType, filterSoldOut, selectedGrade, searchQuery]);
+  useEffect(() => { setCurrentPage(1); }, [filterGrade, filterGenre, selectedGrade, searchQuery]);
 
   return (
     <div className="min-h-screen w-full bg-black">
       <main className="max-w-[1920px] mx-auto px-[220px] py-10">
 
         <h1 className="text-white text-[28px] font-bold mb-8">
-          나의 판매 포토카드
+          나의 포토카드
         </h1>
 
         {/* 통계 박스 */}
@@ -244,30 +231,6 @@ export default function MySalesPage() {
               </Select.Option>
             ))}
           </Select>
-
-          <Select
-            size="noLine"
-            desc="판매방법"
-            value={filterSaleType !== "전체" ? (SALE_TYPE_LABEL[filterSaleType] ?? filterSaleType) : ""}
-          >
-            {FILTER_OPTIONS["판매방법"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterSaleType}>
-                {SALE_TYPE_LABEL[opt] ?? opt}
-              </Select.Option>
-            ))}
-          </Select>
-
-          <Select
-            size="noLine"
-            desc="매진여부"
-            value={filterSoldOut !== "전체" ? filterSoldOut : ""}
-          >
-            {FILTER_OPTIONS["매진여부"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterSoldOut}>
-                {opt}
-              </Select.Option>
-            ))}
-          </Select>
         </div>
 
         {error && (
@@ -278,7 +241,7 @@ export default function MySalesPage() {
 
         {!user && !isLoading && (
           <div className="text-center py-20 text-white/40 text-[15px]">
-            로그인 후 나의 판매 포토카드를 확인할 수 있습니다.
+            로그인 후 나의 포토카드를 확인할 수 있습니다.
           </div>
         )}
 
@@ -286,14 +249,14 @@ export default function MySalesPage() {
           {isLoading
             ? Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} />)
             : pagedCards.map((card) => (
-                <SaleCard key={card.id} card={card} nickname={user?.nickname ?? "회원"} />
+                <MyCard key={card.id} card={card} nickname={user?.nickname ?? "회원"} />
               ))
           }
         </div>
 
         {!isLoading && !error && user && filteredCards.length === 0 && (
           <div className="text-center py-20 text-white/40 text-[15px]">
-            판매 중인 포토카드가 없습니다.
+            보유한 포토카드가 없습니다.
           </div>
         )}
 

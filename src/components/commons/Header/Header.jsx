@@ -2,17 +2,19 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import Logo from '@/assets/images/img-logo.svg';
 import alramIcon from '@/assets/icons/ic-alarm-default.svg';
-import useAuthStore from '@/store/useAuthStore';
-import { logout as logoutApi } from '@/libs/authApi';
+import { useLogout } from '@/hooks/useAuth';
+import useAuthStore from '@/store/authStore';
 import styles from './Header.module.css';
-/*
-  user = 유저 정보
-  isLogin = 로그인이 되어있는지
-*/
-const Header = ({ user, isLogin }) => {
+
+const Header = () => {
+  const user        = useAuthStore((state) => state.user);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const isLoggedIn  = !!(user && accessToken);
+  const point       = user?.point ?? 0;
+  const { mutate: logout } = useLogout();
+
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
@@ -24,7 +26,7 @@ const Header = ({ user, isLogin }) => {
       <ul className="flex items-center justify-center gap-[30px] text-sm">
         {isLoggedIn ? (
           <>
-            <li className="font-bold" style={{ color: '#EFFF04' }}>
+            <li className="font-bold text-main">
               {point.toLocaleString()} P
             </li>
             <li className="cursor-pointer">
@@ -37,20 +39,13 @@ const Header = ({ user, isLogin }) => {
               <Link href="/mySales">나의 판매 포토카드</Link>
             </li>
             <li className={styles.gray}>
-              <span style={{ color: 'var(--white)', fontWeight: 500 }}>{user?.nickname}</span>
+              <span className="text-white font-medium">{user?.nickname}</span>
             </li>
             <li className={styles.gray}>|</li>
             <li className={styles.gray}>
               <button
-                onClick={handleLogout}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                  fontSize: 'inherit',
-                  padding: 0,
-                }}
+                onClick={() => logout()}
+                className="bg-transparent border-none cursor-pointer text-inherit text-sm p-0"
               >
                 로그아웃
               </button>
