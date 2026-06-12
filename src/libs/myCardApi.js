@@ -2,19 +2,14 @@ import useAuthStore from '@/store/useAuthStore';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-/** 인증 헤더 생성 헬퍼 */
-function authHeaders() {
+const authHeaders = () => {
   const { accessToken } = useAuthStore.getState();
   return accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : {};
-}
+};
 
-/**
- * 나의 포토카드 전체 조회
- * GET /api/my-cards
- */
-export async function getMyCards() {
+export const getMyCards = async () => {
   const res = await fetch(`${API_URL}/api/my-cards`, {
     credentials: 'include',
     headers: {
@@ -27,13 +22,9 @@ export async function getMyCards() {
 
   const json = await res.json();
   return json.data;
-}
+};
 
-/**
- * 나의 포토카드 단건 조회
- * GET /api/my-cards/:myCardId
- */
-export async function getMyCardById(myCardId) {
+export const getMyCardById = async (myCardId) => {
   const res = await fetch(`${API_URL}/api/my-cards/${myCardId}`, {
     credentials: 'include',
     headers: {
@@ -46,4 +37,4 @@ export async function getMyCardById(myCardId) {
 
   const json = await res.json();
   return json.data;
-}
+};

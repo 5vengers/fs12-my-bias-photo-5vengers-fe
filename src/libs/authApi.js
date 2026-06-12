@@ -1,15 +1,10 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-/**
- * 로그인
- * POST /api/auth/login
- * @returns {{ user, accessToken }}
- */
-export async function login({ email, password }) {
+export const login = async ({ email, password }) => {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include', // refreshToken 쿠키 수신
+    credentials: 'include',
     body: JSON.stringify({ email, password }),
   });
 
@@ -19,26 +14,17 @@ export async function login({ email, password }) {
     throw new Error(json.message ?? '로그인에 실패했습니다.');
   }
 
-  return json.data; // { user, accessToken }
-}
+  return json.data;
+};
 
-/**
- * 로그아웃
- * POST /api/auth/logout
- */
-export async function logout() {
+export const logout = async () => {
   await fetch(`${API_URL}/api/auth/logout`, {
     method: 'POST',
     credentials: 'include',
   });
-}
+};
 
-/**
- * Access Token 재발급
- * POST /api/auth/refresh
- * @returns {{ accessToken }}
- */
-export async function refresh() {
+export const refresh = async () => {
   const res = await fetch(`${API_URL}/api/auth/refresh`, {
     method: 'POST',
     credentials: 'include',
@@ -50,5 +36,5 @@ export async function refresh() {
     throw new Error(json.message ?? '토큰 재발급에 실패했습니다.');
   }
 
-  return json.data; // { accessToken }
-}
+  return json.data;
+};
