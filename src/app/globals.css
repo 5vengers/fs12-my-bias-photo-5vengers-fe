@@ -74,6 +74,7 @@
 }
 
 /* 스크롤바 */
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }

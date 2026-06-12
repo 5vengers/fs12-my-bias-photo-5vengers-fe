@@ -6,8 +6,9 @@ import CloseIcon from '@/assets/icons/ic-close.svg';
 import SearchIcon from '@/assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import { MOCK_MY_CARDS } from '@/data/mockCards';
-import Card from '../Card/Card';
+import Card from '../../commons/Card/Card';
 import logoImage from '@/assets/images/img-logo.svg';
+import FormStep from './FormStep';
 
 export default function ModalSell({ isOpen, onClose }) {
   const [step, setStep] = useState('gallery');
@@ -29,7 +30,6 @@ export default function ModalSell({ isOpen, onClose }) {
             onClose={onClose}
             onSelect={(card) => {
               setSelectedCard(card);
-
               setStep('form');
             }}
             grade={grade}
@@ -60,10 +60,6 @@ function GalleryStep({
   setGenre,
 }) {
   // 나중에 API로 받아올 데이터입니다.
-
-  const myCards = [
-    /* ...카드 데이터들... */
-  ];
 
   return (
     <div className="flex h-full flex-col">
@@ -163,9 +159,9 @@ function GalleryStep({
         </Select>
       </div>
 
-      {/* 카드 리스트 영역 (스크롤바 적용) */}
+      {/* 카드 리스트 영역 */}
 
-      <div className="custom-scrollbar grid flex-1 grid-cols-2 gap-4 overflow-y-auto pr-2">
+      <div className="custom-scrollbar grid flex-1 grid-cols-2 gap-4 overflow-y-auto">
         {MOCK_MY_CARDS.map((card) => (
           <div key={card.id} onClick={() => onSelect(card)}>
             <Card>
@@ -180,8 +176,8 @@ function GalleryStep({
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
-                <Card.SaleInfo title={'5'} type={'point'} count={7} />
-                <Card.SaleInfo title={card.quantity} count={1} />
+                <Card.SaleInfo title={'가격'} type={'point'} count={7} />
+                <Card.SaleInfo title={'수량'} count={card.quantity} />
               </Card.SaleInfoLayout>
               <div className="mt-[20px] flex items-center justify-center pt-[15px]">
                 <Image
@@ -199,18 +195,4 @@ function GalleryStep({
   );
 }
 
-// 입력 폼 섹션 (나중에 상세 구현)
-
-function FormStep({ card, onBack }) {
-  return (
-    <div>
-      <button onClick={onBack} className="mb-4 text-gray-400">
-        ← 뒤로가기
-      </button>
-
-      <h2 className="text-xl font-bold">카드 {card.id} 판매 정보 입력</h2>
-
-      {/* 여기에 가격 입력, 설명 등 폼 배치 */}
-    </div>
-  );
-}
+// 입력 폼 섹션
