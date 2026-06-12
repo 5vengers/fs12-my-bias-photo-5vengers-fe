@@ -44,6 +44,10 @@ const PhotoCardCreate = () => {
 
     // image 파일 같이 보내기 위해 formData 사용
     const formData = new FormData();
+    if (!file) {
+      return;
+    }
+
     formData.append('imageUrl', file);
 
     Object.keys(data).forEach((key) => {
@@ -51,18 +55,28 @@ const PhotoCardCreate = () => {
       formData.append(key, value);
     });
 
-    const res = await fetch(`${API_URL}/api/myGallery/create`, {
-      method: 'POST',
-      body: formData,
-    });
-    const result = await res.json();
+    try {
+      const res = await fetch(`${API_URL}/api/myGallery/create`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    // error 처리 추가 예정
+      if (!res.ok) {
+        // 실패로 보낸다?
+        return;
+      }
 
-    if (!result.success) {
+      const result = await res.json();
+      // error 처리 추가 예정
+
+      if (!result.success) {
+        // 여기도 실패로 보낸다?
+        return;
+      }
+    } catch (error) {
+      throw error;
+    } finally {
       setIsCreating(false);
-      // message 에 따라서 해당 위치에 focus
-      return;
     }
 
     // 추후 포토카드 생성 완료 페이지로 route 되어야 함
@@ -93,14 +107,10 @@ const PhotoCardCreate = () => {
             <Select
               id="card-grade"
               desc={'등급을 선택해 주세요.'}
-              value={grade}
+              onChange={setGrade}
             >
               {Object.values(CardGrade).map((g, i) => (
-                <Select.Option
-                  key={`grade-${g}-${i}`}
-                  value={g}
-                  onChange={setGrade}
-                >
+                <Select.Option key={`grade-${g}-${i}`} value={g}>
                   {g}
                 </Select.Option>
               ))}
@@ -112,14 +122,10 @@ const PhotoCardCreate = () => {
             <Select
               id="card-genre"
               desc={'장르를 선택해 주세요.'}
-              value={genre}
+              onChange={setGenre}
             >
               {Object.values(Genre).map((g, i) => (
-                <Select.Option
-                  key={`genre-${g}-${i}`}
-                  value={g}
-                  onChange={setGenre}
-                >
+                <Select.Option key={`genre-${g}-${i}`} value={g}>
                   {g}
                 </Select.Option>
               ))}
@@ -175,10 +181,9 @@ const PhotoCardCreate = () => {
                 name="imageUrl"
                 accept="image/png, image/jpeg, image/svg"
                 onChange={(e) => {
-                  setFile(e.target.files[0]);
-                  setCardName(
-                    e.target.files[0].name ? e.target.files[0].name : '',
-                  );
+                  const selectFile = e.target.files?.[0] ?? null;
+                  setFile(selectFile);
+                  setCardName(selectFile?.name ?? '');
                 }}
                 className="hidden"
               />
@@ -206,7 +211,7 @@ const PhotoCardCreate = () => {
             disabled={isCreating}
             onClick={(e) => handleSubmit(e)}
           >
-            생성하기
+            {isCreating ? '생성 중 . . .' : '생성하기'}
           </Button>
         </form>
       </div>
