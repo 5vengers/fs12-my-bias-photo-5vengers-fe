@@ -57,8 +57,8 @@ const MyGallery = () => {
       </div>
 
       <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
-        {tmpData.fill().map((t) => (
-          <Card>
+        {tmpData.fill().map((t, i) => (
+          <Card key={`card-${i}`}>
             <Card.Title>타이틀 테스트</Card.Title>
             <Card.Image src={Bg1} alt={'테스트 배경 1'} />
             <Card.InfoLayout>
