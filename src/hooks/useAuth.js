@@ -25,7 +25,6 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: authService.register,
     onSuccess: () => {
-      toast.success('회원가입이 완료되었습니다.');
       router.replace('/login');
     },
   });
@@ -79,7 +78,7 @@ export const useLogout = () => {
   const handleLogout = () => {
     clearAuth();
     queryClient.clear(); // 캐시된 모든 쿼리 초기화
-    router.push('/login');
+    router.replace('/login');
   };
 
   return useMutation({
