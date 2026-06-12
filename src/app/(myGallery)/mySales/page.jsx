@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import useAuthStore from "@/store/authStore";
 import { getMyMarketItems } from "@/libs/marketApi";
 import Search from "@/components/commons/Input/Search";
 import Select from "@/components/commons/Select/Select";
 import Pagination from "@/components/commons/Pagination/Pagination";
 import Badge from "@/components/commons/Badge/Badge";
 import Card from "@/components/commons/Card/Card";
-import styles from "./mySales.module.css";
 
 /* ─── 등급 ─── */
 const GRADE_LABEL = {
@@ -19,10 +17,10 @@ const GRADE_LABEL = {
 };
 
 const GRADE_CLASS = {
-  COMMON:     styles.common,
-  RARE:       styles.rare,
-  SUPER_RARE: styles.superRare,
-  LEGENDARY:  styles.legendary,
+  COMMON:     "grade-common",
+  RARE:       "grade-rare",
+  SUPER_RARE: "grade-super-rare",
+  LEGENDARY:  "grade-legendary",
 };
 
 /* ─── 장르 ─── */
@@ -91,7 +89,7 @@ function SaleCard({ card, nickname }) {
       <Card.SaleInfoLayout>
         {!isSoldOut && (
           <div className="flex w-full justify-end">
-            <span className={`text-[10px] font-semibold ${saleType === "AUCTION" ? styles.auction : styles.instant}`}>
+            <span className={`text-[10px] font-semibold ${saleType === "AUCTION" ? "sale-auction" : "sale-instant"}`}>
               {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
             </span>
           </div>
@@ -109,7 +107,7 @@ function SaleCard({ card, nickname }) {
 
 /* ─── 메인 페이지 ─── */
 export default function MySalesPage() {
-  const user = useAuthStore((state) => state.user);
+  const user = null;
 
   const [cards, setCards]         = useState([]);
   const [isLoading, setIsLoading] = useState(true);
