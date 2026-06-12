@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLogin } from '@/hooks/useAuth';
@@ -17,6 +18,9 @@ const EMAIL_REGEX =
 const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'}/api/auth/google`;
 
 const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const oauthError = searchParams.get('error');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // submit 시 빈 필드·형식 오류를 Input에 내려줄 에러 상태
@@ -128,6 +132,13 @@ const LoginForm = () => {
 
         {/* API 에러 */}
         {apiErrorMsg && <p className="text-red mt-3 text-sm">{apiErrorMsg}</p>}
+
+        {/* OAuth 이메일 충돌 */}
+        {oauthError === 'email_conflict' && (
+          <p className="mt-3 text-sm text-yellow-400">
+            이미 해당 이메일로 가입된 계정이 있습니다. 이메일로 로그인해 주세요.
+          </p>
+        )}
 
         {/* 로그인 버튼 */}
         <div className="mt-[50px]">

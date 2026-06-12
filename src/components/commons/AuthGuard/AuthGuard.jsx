@@ -46,6 +46,7 @@ export const PrivateGuard = ({ children }) => {
 // ─────────────────────────────────────────────
 // PublicGuard: 비로그인 유저만 접근
 // 인증 상태 -> / 리다이렉트
+// /auth/callback은 예외: executeRefresh 완료 후 직접 redirect하므로 제외
 // ─────────────────────────────────────────────
 export const PublicGuard = ({ children }) => {
   const hasHydrated = useAuthStore((state) => state.hasHydrated);

@@ -1,4 +1,4 @@
-import { PrivateGuard } from '../../components/commons/AuthGuard/AuthGuard';
+import { PrivateGuard } from '@/components/commons/AuthGuard/AuthGuard';
 
 const PrivateLayout = ({ children }) => {
   return <PrivateGuard>{children}</PrivateGuard>;
