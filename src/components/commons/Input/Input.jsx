@@ -2,8 +2,19 @@
 
 import useValidation from '@/hooks/useValidation';
 
-const Input = ({ id, type, placeholder, size = 'lg', value, setValue }) => {
-  const { validation, error, setError } = useValidation();
+const Input = ({
+  id,
+  type,
+  validationType,
+  placeholder,
+  size = 'lg',
+  value,
+  setValue,
+  externalError,
+}) => {
+  const { validation, error } = useValidation();
+
+  const displayError = externalError ?? error;
 
   const sizeStyle = {
     sm: 'text-sm',
@@ -13,18 +24,21 @@ const Input = ({ id, type, placeholder, size = 'lg', value, setValue }) => {
   return (
     <>
       <input
-        className={`mt-[20px] w-full border border-gray-200 px-[20px] py-[18px] text-white active:bg-gray-500 ${sizeStyle[size]} ${error.isError ? 'border-red' : ''}`}
+        className={`mt-[10px] w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${displayError.isError ? 'border-red' : ''}`}
         id={id}
         name={id}
         type={type}
         placeholder={placeholder}
+        value={value}
         onChange={(e) => {
           setValue(e.target.value);
-          validation(type, value);
+          validation(validationType || type, e.target.value);
         }}
-        onBlur={() => validation(type, value)}
+        onBlur={(e) => validation(validationType || type, e.target.value)}
       />
-      {error.isError && <span className="text-red">{error.errMsg}</span>}
+      {displayError.isError && (
+        <span className="text-red text-sm">{displayError.errMsg}</span>
+      )}
     </>
   );
 };
