@@ -11,6 +11,7 @@ const Input = ({
   value,
   setValue,
   externalError,
+  ...props
 }) => {
   const { validation, error } = useValidation();
 
@@ -24,7 +25,7 @@ const Input = ({
   return (
     <>
       <input
-        className={`mt-[10px] w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${displayError.isError ? 'border-red' : ''}`}
+        className={`mt-[10px] w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${type === 'number' ? 'input-h-scroll' : ''} ${displayError.isError ? 'border-red' : ''}`}
         id={id}
         name={id}
         type={type}
@@ -35,6 +36,7 @@ const Input = ({
           validation(validationType || type, e.target.value);
         }}
         onBlur={(e) => validation(validationType || type, e.target.value)}
+        {...props}
       />
       {displayError.isError && (
         <span className="text-red text-sm">{displayError.errMsg}</span>
