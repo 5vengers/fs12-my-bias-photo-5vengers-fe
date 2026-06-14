@@ -27,9 +27,11 @@ const Header = () => {
         {isLogin ? (
           <>
             <li>1500 p</li> {/*나중에 Point API와 연결*/}
-            <li>{user?.nickname}</li>
             <li className="cursor-pointer">
               <Image src={alramIcon} width={24} height={24} alt="알림 아이콘" />
+            </li>
+            <li className="font-baskin text-[18px] font-normal tracking-[-0.54px] text-gray-200">
+              {user?.nickname}
             </li>
             <li className={styles.gray}>|</li>
             <li

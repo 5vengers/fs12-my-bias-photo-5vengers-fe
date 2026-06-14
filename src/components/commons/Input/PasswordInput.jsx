@@ -67,7 +67,7 @@ const PasswordInput = ({
         />
         <span
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute top-[38px] right-[20px] cursor-pointer"
+          className="absolute top-[30px] right-[20px] cursor-pointer"
         >
           {showPassword ? (
             <Image
