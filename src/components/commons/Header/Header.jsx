@@ -27,18 +27,23 @@ const Header = () => {
         {isLogin ? (
           <>
             <li>1500 p</li> {/*나중에 Point API와 연결*/}
-            <li className="cursor-pointer">
-              <Image src={alramIcon} width={24} height={24} alt="알림 아이콘" />
+            <li>
+              <button type="button" aria-label="알림">
+                <Image src={alramIcon} width={24} height={24} alt="" />
+              </button>
             </li>
             <li className="font-baskin text-[18px] font-normal tracking-[-0.54px] text-gray-200">
               {user?.nickname}
             </li>
             <li className={styles.gray}>|</li>
-            <li
-              className={`${styles.gray} cursor-pointer`}
-              onClick={() => logout()}
-            >
-              로그아웃
+            <li>
+              <button
+                type="button"
+                className="cursor-pointer"
+                onClick={() => logout()}
+              >
+                로그아웃
+              </button>
             </li>
           </>
         ) : (
