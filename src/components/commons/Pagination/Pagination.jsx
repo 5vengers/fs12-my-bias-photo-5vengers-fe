@@ -2,87 +2,78 @@ import Image from 'next/image';
 import PrevIcon from '@/assets/icons/ic-left.svg';
 import NextIcon from '@/assets/icons/ic-right.svg';
 
+const DEFAULT_GROUP_SIZE = 5;
+
 /*
-    currentPage  : 현재 페이지
-    totalPages   : 총 페이지
+    currentPage : 현재 페이지
+    totalPages : 총 페이지
     onPageChange : 페이지 이동 시 실행될 함수
-    disabled     : 비활성화 여부
+    groupSize: 페이지를 보여줄 개수
+    disabled : 페이지를 보여줄지 아닐지
 */
 const Pagination = ({
   currentPage = 1,
   totalPages = 1,
   onPageChange,
+  groupSize = DEFAULT_GROUP_SIZE,
   disabled = false,
 }) => {
-  if (totalPages <= 0 || !onPageChange) return null;
+  if (totalPages <= 0 || !onPageChange) {
+    return;
+  }
 
-  /* ─── 표시할 페이지 번호 계산 (← 1 2 3 4 5 ... 20 →) ─── */
-  const buildPages = () => {
-    const delta = 2;
-    const range = [];
+  const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  const startPage = currentGroup * groupSize + 1;
+  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+  const pages = Array.from(
+    { length: endPage - startPage + 1 },
+    (_, index) => startPage + index,
+  );
 
-    for (
-      let i = Math.max(2, currentPage - delta);
-      i <= Math.min(totalPages - 1, currentPage + delta);
-      i++
-    ) {
-      range.push(i);
-    }
+  const navigationDisabled = disabled || totalPages === 1;
 
-    if (currentPage - delta > 2) range.unshift('...');
-    if (currentPage + delta < totalPages - 1) range.push('...');
-
-    range.unshift(1);
-    if (totalPages > 1) range.push(totalPages);
-
-    return range;
-  };
-
-  const pages = totalPages === 1 ? [1] : buildPages();
-
-  const btnBase   = 'flex items-center justify-center text-white transition-colors';
-  const pageBtn   = `${btnBase} w-[50px] h-[50px] text-sm hover:border hover:border-white/30`;
-  const activeBtn = `${pageBtn} border border-white/60`;
-  const arrowBtn  = `${btnBase} w-[50px] h-[50px]`;
+  const movePadding = 'px-[13px] py-[14px]';
+  const pagePadding = 'px-[20px] py-[13px]';
+  const pageStyle = 'text-white hover:border hover:border-gray-200';
+  const activeStyle = 'border border-border-gray-200';
 
   return (
-    <nav className="flex items-center justify-center gap-[20px]" aria-label="페이지네이션">
-      {/* 이전 */}
+    <nav
+      className="flex items-center justify-center gap-[10px]"
+      aria-label="페이지네이션"
+    >
       <button
         type="button"
-        className={`${arrowBtn} ${currentPage === 1 ? 'opacity-30' : 'hover:opacity-70'}`}
+        className={`${movePadding} ${pageStyle} ${currentPage === 1 ? 'grayscale' : ''}`}
         onClick={() => onPageChange(currentPage - 1)}
-        disabled={disabled || currentPage === 1}
+        disabled={navigationDisabled || currentPage === 1}
       >
         <Image src={PrevIcon} alt="이전 페이지" width={24} height={24} />
       </button>
 
-      {/* 페이지 번호 */}
-      {pages.map((page, idx) =>
-        page === '...' ? (
-          <span key={`ellipsis-${idx}`} className="text-white/40 text-sm w-[20px] text-center select-none">
-            ...
-          </span>
-        ) : (
+      {/* 현재 페이지 번호인 버튼에만 active 표시 */}
+      {pages.map((page) => {
+        const isActive = page === currentPage;
+
+        return (
           <button
             key={page}
             type="button"
-            className={page === currentPage ? activeBtn : pageBtn}
-            aria-current={page === currentPage ? 'page' : undefined}
+            className={`${pagePadding} ${pageStyle} ${isActive ? activeStyle : ''}`}
+            aria-current={isActive ? 'page' : undefined}
             onClick={() => onPageChange(page)}
             disabled={disabled}
           >
             {page}
           </button>
-        )
-      )}
+        );
+      })}
 
-      {/* 다음 */}
       <button
         type="button"
-        className={`${arrowBtn} ${currentPage === totalPages ? 'opacity-30' : 'hover:opacity-70'}`}
+        className={`${movePadding} ${pageStyle} ${currentPage === totalPages ? 'grayscale' : ''}`}
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={disabled || currentPage === totalPages}
+        disabled={navigationDisabled || currentPage === totalPages}
       >
         <Image src={NextIcon} alt="다음 페이지" width={24} height={24} />
       </button>

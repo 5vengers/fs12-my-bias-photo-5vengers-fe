@@ -1,47 +1,12 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { getMyMarketItems } from "@/libs/marketApi";
 import Search from "@/components/commons/Input/Search";
 import Select from "@/components/commons/Select/Select";
 import Pagination from "@/components/commons/Pagination/Pagination";
 import Badge from "@/components/commons/Badge/Badge";
 import Card from "@/components/commons/Card/Card";
-
-const MOCK_USER = { id: "mock-1", nickname: "유디" };
-
-const IMG = {
-  spain:  "/images/spain.png",
-  howfar: "/images/how-far.png",
-  garden: "/images/our-garden.png",
-};
-
-const MOCK_CARDS = [
-  /* ── LEGENDARY × 3 ── */
-  { id:  1, grade: "LEGENDARY",  genre: "CONCERT", saleType: "AUCTION",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id:  2, grade: "LEGENDARY",  genre: "CONCERT", saleType: "AUCTION",  status: "SOLD_OUT", quantity: 1, soldQuantity: 1, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  { id:  3, grade: "LEGENDARY",  genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  /* ── SUPER RARE × 3 ── */
-  { id:  4, grade: "SUPER_RARE", genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id:  5, grade: "SUPER_RARE", genre: "FANSIGN", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id:  6, grade: "SUPER_RARE", genre: "ALBUM",   saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  /* ── RARE × 5 ── */
-  { id:  7, grade: "RARE",       genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id:  8, grade: "RARE",       genre: "CONCERT", saleType: "INSTANT",  status: "SOLD_OUT", quantity: 1, soldQuantity: 1, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  { id:  9, grade: "RARE",       genre: "FANSIGN", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id: 10, grade: "RARE",       genre: "ALBUM",   saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id: 11, grade: "RARE",       genre: "MD",      saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  /* ── COMMON × 10 ── */
-  { id: 12, grade: "COMMON",     genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id: 13, grade: "COMMON",     genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  { id: 14, grade: "COMMON",     genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id: 15, grade: "COMMON",     genre: "BENEFIT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id: 16, grade: "COMMON",     genre: "FANSIGN", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  { id: 17, grade: "COMMON",     genre: "ALBUM",   saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id: 18, grade: "COMMON",     genre: "CONCERT", saleType: "INSTANT",  status: "SOLD_OUT", quantity: 1, soldQuantity: 1, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-  { id: 19, grade: "COMMON",     genre: "CONCERT", saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "How Far I'll Go", imageUrl: IMG.howfar } } },
-  { id: 20, grade: "COMMON",     genre: "MD",      saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "우리집 앞마당",  imageUrl: IMG.garden } } },
-  { id: 21, grade: "COMMON",     genre: "COLLAB",  saleType: "INSTANT",  status: "ON_SALE",  quantity: 1, soldQuantity: 0, pricePerCard: 4, myCard: { photoCard: { name: "스페인 여행",     imageUrl: IMG.spain  } } },
-];
 
 /* ─── 등급 ─── */
 const GRADE_LABEL = {
@@ -85,6 +50,18 @@ const FILTER_OPTIONS = {
   매진여부: ["전체", "판매중", "판매완료"],
 };
 
+/* ─── 로딩 스켈레톤 ─── */
+function CardSkeleton() {
+  return (
+    <div className="flex min-h-[600px] max-w-[440px] flex-col items-center rounded-xs border-[2px] border-white/10 bg-gray-500 p-[40px] animate-pulse">
+      <div className="h-6 bg-white/5 rounded w-[70%] mb-4" />
+      <div className="h-[270px] w-[360px] bg-white/5 mb-4" />
+      <div className="h-4 bg-white/5 rounded w-full mb-2" />
+      <div className="h-4 bg-white/5 rounded w-full" />
+    </div>
+  );
+}
+
 /* ─── 카드 컴포넌트 ─── */
 function SaleCard({ card, nickname }) {
   const isSoldOut = card.status === "SOLD_OUT";
@@ -94,15 +71,8 @@ function SaleCard({ card, nickname }) {
   const saleType  = card.saleType ?? "INSTANT";
 
   return (
-    <Card isLogo>
-      <div className="w-full flex justify-between items-center mb-3">
-        <Card.Title>{cardName}</Card.Title>
-        {!isSoldOut && (
-          <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 border rounded-sm ${saleType === "AUCTION" ? "sale-auction border-purple" : "sale-instant border-blue"}`}>
-            {SALE_TYPE_LABEL[saleType]}
-          </span>
-        )}
-      </div>
+    <Card>
+      <Card.Title>{cardName}</Card.Title>
       <Card.Image
         src={imageUrl}
         alt={cardName}
@@ -113,11 +83,22 @@ function SaleCard({ card, nickname }) {
           <span className={`font-bold text-[11px] ${GRADE_CLASS[card.grade] ?? ""}`}>
             {GRADE_LABEL[card.grade] ?? card.grade}
           </span>
-          <span className="text-gray-300 text-[11px]">{GENRE_LABEL[card.genre] ?? card.genre}</span>
+          <span className="text-gray-300">{GENRE_LABEL[card.genre] ?? card.genre}</span>
         </Card.Info>
       </Card.InfoLayout>
       <Card.SaleInfoLayout>
-        <Card.SaleInfo title="가격" type="point" count={card.pricePerCard} />
+        {!isSoldOut && (
+          <div className="flex w-full justify-end">
+            <span className={`text-[10px] font-semibold ${saleType === "AUCTION" ? "sale-auction" : "sale-instant"}`}>
+              {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
+            </span>
+          </div>
+        )}
+        <Card.SaleInfo
+          title="가격"
+          type="point"
+          count={Number(card.pricePerCard).toLocaleString()}
+        />
         <Card.SaleInfo title="잔여" count={remaining} />
       </Card.SaleInfoLayout>
     </Card>
@@ -126,10 +107,13 @@ function SaleCard({ card, nickname }) {
 
 /* ─── 메인 페이지 ─── */
 export default function MySalesPage() {
-  const user  = MOCK_USER;
-  const cards = MOCK_CARDS;
+  const user = null;
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [cards, setCards]         = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError]         = useState(null);
+
+  const [currentPage, setCurrentPage]       = useState(1);
   const PAGE_SIZE = 9;
 
   const [searchQuery, setSearchQuery]       = useState("");
@@ -138,6 +122,22 @@ export default function MySalesPage() {
   const [filterGenre, setFilterGenre]       = useState("전체");
   const [filterSaleType, setFilterSaleType] = useState("전체");
   const [filterSoldOut, setFilterSoldOut]   = useState("전체");
+
+  useEffect(() => {
+    if (!user?.id) { setIsLoading(false); return; }
+    (async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await getMyMarketItems(user.id);
+        setCards(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [user?.id]);
 
   const gradeCounts = useMemo(() =>
     cards.reduce((acc, c) => {
@@ -185,7 +185,7 @@ export default function MySalesPage() {
         {/* 통계 박스 */}
         <div className="w-[650px] min-h-[95px] border border-white/15 rounded py-[14px] px-5 flex flex-col justify-between gap-2.5">
           <span className="text-white/70 text-sm font-medium">
-            {user.nickname}님이 보유한 포토카드&nbsp;
+            {user?.nickname ?? "회원"}님이 보유한 포토카드&nbsp;
             <span className="text-white font-bold">(총 {totalQuantity}장)</span>
           </span>
           <div className="flex items-center gap-[10px]">
@@ -196,7 +196,7 @@ export default function MySalesPage() {
                 <button
                   key={grade}
                   onClick={() => setSelectedGrade(isActive ? null : grade)}
-                  className={`text-[11px] scale-[0.9] origin-left transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
+                  className={`text-xs transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
                 >
                   <Badge grade={grade} count={count} />
                 </button>
@@ -260,19 +260,34 @@ export default function MySalesPage() {
           </Select>
         </div>
 
-        <div className="grid grid-cols-3 gap-[80px]">
-          {pagedCards.map((card) => (
-            <SaleCard key={card.id} card={card} nickname={user.nickname} />
-          ))}
-        </div>
-
-        {filteredCards.length === 0 && (
-          <div className="text-center py-20 text-white/40 text-[15px]">
-            조건에 맞는 포토카드가 없습니다.
+        {error && (
+          <div className="p-5 bg-red-500/10 border border-red-500/30 rounded-lg text-[#f87171] text-sm mb-6">
+            ⚠️ {error}
           </div>
         )}
 
-        {totalPages > 1 && (
+        {!user && !isLoading && (
+          <div className="text-center py-20 text-white/40 text-[15px]">
+            로그인 후 나의 판매 포토카드를 확인할 수 있습니다.
+          </div>
+        )}
+
+        <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
+          {isLoading
+            ? Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} />)
+            : pagedCards.map((card) => (
+                <SaleCard key={card.id} card={card} nickname={user?.nickname ?? "회원"} />
+              ))
+          }
+        </div>
+
+        {!isLoading && !error && user && filteredCards.length === 0 && (
+          <div className="text-center py-20 text-white/40 text-[15px]">
+            판매 중인 포토카드가 없습니다.
+          </div>
+        )}
+
+        {!isLoading && totalPages > 1 && (
           <div className="mt-12 mb-8">
             <Pagination
               currentPage={currentPage}
