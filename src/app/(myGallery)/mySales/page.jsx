@@ -110,7 +110,7 @@ export default function MySalesPage() {
   const user = null;
 
   const [cards, setCards]         = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError]         = useState(null);
 
   const [currentPage, setCurrentPage]       = useState(1);
@@ -262,7 +262,7 @@ export default function MySalesPage() {
 
         {error && (
           <div className="p-5 bg-red-500/10 border border-red-500/30 rounded-lg text-[#f87171] text-sm mb-6">
-            오류: {error}
+            ⚠️ {error}
           </div>
         )}
 
