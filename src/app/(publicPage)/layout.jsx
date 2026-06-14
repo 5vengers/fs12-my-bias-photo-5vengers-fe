@@ -1,7 +1,5 @@
-import { PublicGuard } from '../../components/commons/AuthGuard/AuthGuard';
-
 const PublicLayout = ({ children }) => {
-  return <PublicGuard>{children}</PublicGuard>;
+  return children;
 };
 
 export default PublicLayout;

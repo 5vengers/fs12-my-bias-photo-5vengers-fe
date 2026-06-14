@@ -196,7 +196,7 @@ export default function MySalesPage() {
                 <button
                   key={grade}
                   onClick={() => setSelectedGrade(isActive ? null : grade)}
-                  className={`transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
+                  className={`text-xs transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
                 >
                   <Badge grade={grade} count={count} />
                 </button>

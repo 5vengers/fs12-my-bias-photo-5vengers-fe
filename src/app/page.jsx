@@ -554,10 +554,12 @@ function FooterCTASection() {
         width: "160px",
         flexShrink: 0,
       }}>
-        <img
+        <Image
           src="/images/art3.jpg"
           alt="최애의포토"
-          style={{ width: "140px", height: "140px", objectFit: "cover", display: "block" }}
+          width={140}
+          height={140}
+          style={{ objectFit: "cover", display: "block" }}
         />
       </div>
 
