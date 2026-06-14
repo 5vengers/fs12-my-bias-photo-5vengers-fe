@@ -21,7 +21,7 @@ const Input = ({
   return (
     <>
       <input
-        className={`mt-[20px] w-full border border-gray-200 px-[20px] py-[18px] text-white active:bg-gray-500 ${sizeStyle[size]} ${type === 'number' && 'input-h-scroll'} ${error.isError ? 'border-red' : ''}`}
+        className={`w-full border border-gray-200 px-[20px] py-[18px] text-white active:bg-gray-500 ${sizeStyle[size]} ${type === 'number' && 'input-h-scroll'} ${error.isError ? 'border-red' : ''}`}
         id={id}
         name={id}
         type={type}

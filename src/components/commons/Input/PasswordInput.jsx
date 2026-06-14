@@ -53,7 +53,7 @@ const PasswordInput = ({
     <div>
       <div className="relative flex items-center justify-between">
         <input
-          className={`mt-[20px] w-full border border-gray-200 px-[20px] py-[18px] text-white ${sizeStyle[size]} ${error.isError ? 'border-red' : ''}`}
+          className={`w-full border border-gray-200 px-[20px] py-[18px] text-white ${sizeStyle[size]} ${error.isError ? 'border-red' : ''}`}
           id={id}
           type={showPassword ? 'text' : 'password'}
           placeholder={placeholder}
