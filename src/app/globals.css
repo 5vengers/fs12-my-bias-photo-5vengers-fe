@@ -99,3 +99,24 @@
 /* 판매 유형 텍스트 색상 */
 .sale-auction { color: var(--purple); }
 .sale-instant { color: #00D1FF;       }
+
+/* 랜딩 페이지 애니메이션 */
+@keyframes floatUp {
+  0%   { transform: translateY(0px); opacity: 1; }
+  80%  { opacity: 0.8; }
+  100% { transform: translateY(-160px); opacity: 0; }
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.3) translateY(20px); opacity: 0; }
+  60%  { transform: scale(1.15) translateY(-6px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes boxShake {
+  0%,100% { transform: rotate(0deg); }
+  20%     { transform: rotate(-8deg); }
+  40%     { transform: rotate(8deg); }
+  60%     { transform: rotate(-5deg); }
+  80%     { transform: rotate(5deg); }
+}
