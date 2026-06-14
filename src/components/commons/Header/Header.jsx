@@ -15,17 +15,9 @@ const Header = () => {
         </Link>
       </div>
 
-      {/* 가운데: 주요 nav */}
-      <ul className="flex items-center justify-center gap-[10px] text-sm">
-        <li className="text-white font-medium">
-          <Link href="/myCards">나의 포토카드</Link>
-        </li>
-        <li className="text-white font-medium">
-          <Link href="/mySales">나의 판매 포토카드</Link>
-        </li>
-      </ul>
+      <div />
 
-      {/* 오른쪽: 로그인/회원가입 */}
+{/* 오른쪽: 로그인/회원가입 */}
       <ul className="flex items-center justify-end gap-[10px] text-sm">
         <li className={styles.gray}>|</li>
         <li className="text-white font-medium">
