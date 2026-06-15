@@ -24,10 +24,16 @@ export default function ModalSell({ isOpen, onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative flex h-[1160px] w-[1100px] flex-col bg-gray-500 px-[120px] py-[60px]">
+      <div className="relative flex h-[1000px] w-[1160px] flex-col bg-gray-500 px-[120px] py-[60px]">
+        <div
+          className="absolute top-[60px] right-[60px] z-[60] cursor-pointer"
+          onClick={onClose}
+        >
+          <Image src={CloseIcon} alt="닫기버튼" width={24} height={24} />
+        </div>
+
         {step === 'gallery' ? (
           <GalleryStep
-            onClose={onClose}
             onSelect={(card) => {
               setSelectedCard(card);
               setStep('form');
@@ -38,11 +44,7 @@ export default function ModalSell({ isOpen, onClose }) {
             setGenre={setGenre}
           />
         ) : (
-          <FormStep
-            card={selectedCard}
-            onBack={() => setStep('gallery')}
-            onClose={onClose}
-          />
+          <FormStep card={selectedCard} onBack={() => setStep('gallery')} />
         )}
       </div>
     </div>
@@ -51,24 +53,9 @@ export default function ModalSell({ isOpen, onClose }) {
 
 // 갤러리 섹션
 
-function GalleryStep({
-  onSelect,
-  onClose,
-  grade,
-  handleGradeChange,
-  genre,
-  setGenre,
-}) {
-  // 나중에 API로 받아올 데이터입니다.
-
+function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
   return (
     <div className="flex h-full flex-col">
-      <div
-        className="absolute -top-[-30px] -right-[-30px] cursor-pointer"
-        onClick={onClose}
-      >
-        <Image src={CloseIcon} alt="닫기버튼" width={24} height={24} />
-      </div>
       <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-[#A4A4A4]">
         마이갤러리
       </h3>
