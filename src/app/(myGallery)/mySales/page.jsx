@@ -51,7 +51,7 @@ const FILTER_OPTIONS = {
 };
 
 /* ─── 로딩 스켈레톤 ─── */
-function CardSkeleton() {
+const CardSkeleton = () => {
   return (
     <div className="flex min-h-[600px] max-w-[440px] flex-col items-center rounded-xs border-[2px] border-white/10 bg-gray-500 p-[40px] animate-pulse">
       <div className="h-6 bg-white/5 rounded w-[70%] mb-4" />
@@ -63,7 +63,7 @@ function CardSkeleton() {
 }
 
 /* ─── 카드 컴포넌트 ─── */
-function SaleCard({ card, nickname }) {
+const SaleCard = ({ card, nickname }) => {
   const isSoldOut = card.status === "SOLD_OUT";
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
