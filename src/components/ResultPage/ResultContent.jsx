@@ -2,6 +2,7 @@ import Button from '../commons/Button/Button';
 import Link from 'next/link';
 
 import { LINK_NAME } from '@/app/(privatePage)/result/result.config.js';
+import { useRouter } from 'next/navigation';
 
 /**
  * title = 해당 행동의 제목 (포토카드 생성 등)
@@ -10,15 +11,20 @@ import { LINK_NAME } from '@/app/(privatePage)/result/result.config.js';
  * isSuccess = 성공 or 실패 (boolean)
  */
 const ResultContent = ({ title, info = '', link, isSuccess }) => {
+  const router = useRouter();
+
   // 받침이 있는지 없는지 확인합니다.
   const hasFinalConstant = (char) => {
     const code = char.charCodeAt(0);
-    return (code - 0xac00) % 28 === 0;
+    if (code < 0xac00 || code > 0xd7a3) return false;
+    return (code - 0xac00) % 28 !== 0;
   };
 
   const handleBtnTxt = () => {
     const linkName = link.slice(1);
-    const lastChar = link.slice(-1);
+    const linkLabel = LINK_NAME[linkName];
+    const lastChar = linkLabel?.slice(-1);
+
     //받침이 있으면 으로, 없으면 로
     const charFix = hasFinalConstant(lastChar) ? '으로' : '로';
 
@@ -47,9 +53,9 @@ const ResultContent = ({ title, info = '', link, isSuccess }) => {
         </p>
       </div>
 
-      <Link href={link} className="w-full text-center">
-        <Button type="sec">{handleBtnTxt()}</Button>
-      </Link>
+      <Button size="lg" type="sec" onClick={() => router.push(link)}>
+        {handleBtnTxt()}
+      </Button>
     </div>
   );
 };

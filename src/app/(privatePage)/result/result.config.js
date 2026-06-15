@@ -5,17 +5,17 @@ export const RESULT_CONFIG = {
     sell: {
       title: '판매 등록',
       success: { link: '/myGallery' },
-      fail: { link: '/marketPalce' },
+      fail: { link: '/market' },
     },
     buy: {
       title: '구매',
       success: { link: '/myGallery' },
-      fail: { link: '/marketPalce' },
+      fail: { link: '/market' },
     },
     exchange: {
       title: '교환 제시',
       success: { link: '/mySales' },
-      fail: { link: '/marketPlace' },
+      fail: { link: '/market' },
     },
     create: {
       title: '포토카드 생성',
@@ -26,7 +26,7 @@ export const RESULT_CONFIG = {
   auth: {
     login: {
       title: '로그인',
-      success: { link: '/myGallery' },
+      success: { link: '/market' },
       fail: { link: '/login' },
     },
     register: {

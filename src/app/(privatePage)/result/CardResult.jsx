@@ -21,7 +21,9 @@ const CardResult = ({ config }) => {
 
   /* 전역 변수 card 정보 삭제 */
   useEffect(() => {
-    reset();
+    return () => {
+      reset();
+    };
   }, [reset]);
 
   // message 값 변환 (카드 정보 없으면 title, status만)

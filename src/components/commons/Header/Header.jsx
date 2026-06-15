@@ -27,7 +27,7 @@ const Header = () => {
         {isLogin ? (
           <>
             <li>1500 p</li> {/*나중에 Point API와 연결*/}
-            <li>
+            <li className="flex items-center">
               <button type="button" aria-label="알림">
                 <Image src={alramIcon} width={24} height={24} alt="" />
               </button>
