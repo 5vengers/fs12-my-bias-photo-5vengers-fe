@@ -128,7 +128,7 @@ const PhotoCardCreate = () => {
             </Select>
           </FormField>
 
-          <FormField label={'가격'} labelFor={'card-pricec'}>
+          <FormField label={'가격'} labelFor={'card-price'}>
             <Input
               id="card-price"
               type={'number'}
@@ -150,9 +150,7 @@ const PhotoCardCreate = () => {
           </FormField>
 
           <div>
-            <p className="font-bold" htmlFor="file-box">
-              사진 업로드
-            </p>
+            <p className="font-bold">사진 업로드</p>
             <label
               htmlFor="card-upload"
               className="mt-[20px] flex items-center justify-between"
