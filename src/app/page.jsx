@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import styles from "./page.module.css";
 
 export default function LandingPage() {
   return (
@@ -87,8 +88,8 @@ function PointSection() {
             ].map(({ val, left, top, delay, size, opacity }) => (
               <div
                 key={val + top}
-                style={{ left, top, fontSize: size, opacity, animationDelay: delay }}
-                className="absolute text-main font-extrabold animate-[floatUp_3s_ease-in_infinite]"
+                style={{ "--left": left, "--top": top, "--size": size, "--opacity": opacity, "--delay": delay }}
+                className={`absolute text-main font-extrabold animate-[floatUp_3s_ease-in_infinite] ${styles.floatingPoint}`}
               >
                 {val}
               </div>
@@ -204,8 +205,8 @@ function NotificationSection() {
                   {["/images/img-image3.png", "/images/img-image2.png"].map((img, i) => (
                     <div
                       key={i}
-                      style={{ backgroundImage: `url(${img})` }}
-                      className="h-[110px] bg-center bg-cover bg-no-repeat rounded-[6px]"
+                      style={{ "--bg-url": `url(${img})` }}
+                      className={`h-[110px] bg-center bg-cover bg-no-repeat rounded-[6px] ${styles.notifImage}`}
                     />
                   ))}
                 </div>
@@ -354,19 +355,13 @@ function RandomBoxSection() {
                         /* ── 닫힌 상자 ── */
                         <div
                           onClick={() => handleBoxClick(i)}
-                          style={{
-                            filter: isDisabled
-                              ? "drop-shadow(0 4px 8px rgba(0,0,0,0.3)) grayscale(0.6) brightness(0.5)"
-                              : `drop-shadow(0 16px 32px ${shadow})`,
-                            animation: !isDisabled && openedIdx === null
-                              ? `boxShake 2s ease-in-out ${i * 0.4}s infinite`
-                              : "none",
-                            transition: "filter 0.3s, transform 0.15s",
-                          }}
-                          className={`w-[120px] h-[130px] relative ${
+                          style={{ "--glow-color": shadow, "--anim-delay": `${i * 0.4}s` }}
+                          className={`${styles.box} ${
                             isDisabled
-                              ? "cursor-not-allowed"
-                              : "cursor-pointer hover:scale-[1.08] hover:-translate-y-1"
+                              ? styles.boxDisabled
+                              : openedIdx === null
+                                ? `${styles.boxActive} ${styles.boxShaking}`
+                                : styles.boxActive
                           }`}
                         >
                           {/* 상자 본체 */}
