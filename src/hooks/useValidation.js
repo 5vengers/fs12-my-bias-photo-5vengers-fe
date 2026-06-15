@@ -50,6 +50,34 @@ const useValidation = () => {
       }
     }
 
+    if (type === 'password') {
+      if (value.length < 8) {
+        setError({
+          isError: true,
+          errMsg: '비밀번호는 8자 이상이어야 합니다.',
+        });
+        return;
+      }
+      if (value.length > 20) {
+        setError({
+          isError: true,
+          errMsg: '비밀번호는 20자 이하이어야 합니다.',
+        });
+        return;
+      }
+    }
+
+    if (type === 'nickname') {
+      if (value.length < 2) {
+        setError({ isError: true, errMsg: '닉네임은 2자 이상이어야 합니다.' });
+        return;
+      }
+      if (value.length > 20) {
+        setError({ isError: true, errMsg: '닉네임은 20자 이하이어야 합니다.' });
+        return;
+      }
+    }
+
     setError({
       isError: false,
       errMsg: '',
