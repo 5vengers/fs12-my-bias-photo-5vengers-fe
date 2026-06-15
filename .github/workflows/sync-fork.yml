@@ -5,7 +5,7 @@ on:
     branches: [dev]
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Node.js 24 강제 적용
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true ## Node.js 24 강제 적용
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Pushes to another repository
         id: push_directory
-        uses: cpina/github-action-push-to-another-repository@v1.7.3 # main → v2 고정
+        uses: cpina/github-action-push-to-another-repository@v1.7.3
         env:
           API_TOKEN_GITHUB: ${{ secrets.NAYEON_GITHUB_KEY }}
         with:
