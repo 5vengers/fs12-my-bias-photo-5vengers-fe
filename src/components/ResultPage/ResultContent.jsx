@@ -1,13 +1,12 @@
 import Button from '../commons/Button/Button';
 import Link from 'next/link';
 
-import { LINK_NAME } from '@/app/(publicPage)/result/result.config.js';
+import { LINK_NAME } from '@/app/(privatePage)/result/result.config.js';
 
 /**
  * title = 해당 행동의 제목 (포토카드 생성 등)
  * info = 해당 하는 result 값에 info가 있을 경우 사용(예: [RARE | 포토카드 이름])
  * link = 이동할 link
- * btnTxt = 이동할 곳의 이름 (마이갤러리 확인하기 등)
  * isSuccess = 성공 or 실패 (boolean)
  */
 const ResultContent = ({ title, info = '', link, isSuccess }) => {
