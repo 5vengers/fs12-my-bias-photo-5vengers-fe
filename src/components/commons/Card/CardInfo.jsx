@@ -1,6 +1,10 @@
-const CardInfo = ({ children, nickname }) => {
+const CardInfo = ({ children, nickname, className }) => {
+  const defaultStyle =
+    'mb-[20px] flex w-full items-center justify-between border-b border-gray-400 pb-[20px]';
+
   return (
-    <div className="mb-[20px] flex w-full items-center justify-between border-b border-gray-400 pb-[20px]">
+    // className을 넘겨주면 그게 적용되고, 안 넘겨주면 defaultStyle 적용
+    <div className={className || defaultStyle}>
       <div className="info-box flex items-center justify-center gap-[10px]">
         {children}
       </div>
