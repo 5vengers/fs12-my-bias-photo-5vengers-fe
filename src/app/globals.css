@@ -34,6 +34,8 @@
 
   --font-noto: var(--font-noto-sans-kr);
   --font-baskin: var(--font-baskin-robbins);
+
+  --inset-shadow-xs: 0 0 0 1px var(--white) inset;
 }
 
 .text-overflow {
