@@ -1,6 +1,6 @@
 /*
   children = 버튼에 들어갈 text 및 html
-  size = 버튼 사이즈 'lg, 'sm' (기본 'lg')
+  size = 버튼 사이즈 'full', 'lg', 'sm' (기본 'full')
   isThick = 버튼 두껍기 (기본 true)
   disabled = 버튼 활성화 (기본 false)
   btnType = 버튼 타입 'button', 'submit' (기본 'button')
