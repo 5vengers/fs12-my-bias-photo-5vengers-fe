@@ -52,6 +52,12 @@
   color: var(--gray400);
 }
 
+.input-h-scroll::-webkit-outer-spin-button,
+.input-h-scroll::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* btns */
 
 .btn {

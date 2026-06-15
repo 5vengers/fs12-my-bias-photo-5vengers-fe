@@ -7,6 +7,7 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import MarketListPage from '@/components/MarketPage/MarketListPage';
 import SellModal from '@/components/MarketPage/MarketModal/ModalSell';
+
 export default function MarketPageClient() {
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
