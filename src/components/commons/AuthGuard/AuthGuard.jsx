@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { useIsAuthenticated } from '../../../hooks/useAuth';
-import useAuthStore from '../../../store/authStore';
+import { useIsAuthenticated } from '@/hooks/useAuth';
+import useAuthStore from '@/store/authStore';
 
 // ─────────────────────────────────────────────
 // 공통 로딩 UI
@@ -46,6 +46,7 @@ export const PrivateGuard = ({ children }) => {
 // ─────────────────────────────────────────────
 // PublicGuard: 비로그인 유저만 접근
 // 인증 상태 -> / 리다이렉트
+// /auth/callback은 예외: executeRefresh 완료 후 직접 redirect하므로 제외
 // ─────────────────────────────────────────────
 export const PublicGuard = ({ children }) => {
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
@@ -53,18 +54,20 @@ export const PublicGuard = ({ children }) => {
   const accessToken = useAuthStore((state) => state.accessToken);
   const isAuthenticated = useIsAuthenticated();
   const router = useRouter();
+  const pathname = usePathname();
 
   const isRefreshing = !!user && !accessToken;
+  const isOAuthCallback = pathname === '/auth/callback';
 
   useEffect(() => {
-    if (hasHydrated && !isRefreshing && isAuthenticated) {
+    if (hasHydrated && !isRefreshing && isAuthenticated && !isOAuthCallback) {
       router.replace('/');
     }
-  }, [hasHydrated, isRefreshing, isAuthenticated, router]);
+  }, [hasHydrated, isRefreshing, isAuthenticated, router, isOAuthCallback]);
 
   if (!hasHydrated) return <AuthLoading />;
-  if (isRefreshing) return <AuthLoading />; 
-  if (isAuthenticated) return null; 
+  if (isRefreshing) return <AuthLoading />;
+  if (isAuthenticated && !isOAuthCallback) return null;
 
   return children;
 };

@@ -12,7 +12,7 @@
 import axios from 'axios';
 import useAuthStore from '../store/authStore';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000';
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -38,18 +38,15 @@ export const executeRefresh = () => {
     refreshPromise = refreshClient
       .post('/api/auth/refresh')
       .then((res) => {
-        const newAccessToken = res.data?.data?.accessToken;
-        if (!newAccessToken)
+        const accessToken = res.data?.data?.accessToken;
+        const user = res.data?.data?.user;
+
+        if (!accessToken || !user)
           throw new Error('토큰 재발급 응답이 올바르지 않습니다.');
 
-        const { user, setAccessToken } = useAuthStore.getState();
-        // refresh 요청 중 로그아웃되어 인증 상태가 초기화된 경우
-        if (!user) {
-          
-          throw new Error('Refresh 응답 수신 전 인증 상태가 초기화되었습니다.');
-        }
-        setAccessToken(newAccessToken); // 토큰 저장
-        return { accessToken: newAccessToken };
+        useAuthStore.getState().setAuth(user, accessToken);
+
+        return { accessToken, user };
       })
       .catch((err) => {
         console.error('[executeRefresh] 토큰 재발급 실패:', err);
