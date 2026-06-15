@@ -31,7 +31,7 @@ const ResultContent = ({ title, info = '', link, isSuccess }) => {
   };
 
   return (
-    <div className="mx-auto flex h-dvh w-[1000px] flex-col items-center justify-center gap-[60px]">
+    <div className="h-screen-header mx-auto flex w-[520px] flex-col items-center justify-center gap-[60px]">
       <div className="flex flex-col items-center gap-[40px]">
         <h1 className="font-baskin text-[46px]">
           <span>{title}</span>{' '}
@@ -48,7 +48,7 @@ const ResultContent = ({ title, info = '', link, isSuccess }) => {
         </p>
       </div>
 
-      <Link href={link}>
+      <Link href={link} className="w-full text-center">
         <Button type="sec">{handleBtnTxt()}</Button>
       </Link>
     </div>

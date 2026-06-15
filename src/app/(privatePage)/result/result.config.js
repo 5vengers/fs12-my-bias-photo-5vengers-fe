@@ -26,7 +26,7 @@ export const RESULT_CONFIG = {
   auth: {
     login: {
       title: '로그인',
-      success: { link: '/' },
+      success: { link: '/myGallery' },
       fail: { link: '/login' },
     },
     register: {

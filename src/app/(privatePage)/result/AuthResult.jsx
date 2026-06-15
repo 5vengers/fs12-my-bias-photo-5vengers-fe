@@ -12,12 +12,7 @@ const AuthResult = ({ config }) => {
 
   return (
     <>
-      <ResultContent
-        title={title}
-        link={link}
-        isSuccess={isSuccess}
-        btnTxt={handleLinkTxt()}
-      />
+      <ResultContent title={title} link={link} isSuccess={isSuccess} />
     </>
   );
 };
