@@ -1,20 +1,13 @@
 'use client';
 
 import ResultContent from '@/components/ResultPage/ResultContent';
-import useCardStore from '@/store/useCardStore';
+import useCardStore from '@/store/cardStore.js';
 import { useEffect } from 'react';
 
-const LINK_NAME = {
-  myGallery: '마이갤러리',
-  marketPlace: '마켓플레이스',
-  mySales: '나의 판매 포토카드',
-};
-
 const CardResult = ({ config }) => {
-  const { title, link, statusText, status } = config;
+  const { title, link, isSuccess } = config;
 
-  const isSuccess = status === 'success';
-
+  /* 전역 변수 카드 정보 */
   const { cardName, cardGrade, cardCount } = useCardStore((state) => ({
     cardName: state.cardName,
     cardGrade: state.cardGrade,
@@ -23,6 +16,7 @@ const CardResult = ({ config }) => {
 
   const { reset } = useCardStore((state) => state.actions);
 
+  /* 전역 변수 card 정보 삭제 */
   useEffect(() => {
     reset();
   }, [reset]);
@@ -37,27 +31,16 @@ const CardResult = ({ config }) => {
       return `[${cardGrade} | ${cardName}]`;
     }
 
-    return `[${cardGrade} | ${cardName}]}`;
-  };
-
-  const handleLinkTxt = () => {
-    const linkName = link.slice(1);
-
-    if (!Object.keys(LINK_NAME).includes(linkName)) {
-      return '';
-    }
-
-    return `${LINK_NAME[linkName]} ${isSuccess ? '확인하기' : '로 돌아가기'}`;
+    return `[${cardGrade} | ${cardName}] ${cardCount}장`;
   };
 
   return (
     <>
       <ResultContent
         title={title}
-        cardIngo={handleCardInfo()}
+        info={handleCardInfo()}
         link={link}
         isSuccess={isSuccess}
-        btnTxt={handleLinkTxt()}
       />
     </>
   );

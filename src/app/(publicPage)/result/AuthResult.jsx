@@ -1,16 +1,23 @@
 'use client';
 
 import ResultContent from '@/components/ResultPage/ResultContent';
-
-const LINK_NAME = {
-  login: '로그인',
-  register: '회원가입',
-};
+import useAuthStore from '@/store/authStore';
 
 const AuthResult = ({ config }) => {
+  const { title, link, isSuccess } = config;
+
+  const user = useAuthStore((state) => state.user);
+
+  /* 유저 정보를 이용한 info 만들기 */
+
   return (
     <>
-      <ResultContent />
+      <ResultContent
+        title={title}
+        link={link}
+        isSuccess={isSuccess}
+        btnTxt={handleLinkTxt()}
+      />
     </>
   );
 };
