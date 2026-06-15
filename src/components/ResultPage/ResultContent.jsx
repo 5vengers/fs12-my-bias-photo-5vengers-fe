@@ -1,7 +1,7 @@
 import Button from '../commons/Button/Button';
 import Link from 'next/link';
 
-import { LINK_NAME } from './result.config.js';
+import { LINK_NAME } from '@/app/(publicPage)/result/result.config.js';
 
 /**
  * title = 해당 행동의 제목 (포토카드 생성 등)
@@ -10,12 +10,17 @@ import { LINK_NAME } from './result.config.js';
  * btnTxt = 이동할 곳의 이름 (마이갤러리 확인하기 등)
  * isSuccess = 성공 or 실패 (boolean)
  */
-const ResultContent = ({ title, info = '', link, isSuccess, btnTxt }) => {
-  const hasFinalConstant = (char) => {};
+const ResultContent = ({ title, info = '', link, isSuccess }) => {
+  // 받침이 있는지 없는지 확인합니다.
+  const hasFinalConstant = (char) => {
+    const code = char.charCodeAt(0);
+    return (code - 0xac00) % 28 === 0;
+  };
 
   const handleBtnTxt = () => {
     const linkName = link.slice(1);
     const lastChar = link.slice(-1);
+    //받침이 있으면 으로, 없으면 로
     const charFix = hasFinalConstant(lastChar) ? '으로' : '로';
 
     if (!Object.keys(LINK_NAME).includes(linkName)) {
@@ -26,9 +31,9 @@ const ResultContent = ({ title, info = '', link, isSuccess, btnTxt }) => {
   };
 
   return (
-    <div className="flex w-[1000px] flex-col items-center justify-center gap-[60px]">
-      <div className="flex flex-col gap-[40px]">
-        <h1 className="font-baskin">
+    <div className="mx-auto flex h-dvh w-[1000px] flex-col items-center justify-center gap-[60px]">
+      <div className="flex flex-col items-center gap-[40px]">
+        <h1 className="font-baskin text-[46px]">
           <span>{title}</span>{' '}
           <span className={isSuccess ? 'text-main' : 'text-gray-300'}>
             {isSuccess ? '성공' : '실패'}

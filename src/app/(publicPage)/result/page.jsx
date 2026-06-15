@@ -26,7 +26,7 @@ const ResultPage = async ({ searchParams }) => {
 
   const config = {
     title: RESULT_CONFIG[domain][type].title,
-    link: RESULT_CONFIG[domain][type].link,
+    link: RESULT_CONFIG[domain][type][status].link,
     isSuccess: status === 'success',
   };
 

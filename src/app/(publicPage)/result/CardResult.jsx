@@ -3,16 +3,19 @@
 import ResultContent from '@/components/ResultPage/ResultContent';
 import useCardStore from '@/store/cardStore.js';
 import { useEffect } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 const CardResult = ({ config }) => {
   const { title, link, isSuccess } = config;
 
   /* 전역 변수 카드 정보 */
-  const { cardName, cardGrade, cardCount } = useCardStore((state) => ({
-    cardName: state.cardName,
-    cardGrade: state.cardGrade,
-    cardCount: state.cardCount,
-  }));
+  const { cardName, cardGrade, cardCount } = useCardStore(
+    useShallow((state) => ({
+      cardName: state.cardName,
+      cardGrade: state.cardGrade,
+      cardCount: state.cardCount,
+    })),
+  );
 
   const { reset } = useCardStore((state) => state.actions);
 
