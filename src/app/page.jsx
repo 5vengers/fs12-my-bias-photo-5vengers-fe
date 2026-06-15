@@ -20,7 +20,7 @@ export default function LandingPage() {
 /* ═══════════════════════════════════════════
    1페이지 — Hero
 ═══════════════════════════════════════════ */
-function HeroSection() {
+const HeroSection = () => {
   return (
     <section className="w-full bg-black relative overflow-hidden min-h-screen flex flex-col items-center justify-center">
       <div className="text-center relative z-[2] pt-20 mb-12">
@@ -55,7 +55,7 @@ function HeroSection() {
 /* ═══════════════════════════════════════════
    2페이지 — 포인트로 안전하게 거래
 ═══════════════════════════════════════════ */
-function PointSection() {
+const PointSection = () => {
   return (
     <section className="w-full bg-black relative overflow-hidden min-h-[900px] flex items-center">
       {/* 올리브 블롭 */}
@@ -152,7 +152,7 @@ const NOTIFICATIONS = [
   "예진쓰님과의 [COMMON | 스페인 여행]의 포토카드 교환이 성사되었습니다.",
 ];
 
-function NotificationSection() {
+const NotificationSection = () => {
   return (
     <section className="w-full bg-black relative overflow-hidden min-h-[900px] flex items-center">
       {/* 민트 블롭 */}
@@ -237,7 +237,7 @@ const BOXES = [
   { ribbonClass: "bg-[#FF6EB4]", bow: "🎀", shadow: "rgba(255,110,180,0.5)" },
 ];
 
-function RandomBoxSection() {
+const RandomBoxSection = () => {
   const [time, setTime] = useState({ m: 59, s: 59 });
   const [openedIdx, setOpenedIdx] = useState(null);
   const [earnedPoint, setEarnedPoint] = useState(null);
@@ -398,7 +398,7 @@ function RandomBoxSection() {
 /* ═══════════════════════════════════════════
    5페이지 — Footer CTA
 ═══════════════════════════════════════════ */
-function FooterCTASection() {
+const FooterCTASection = () => {
   return (
     <section className="w-full bg-black relative overflow-hidden min-h-[420px] flex flex-col items-center justify-center border-t border-white/[0.06] py-20">
       {/* 폴라로이드 스타일 카드 */}
