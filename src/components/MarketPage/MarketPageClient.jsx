@@ -6,12 +6,14 @@ import { useState } from 'react';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import MarketListPage from '@/components/MarketPage/MarketListPage';
+import SellModal from '@/components/MarketPage/MarketModal/ModalSell';
 
 export default function MarketPageClient() {
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
   const [soldOut, setSoldOut] = useState('');
   const [sort, setSort] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleGradeChange = (value) => {
     setGrade(value);
   };
@@ -21,12 +23,13 @@ export default function MarketPageClient() {
         <h1 className="font-baskin text-[62px] font-normal tracking-[-1.86px] text-white">
           마켓플레이스
         </h1>
-        <Link
-          href="/market/sell"
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
           className="flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] bg-[var(--main)] text-[18px] font-bold !text-black transition hover:opacity-90"
         >
           나의 포토카드 판매하기 →
-        </Link>
+        </button>
       </div>
       <div className="mt-4 mb-12 flex items-center justify-between gap-6">
         {/* 왼쪽 영역 */}
@@ -151,6 +154,7 @@ export default function MarketPageClient() {
         soldOut={soldOut}
         sort={sort}
       />
+      <SellModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
