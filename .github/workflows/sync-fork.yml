@@ -4,19 +4,25 @@ on:
   push:
     branches: [dev]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Node.js 24 강제 적용
+
 jobs:
   build:
     runs-on: ubuntu-latest
     container: pandoc/latex
     steps:
       - uses: actions/checkout@v4
+
       - name: Install mustache (to update the date)
         run: apk add ruby && gem install mustache
+
       - name: creates output
         run: sh ./build.sh
+
       - name: Pushes to another repository
         id: push_directory
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@v2 # main → v2 고정
         env:
           API_TOKEN_GITHUB: ${{ secrets.NAYEON_GITHUB_KEY }}
         with:
@@ -26,5 +32,6 @@ jobs:
           user-email: ${{ secrets.NAYEON_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: dev
+
       - name: Test get variable exported by push-to-another-repository
         run: echo $DESTINATION_CLONED_DIRECTORY
