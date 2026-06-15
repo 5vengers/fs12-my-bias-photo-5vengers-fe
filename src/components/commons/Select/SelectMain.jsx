@@ -24,7 +24,6 @@ const SelectMain = ({ children, desc, size = 'lg', onChange }) => {
     md: 'w-[440px]',
     lg: 'w-[520px]',
   };
-
   const buttonStyle = {
     noLine: 'font-bold gap-[10px]',
     xs: 'border border-white px-[20px] py-[13px]',

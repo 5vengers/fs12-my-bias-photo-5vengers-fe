@@ -5,13 +5,17 @@ import useValidation from '@/hooks/useValidation';
 const Input = ({
   id,
   type,
+  validationType,
   placeholder,
   size = 'lg',
   value,
   setValue,
+  externalError,
   ...props
 }) => {
-  const { validation, error, setError } = useValidation();
+  const { validation, error } = useValidation();
+
+  const displayError = externalError ?? error;
 
   const sizeStyle = {
     sm: 'text-sm',
@@ -21,19 +25,22 @@ const Input = ({
   return (
     <>
       <input
-        className={`w-full border border-gray-200 px-[20px] py-[18px] text-white active:bg-gray-500 ${sizeStyle[size]} ${type === 'number' && 'input-h-scroll'} ${error.isError ? 'border-red' : ''}`}
+        className={`w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${type === 'number' ? 'input-h-scroll' : ''} ${displayError.isError ? 'border-red' : ''}`}
         id={id}
         name={id}
         type={type}
         placeholder={placeholder}
+        value={value}
         onChange={(e) => {
           setValue(e.target.value);
-          validation(type, value);
+          validation(validationType || type, e.target.value);
         }}
-        onBlur={() => validation(type, value)}
+        onBlur={(e) => validation(validationType || type, e.target.value)}
         {...props}
       />
-      {error.isError && <span className="text-red">{error.errMsg}</span>}
+      {displayError.isError && (
+        <span className="text-red text-sm">{displayError.errMsg}</span>
+      )}
     </>
   );
 };

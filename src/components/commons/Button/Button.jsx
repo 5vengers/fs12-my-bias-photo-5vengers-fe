@@ -23,13 +23,14 @@ const Button = ({
   // 기본 lg
   const sizing = {
     sm: 'w-[150px]',
-    lg: 'w-[520px]',
+    lg: 'w-full max-w-[520px]',
   };
 
   // 기본 pri (노란색)
   const typeColor = {
     pri: 'bg-main text-black',
     sec: 'bg-black text-white border border-white',
+    google: 'bg-white text-black border border-gray-300'
   };
 
   return (
