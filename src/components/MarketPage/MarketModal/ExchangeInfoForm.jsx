@@ -8,15 +8,13 @@ function ExchangeInfo() {
   };
   return (
     <div className="mt-20 mb-20 flex flex-col">
-      <div className="mb-13 border-b-2 pb-2 font-[Noto_Sans_KR] text-[23px] font-bold text-white">
+      <div className="mb-13 border-b-2 pb-2 text-[23px] font-bold text-white">
         교환 희망 정보
       </div>
       <div className="flex gap-8">
         {/* 등급 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-[Noto_Sans_KR] text-[20px] font-bold text-white">
-            등급
-          </h3>
+          <h3 className="text-[20px] font-bold text-white">등급</h3>
           <Select size="md" desc="등급을 선택해 주세요" value={grade}>
             <Select.Option value="" onChange={handleGradeChange}>
               전체 등급
@@ -42,9 +40,7 @@ function ExchangeInfo() {
 
         {/* 장르 */}
         <div className="flex flex-col gap-2">
-          <h3 className="font-[Noto_Sans_KR] text-[20px] font-bold text-white">
-            장르
-          </h3>
+          <h3 className="text-[20px] font-bold text-white">장르</h3>
           <Select size="md" desc="장르를 선택해주세요" value={genre}>
             <Select.Option value="" onChange={setGenre}>
               전체 장르
@@ -93,11 +89,9 @@ function ExchangeInfo() {
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-2">
-        <h3 className="test-[20px] font-[Noto_Sans_KR] font-bold text-white">
-          교환 희망 설명
-        </h3>
+        <h3 className="text-[20px] font-bold text-white">교환 희망 설명</h3>
         <textarea
-          className="flex w-full flex-1 shrink-0 resize-none items-start gap-[10px] rounded-[2px] border border-[var(--gray-gray200)] bg-[var(--gray-gray500)] p-[18px_20px] text-white outline-none"
+          className="flex w-full flex-1 shrink-0 resize-none items-start gap-[10px] rounded-[2px] border border-gray-200 bg-gray-500 p-[18px_20px] text-white outline-none"
           placeholder="교환 희망 설명을 입력하세요"
           rows={4}
         />
