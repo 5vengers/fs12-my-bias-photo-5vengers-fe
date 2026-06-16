@@ -55,6 +55,7 @@ export const useLogin = () => {
     },
     onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
+      useAuthStore.getState().setShowLoggedInToast(true);
       router.replace('/');
     },
   });
@@ -78,7 +79,7 @@ export const useLogout = () => {
   const handleLogout = () => {
     clearAuth();
     queryClient.clear(); // 캐시된 모든 쿼리 초기화
-    router.replace('/login');
+    router.replace('/login?loggedOut=true');
   };
 
   return useMutation({

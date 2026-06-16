@@ -69,6 +69,36 @@ const RegisterSuccessToast = () => {
   );
 };
 
+const LoggedOutToast = () => {
+  const searchParams = useSearchParams();
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('loggedOut') !== 'true') return;
+
+    window.history.replaceState({}, '', '/login');
+    setShowToast(true);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!showToast) return;
+
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [showToast]);
+
+  if (!showToast) return null;
+
+  return (
+    <Toast toastType="success" onClose={() => setShowToast(false)}>
+      로그아웃 되었습니다!
+    </Toast>
+  );
+};
+
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -186,11 +216,15 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* API 에러 — formErrors 없을 때만 표시 */}
+        {/* API 에러 — formErrors 없을 때만 표시(패스워드 유효성 검사 추가) */}
         {apiErrorMsg && <p className="text-red mt-3 text-sm">{apiErrorMsg}</p>}
 
         <Suspense fallback={null}>
           <RegisterSuccessToast />
+        </Suspense>
+
+        <Suspense fallback={null}>
+          <LoggedOutToast />
         </Suspense>
 
         {/* OAuth 에러 메시지 */}
