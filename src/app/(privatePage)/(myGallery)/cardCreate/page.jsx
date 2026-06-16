@@ -90,7 +90,7 @@ const PhotoCardCreate = () => {
     <div className="mx-auto my-0 w-[1480px] py-[60px]">
       <Title text="포토카드 생성" />
       <div className="mx-auto my-0 w-[520px] py-[60px]">
-        <form className="flex flex-col gap-[20px]">
+        <form className="flex flex-col gap-[65px]">
           <FormField label={'포토카드 이름'} labelFor={'card-name'}>
             <Input
               id="card-name"
