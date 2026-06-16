@@ -25,7 +25,7 @@ export const useRegister = () => {
   return useMutation({
     mutationFn: authService.register,
     onSuccess: () => {
-      router.replace('/login');
+      router.replace('/login?registered=true');
     },
   });
 };

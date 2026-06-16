@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import Toast from '@/components/commons/Toast/Toast';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLogin } from '@/hooks/useAuth';
@@ -38,6 +39,39 @@ const OAuthErrorMessage = () => {
   );
 };
 
+const RegisterSuccessToast = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    const registered = searchParams.get('registered');
+
+    if (registered === 'true') {
+      setShowToast(true);
+
+      router.replace('/login', {
+        scroll: false,
+      });
+
+      const timer = setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, router]);
+
+  if (!showToast) return null;
+
+  return (
+    <Toast toastType="success" onClose={() => setShowToast(false)}>
+      회원가입이 완료되었습니다!
+    </Toast>
+  );
+};
+
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,7 +95,7 @@ const LoginForm = () => {
     } else if (password.length > 20) {
       errors.password = '비밀번호는 20자 이하이어야 합니다.';
     }
-    
+
     return errors;
   };
 
@@ -157,6 +191,10 @@ const LoginForm = () => {
 
         {/* API 에러 — formErrors 없을 때만 표시 */}
         {apiErrorMsg && <p className="text-red mt-3 text-sm">{apiErrorMsg}</p>}
+
+        <Suspense fallback={null}>
+          <RegisterSuccessToast />
+        </Suspense>
 
         {/* OAuth 에러 메시지 */}
         <Suspense fallback={null}>
