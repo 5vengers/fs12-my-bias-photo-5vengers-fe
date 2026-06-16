@@ -15,7 +15,7 @@ export const getMarketItems = async ({ pageParam = 1 }) => {
     },
   });
 
-  const data = response.data;
+  const data = response.data.data;
 
   return {
     items: data.items,
