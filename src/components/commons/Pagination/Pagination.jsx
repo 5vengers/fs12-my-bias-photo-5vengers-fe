@@ -81,7 +81,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
               onPageChange(prevPage < 1 ? 1 : prevPage);
             }}
             disabled={prevDisabled}
-            aria-label="prev-page"
+            aria-label="이전 페이지"
           >
             <Image src={PrevIcon} alt="이전 페이지" width={24} height={24} />
           </button>
@@ -90,10 +90,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
         {getPages(currentPage, totalPages).map((p, i, pages) => {
           const isActive = p === currentPage;
           return (
-            <li
-              key={`page-${i}`}
-              aria-current={isActive ? 'active-page' : undefined}
-            >
+            <li key={`page-${i}`} aria-current={isActive ? 'page' : undefined}>
               {p === '...' ? (
                 <span
                   className={`relative ${pageStyle} ${hoverStyle} ${isActive ? activeStyle : ''}`}
@@ -112,11 +109,9 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
                 <button
                   type="button"
                   className={`${pageStyle} ${hoverStyle} ${isActive ? activeStyle : ''}`}
-                  onClick={() => {
-                    p !== '...' && onPageChange(p);
-                  }}
+                  onClick={() => onPageChange(p)}
                   disabled={isActive}
-                  aria-label="page"
+                  aria-label={`${p} 페이지`}
                 >
                   {p}
                 </button>
@@ -134,7 +129,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
               onPageChange(nextPage < totalPages ? nextPage : totalPages);
             }}
             disabled={nextDisabled}
-            aria-label="next-page"
+            aria-label="다음 페이지"
           >
             <Image src={NextIcon} alt="다음 페이지" width={24} height={24} />
           </button>
