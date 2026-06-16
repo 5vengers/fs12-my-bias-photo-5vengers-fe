@@ -1,7 +1,7 @@
 /*
   children = 버튼에 들어갈 text 및 html
   size = 버튼 사이즈 'full', 'lg', 'sm' (기본 'full')
-  isThick = 버튼 두껍기 (기본 true)
+  isThick = 버튼 두껍기 (기본 false)
   disabled = 버튼 활성화 (기본 false)
   btnType = 버튼 타입 'button', 'submit' (기본 'button')
   type = 버튼 색 타입 'pri' = 노란색, 'sec' = 검은색 (기본 'pri')
