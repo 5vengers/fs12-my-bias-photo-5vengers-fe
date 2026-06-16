@@ -8,10 +8,7 @@ const getMyGallery = async (query) => {
   if (query) {
     // query 가 있으면 url 에 값 추가
     const queryString = Object.entries(query)
-      .filter(
-        ([key, value]) =>
-          value != null && value !== '' && value !== '등급' && value !== '장르',
-      )
+      .filter(([key, value]) => value != null && value !== '')
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&');
 

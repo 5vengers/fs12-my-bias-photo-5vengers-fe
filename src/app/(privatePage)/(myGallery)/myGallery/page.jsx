@@ -19,10 +19,6 @@ import { curDate, remainCount } from '@/libs/dateUtils';
 const MyGallery = () => {
   const user = useAuthStore((state) => state.user);
 
-  if (!user) {
-    return;
-  }
-
   const router = useRouter();
 
   const [keyword, setKeyword] = useState('');
@@ -56,7 +52,7 @@ const MyGallery = () => {
 
   if (error || isCountError || isLogError) return notFound();
 
-  const remain = remainCount(log?.count);
+  const remain = log?.count !== null ? remainCount(log?.count) : '-';
   const yearMonth = curDate();
 
   return (

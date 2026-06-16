@@ -22,7 +22,7 @@ const CardImage = ({ src, alt, state = 'sale', ...props }) => {
         className="object-cover"
         src={safeSrc}
         alt={alt || '카드 이미지'}
-        sizes="360px 270px"
+        sizes="360px"
         fill
         {...props}
       />
