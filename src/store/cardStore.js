@@ -8,16 +8,17 @@ import { create } from 'zustand';
     cardCount: 생성, 구매, 교환 될 카드 개수,
 */
 
-const useCardStore = create((set) => ({
-  cardName: '',
-  cardGrade: '',
-  cardGenre: '',
-  cardCount: '',
+const init = { cardName: '', cardGrade: '', cardCount: '' };
 
-  setCardName: (name) => set({ cardName: name }),
-  setCardGrade: (grade) => set({ cardGrade: grade }),
-  setCardGenre: (genre) => set({ cardGrade: genre }),
-  setCardCount: (count) => set({ cardCount: count }),
+const useCardStore = create((set) => ({
+  ...init,
+
+  actions: {
+    setCardName: (name) => set({ cardName: name }),
+    setCardGrade: (grade) => set({ cardGrade: grade }),
+    setCardCount: (count) => set({ cardCount: count }),
+    reset: () => set(init),
+  },
 }));
 
 export default useCardStore;
