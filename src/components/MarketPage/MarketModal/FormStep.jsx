@@ -11,7 +11,7 @@ function FormStep({ card, onBack }) {
     COMMON: 'text-main',
     RARE: 'text-blue',
     SUPER_RARE: 'text-purple',
-    LAGENDARY: 'text-pink',
+    LEGENDARY: 'text-pink',
   };
   const [quantity, setQuantity] = useState(1);
   if (!card) return null;
