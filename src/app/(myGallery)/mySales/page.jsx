@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { getMyMarketItems } from "@/libs/marketApi";
 import { CardGrade, Genre, MarketStatus } from "@/constants/enums";
+import useAuthStore from "@/store/authStore";
 import Search from "@/components/commons/Input/Search";
 import Select from "@/components/commons/Select/Select";
 import Pagination from "@/components/commons/Pagination/Pagination";
@@ -108,7 +109,7 @@ const SaleCard = ({ card, nickname }) => {
 
 /* ─── 메인 페이지 ─── */
 const MySalesPage = () => {
-  const user = null;
+  const user = useAuthStore((state) => state.user);
 
   const [cards, setCards]         = useState([]);
   const [isLoading, setIsLoading] = useState(true);
