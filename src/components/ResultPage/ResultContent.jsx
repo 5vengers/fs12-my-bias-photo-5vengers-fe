@@ -1,7 +1,7 @@
 import Button from '../commons/Button/Button';
 import Link from 'next/link';
 
-import { LINK_NAME } from '@/app/(privatePage)/result/result.config.js';
+import { LINK_NAME } from '@/app/(private)/result/result.config';
 import { useRouter } from 'next/navigation';
 
 /**
