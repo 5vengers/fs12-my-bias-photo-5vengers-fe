@@ -15,7 +15,13 @@ const CardImage = ({ src, alt, state = 'sale' }) => {
           />
         </div>
       )}
-      <Image className="object-cover" src={src} alt={alt} fill />
+      <Image
+        className="object-cover"
+        src={src}
+        alt={alt}
+        width={360}
+        height={270}
+      />
     </div>
   );
 };
