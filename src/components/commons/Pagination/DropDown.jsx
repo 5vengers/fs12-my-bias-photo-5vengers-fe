@@ -1,14 +1,4 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 const DropDown = ({ isOpen, handleOpen, index, start, end, onChange }) => {
-  const [pages, setPages] = useState([]);
-
-  useEffect(() => {
-    setPages(getPages());
-  }, []);
-
   const getPages = () => {
     const pages = [];
 
@@ -20,20 +10,21 @@ const DropDown = ({ isOpen, handleOpen, index, start, end, onChange }) => {
   };
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative z-[10] size-full">
       <button
         type="button"
-        className="h-full w-full"
+        className="size-full"
         onClick={() => handleOpen(isOpen ? null : index)}
+        aria-label="ellipsis-page"
       >
         ...
       </button>
       {isOpen && (
         <ul className="custom-scrollbar absolute top-[0] flex max-h-[180px] w-full flex-col items-center overflow-y-scroll border border-gray-100 bg-black">
-          {pages.map((p, i) => (
+          {getPages().map((p, i, pages) => (
             <li
               key={`drop-page-${i}`}
-              className="w-full py-[8px] text-center hover:bg-gray-500"
+              className={`w-full text-center hover:bg-gray-500 ${pages.length === 1 ? 'p-[13px]' : 'p-[8px]'}`}
               onClick={() => {
                 onChange(p);
                 handleOpen(null);

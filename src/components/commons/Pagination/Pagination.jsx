@@ -11,7 +11,7 @@ import useMouseOut from '@/hooks/useMouseOut';
     onPageChange : 페이지 이동 시 실행될 함수
 */
 const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
-  const [openIndex, setOpenIndex] = useState();
+  const [openIndex, setOpenIndex] = useState(null);
   const { ref } = useMouseOut({ setIsOpen: () => setOpenIndex(null) });
 
   if (totalPages <= 0 || !onPageChange) {
@@ -22,6 +22,9 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
   const disableStyle = 'brightness-50';
   const hoverStyle = 'text-white hover:inset-shadow-xs cursor-pointer';
   const activeStyle = 'inset-shadow-xs cursor-pointer';
+
+  const prevDisabled = currentPage === 1;
+  const nextDisabled = currentPage === totalPages;
 
   const getPages = (curPage, lastPage) => {
     const pages = [];
@@ -69,14 +72,19 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
   return (
     <nav aria-label="페이지네이션">
       <ul ref={ref} className="flex items-center justify-center gap-[10px]">
-        <li
-          className={`${pageStyle} ${currentPage === 1 ? disableStyle : hoverStyle}`}
-          onClick={() => {
-            const prevPage = currentPage - 1;
-            onPageChange(prevPage < 1 ? 1 : prevPage);
-          }}
-        >
-          <Image src={PrevIcon} alt="이전 페이지" width={24} height={24} />
+        <li>
+          <button
+            type="button"
+            className={`${pageStyle} ${prevDisabled ? disableStyle : hoverStyle}`}
+            onClick={() => {
+              const prevPage = currentPage - 1;
+              onPageChange(prevPage < 1 ? 1 : prevPage);
+            }}
+            disabled={prevDisabled}
+            aria-label="prev-page"
+          >
+            <Image src={PrevIcon} alt="이전 페이지" width={24} height={24} />
+          </button>
         </li>
 
         {getPages(currentPage, totalPages).map((p, i, pages) => {
@@ -84,14 +92,12 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
           return (
             <li
               key={`page-${i}`}
-              className={`${pageStyle} ${hoverStyle} ${isActive ? activeStyle : ''}`}
-              aria-current={isActive ? 'page' : undefined}
-              onClick={() => {
-                p !== '...' && onPageChange(p);
-              }}
+              aria-current={isActive ? 'active-page' : undefined}
             >
               {p === '...' ? (
-                <>
+                <span
+                  className={`relative ${pageStyle} ${hoverStyle} ${isActive ? activeStyle : ''}`}
+                >
                   <DropDown
                     isOpen={openIndex === i}
                     index={i}
@@ -100,22 +106,38 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
                     end={pages[i + 1]}
                     onChange={onPageChange}
                   />
-                </>
+                  <span className="absolute right-0 bottom-0 h-0 w-0 border-b-[10px] border-l-[10px] border-b-white border-l-transparent"></span>
+                </span>
               ) : (
-                p
+                <button
+                  type="button"
+                  className={`${pageStyle} ${hoverStyle} ${isActive ? activeStyle : ''}`}
+                  onClick={() => {
+                    p !== '...' && onPageChange(p);
+                  }}
+                  disabled={isActive}
+                  aria-label="page"
+                >
+                  {p}
+                </button>
               )}
             </li>
           );
         })}
 
-        <li
-          className={`${pageStyle} ${currentPage === totalPages ? disableStyle : hoverStyle}`}
-          onClick={() => {
-            const nextPage = currentPage + 1;
-            onPageChange(nextPage < totalPages ? nextPage : totalPages);
-          }}
-        >
-          <Image src={NextIcon} alt="다음 페이지" width={24} height={24} />
+        <li>
+          <button
+            type="button"
+            className={`${pageStyle} ${nextDisabled ? disableStyle : hoverStyle}`}
+            onClick={() => {
+              const nextPage = currentPage + 1;
+              onPageChange(nextPage < totalPages ? nextPage : totalPages);
+            }}
+            disabled={nextDisabled}
+            aria-label="next-page"
+          >
+            <Image src={NextIcon} alt="다음 페이지" width={24} height={24} />
+          </button>
         </li>
       </ul>
     </nav>
