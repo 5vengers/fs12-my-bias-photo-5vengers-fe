@@ -34,6 +34,9 @@
 
   --font-noto: var(--font-noto-sans-kr);
   --font-baskin: var(--font-baskin-robbins);
+
+  --inset-shadow-xs: 0 0 0 1px var(--white) inset;
+  --height-screen-header: calc(100vh - 82px);
 }
 
 .text-overflow {
