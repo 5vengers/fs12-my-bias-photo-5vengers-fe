@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import CloseIcon from '@/assets/icons/ic-close.svg';
 import MinusIcon from '@/assets/icons/ic-minus.svg';
 import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
@@ -28,10 +27,10 @@ function FormStep({ card, onBack }) {
 
   return (
     <div className="custom-scrollbar -mr-[30px] flex flex-1 flex-col overflow-y-auto pr-[30px]">
-      <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-[#A4A4A4]">
+      <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-gray-300">
         나의 포토카드 판매하기
       </h3>
-      <h2 className="font-baskin mb-5 border-b-2 pb-5 text-[46px] font-normal tracking-[-1.38px] text-white">
+      <h2 className="font-baskin mb-5 border-b-2 pb-5 text-[46px] tracking-[-1.38px] text-white">
         {card.photoCard.name}
       </h2>
       <div className="mt-8 flex gap-10">
@@ -70,9 +69,7 @@ function FormStep({ card, onBack }) {
 
           <div className="mt-7 flex flex-col gap-7">
             <div className="flex w-full items-center justify-between">
-              <span className="font-[Noto_Sans_KR] text-[20px] text-white">
-                총 판매 수량
-              </span>
+              <span className="text-[20px] text-white">총 판매 수량</span>
 
               <div>
                 <div className="flex items-center gap-4">
@@ -101,30 +98,22 @@ function FormStep({ card, onBack }) {
                   </div>
 
                   <div className="flex flex-col">
-                    <div className="text-left font-[Noto_Sans_KR] text-[20px] font-bold">
-                      / 3
-                    </div>{' '}
+                    <div className="text-left text-[20px] font-bold">/ 3</div>{' '}
                     {/*최대 가능 수로 수정 예정*/}
-                    <div className="text-right font-[Noto_Sans_KR] text-[14px]">
-                      최대 3장
-                    </div>
+                    <div className="text-right text-[14px]">최대 3장</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-between">
-              <div className="font-[Noto_Sans_KR] text-[20px] text-white">
-                장당 가격
-              </div>
-              <div className="flex h-[50px] w-[242px] shrink-0 items-center justify-between rounded-[2px] border border-[var(--gray-gray200)] bg-[var(--gray-gray500)] px-5 py-6 text-[20px]">
+            <div className="flex items-center justify-between">
+              <div className="text-[20px] text-white">장당 가격</div>
+              <div className="flex h-[50px] w-[242px] shrink-0 items-center justify-between rounded-[2px] border border-gray-200 bg-gray-500 px-5 py-6 text-[20px]">
                 <input
                   placeholder="숫자만 입력"
                   className="w-24 bg-transparent text-left text-[20px] font-bold text-white outline-none placeholder:text-[16px] placeholder:font-light placeholder:text-white"
                 ></input>
-                <p className="font-[Noto_Sans_KR] text-[20px] font-bold text-white">
-                  P
-                </p>
+                <p className="text-[20px] font-bold text-white">P</p>
               </div>
             </div>
           </div>
@@ -134,14 +123,14 @@ function FormStep({ card, onBack }) {
       <div className="flex gap-[25px] border-t border-[#2E2E2E] pt-[25px] pb-8">
         <button
           onClick={handleCancel}
-          className="flex h-[60px] flex-1 items-center justify-center rounded-[2px] border border-[#EEE] bg-[#161616] text-[18px] font-bold text-white"
+          className="flex h-[60px] flex-1 items-center justify-center rounded-[2px] border border-white bg-gray-500 text-[18px] font-bold text-white"
         >
           취소하기
         </button>
 
         <button
           onClick={handleSell}
-          className="flex h-[60px] flex-1 items-center justify-center rounded-[2px] bg-[#EFFF04] text-[18px] font-bold text-black"
+          className="bg-main flex h-[60px] flex-1 items-center justify-center rounded-[2px] text-[18px] font-bold text-black"
         >
           판매하기
         </button>
