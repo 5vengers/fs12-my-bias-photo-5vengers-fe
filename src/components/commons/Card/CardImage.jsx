@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import SoldOut from '@/assets/images/img-soldout.png';
 
-const CardImage = ({ src, alt, state = 'sale' }) => {
+const CardImage = ({ src, alt, state = 'sale', ...props }) => {
   const fallbackSrc = '/placeholder.jpg';
   const safeSrc = src?.trim() ? src : fallbackSrc;
 
@@ -19,10 +19,12 @@ const CardImage = ({ src, alt, state = 'sale' }) => {
         </div>
       )}
       <Image
+        className="object-cover"
         src={safeSrc}
         alt={alt || '카드 이미지'}
+        sizes="360px"
         fill
-        className="object-cover"
+        {...props}
       />
     </div>
   );
