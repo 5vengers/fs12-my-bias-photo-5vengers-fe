@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { GRADE_OPTIONS, GENRE_OPTIONS } from '@/constants/marketOptions';
-import { GRADE_OPTIONS, GENRE_OPTIONS } from '@/constants/marketOptions';
 import Image from 'next/image';
 import { useState } from 'react';
 import SearchIcon from '../../assets/icons/ic-search.svg';

@@ -7,8 +7,11 @@ import logoImage from '@/assets/images/img-logo.svg';
 import { useMyCards } from '@/hooks/queries/useMarketItems';
 
 function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
-  const { data } = useMyCards();
-  const myCards = data?.items ?? [];
+  console.log('GalleryStep render');
+
+  const { data: myCards = [] } = useMyCards();
+  console.log('myCards value:', myCards);
+
   return (
     <div className="flex h-full flex-col">
       <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-gray-300">
@@ -105,9 +108,12 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
 
       <div className="custom-scrollbar grid flex-1 grid-cols-2 gap-4 overflow-y-auto">
         {myCards.map((card) => (
-          <div key={card.id} onClick={() => onSelect(card)}>
+          <div key={card.name} onClick={() => onSelect(card)}>
             <Card>
-              <Card.Image src={card.photoCard.imageUrl} alt={'테스트이미지'} />
+              <Card.Image
+                src={card.photoCard.imageUrl}
+                alt={card.photoCard.name}
+              />
               <Card.Title className="mt-5 mb-[0px]">
                 {card.photoCard.name}
               </Card.Title>
@@ -118,7 +124,11 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
-                <Card.SaleInfo title={'가격'} type={'point'} count={7} />
+                <Card.SaleInfo
+                  title={'가격'}
+                  type={'point'}
+                  count={card.photoCard.price}
+                />
                 <Card.SaleInfo title={'수량'} count={card.quantity} />
               </Card.SaleInfoLayout>
               <div className="mt-[20px] flex items-center justify-center pt-[15px]">
