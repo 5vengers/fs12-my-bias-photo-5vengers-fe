@@ -74,16 +74,18 @@ const PhotoCardCreate = () => {
 
       if (!result.success) {
         // 여기도 실패로 보낸다?
+        router.push('/result?type=create&status=fail&domain=card');
         return;
       }
     } catch (error) {
+      router.push('/result?type=create&status=fail&domain=card');
       throw error;
     } finally {
       setIsCreating(false);
     }
 
     // 추후 포토카드 생성 완료 페이지로 route 되어야 함
-    router.push('/myGallery');
+    router.push('/result?type=create&status=success&domain=card');
   };
 
   return (

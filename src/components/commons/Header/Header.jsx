@@ -22,8 +22,8 @@ const Header = () => {
   const pointText = (() => {
     if (isPending) return '... P';
     if (isError || typeof point !== 'number' || !Number.isFinite(point)) {
-  return '-- P';
-}
+      return '-- P';
+    }
 
     return `${point.toLocaleString('ko-KR')} P`;
   })();
