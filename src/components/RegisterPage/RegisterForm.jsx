@@ -22,7 +22,12 @@ const RegisterForm = () => {
   const [passwordCheck, setPasswordCheck] = useState('');
   const [formErrors, setFormErrors] = useState({});
 
-  const { mutate: register, isPending, error: registerError } = useRegister();
+  const {
+    mutate: register,
+    isPending,
+    error: registerError,
+    reset,
+  } = useRegister();
 
   // ─── 클라이언트 유효성 검사 ─────────────────────────────────
   // BE 스키마와 동일한 기준 적용: password 8~20자, nickname 2~20자
@@ -81,8 +86,26 @@ const RegisterForm = () => {
   // ─── 필드별 setValue 래퍼 (입력 시 submit 에러 클리어) ──────
   const makeSetValue = (setter, field) => (v) => {
     setter(v);
+    if (registerError) reset();
     if (formErrors[field]) {
       setFormErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  // ─── 비밀번호 교차 검증 ─────────────────────────────────────
+  const validatePasswordMatch = (currentPassword, currentPasswordCheck) => {
+    if (!currentPasswordCheck) {
+      setFormErrors((prev) => ({ ...prev, passwordCheck: undefined }));
+      return;
+    }
+
+    if (currentPassword !== currentPasswordCheck) {
+      setFormErrors((prev) => ({
+        ...prev,
+        passwordCheck: '비밀번호가 일치하지 않습니다.',
+      }));
+    } else {
+      setFormErrors((prev) => ({ ...prev, passwordCheck: undefined }));
     }
   };
 
@@ -154,7 +177,10 @@ const RegisterForm = () => {
           <PasswordInput
             id="password"
             password={password}
-            setPassword={makeSetValue(setPassword, 'password')}
+            setPassword={(v) => {
+              makeSetValue(setPassword, 'password')(v);
+              validatePasswordMatch(v, passwordCheck);
+            }}
             type="password"
             placeholder="8자 이상 입력해 주세요"
             externalError={
@@ -176,7 +202,10 @@ const RegisterForm = () => {
           <PasswordInput
             id="passwordCheck"
             password={passwordCheck}
-            setPassword={makeSetValue(setPasswordCheck, 'passwordCheck')}
+            setPassword={(v) => {
+              makeSetValue(setPasswordCheck, 'passwordCheck')(v);
+              validatePasswordMatch(password, v);
+            }}
             checkPassword={password}
             type="check"
             placeholder="비밀번호를 한번 더 입력해 주세요"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -17,16 +17,34 @@ const EMAIL_REGEX =
 // Google OAuth: 브라우저를 BE 엔드포인트로 직접 이동시켜 리다이렉트 흐름 시작
 const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'}/api/auth/google`;
 
-const LoginForm = () => {
+// useSearchParams는 Suspense 경계 안에서만 사용 가능
+const OAuthErrorMessage = () => {
   const searchParams = useSearchParams();
   const oauthError = searchParams.get('error');
 
+  return (
+    <>
+      {oauthError === 'email_conflict' && (
+        <p className="mt-3 text-sm text-yellow-400">
+          이미 해당 이메일로 가입된 계정이 있습니다. 이메일로 로그인해 주세요.
+        </p>
+      )}
+      {oauthError === 'oauth' && (
+        <p className="mt-3 text-sm text-red-400">
+          구글 로그인에 실패했거나 취소되었습니다.
+        </p>
+      )}
+    </>
+  );
+};
+
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // submit 시 빈 필드·형식 오류를 Input에 내려줄 에러 상태
   const [formErrors, setFormErrors] = useState({});
 
-  const { mutate: login, isPending, error: loginError } = useLogin();
+  const { mutate: login, isPending, error: loginError, reset } = useLogin();
 
   // ─── 클라이언트 유효성 검사 ───────────────────────────
   const validate = () => {
@@ -38,7 +56,12 @@ const LoginForm = () => {
     }
     if (!password) {
       errors.password = '필수 입력사항입니다.';
+    } else if (password.length < 8) {
+      errors.password = '비밀번호는 8자 이상이어야 합니다.';
+    } else if (password.length > 20) {
+      errors.password = '비밀번호는 20자 이하이어야 합니다.';
     }
+    
     return errors;
   };
 
@@ -93,6 +116,7 @@ const LoginForm = () => {
             value={email}
             setValue={(v) => {
               setEmail(v);
+              if (loginError) reset(); // loginError 초기화
               // 사용자가 다시 입력하면 submit 에러 클리어
               if (formErrors.email) {
                 setFormErrors((prev) => ({ ...prev, email: undefined }));
@@ -116,6 +140,7 @@ const LoginForm = () => {
             password={password}
             setPassword={(v) => {
               setPassword(v);
+              if (loginError) reset();
               if (formErrors.password) {
                 setFormErrors((prev) => ({ ...prev, password: undefined }));
               }
@@ -130,22 +155,13 @@ const LoginForm = () => {
           />
         </div>
 
-        {/* API 에러 */}
+        {/* API 에러 — formErrors 없을 때만 표시 */}
         {apiErrorMsg && <p className="text-red mt-3 text-sm">{apiErrorMsg}</p>}
 
-        {/* Google 로그인 실패 또는 취소 */}
-        {oauthError === 'oauth' && (
-          <p className="mt-3 text-sm text-red-400">
-            구글 로그인에 실패했거나 취소되었습니다.
-          </p>
-        )}
-
-        {/* OAuth 이메일 충돌 */}
-        {oauthError === 'email_conflict' && (
-          <p className="mt-3 text-sm text-yellow-400">
-            이미 해당 이메일로 가입된 계정이 있습니다. 이메일로 로그인해 주세요.
-          </p>
-        )}
+        {/* OAuth 에러 메시지 */}
+        <Suspense fallback={null}>
+          <OAuthErrorMessage />
+        </Suspense>
 
         {/* 로그인 버튼 */}
         <div className="mt-[50px]">
