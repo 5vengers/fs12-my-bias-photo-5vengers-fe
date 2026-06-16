@@ -119,7 +119,6 @@ const MySalesPage = () => {
   const PAGE_SIZE = 9;
 
   const [searchQuery, setSearchQuery]       = useState("");
-  const [selectedGrade, setSelectedGrade]   = useState(null);
   const [filterGrade, setFilterGrade]       = useState("전체");
   const [filterGenre, setFilterGenre]       = useState("전체");
   const [filterSaleType, setFilterSaleType] = useState("전체");
@@ -154,7 +153,6 @@ const MySalesPage = () => {
 
   const filteredCards = useMemo(() => {
     return cards.filter((card) => {
-      if (selectedGrade && card.grade !== selectedGrade) return false;
       if (filterGrade !== "전체" && card.grade !== filterGrade) return false;
       if (filterGenre !== "전체" && card.genre !== filterGenre) return false;
       if (filterSaleType !== "전체") {
@@ -168,13 +166,13 @@ const MySalesPage = () => {
       }
       return true;
     });
-  }, [cards, selectedGrade, filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
+  }, [cards, filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
   const pagedCards = filteredCards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   useEffect(() => { setCurrentPage(1); },
-    [filterGrade, filterGenre, filterSaleType, filterSoldOut, selectedGrade, searchQuery]);
+    [filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
 
   return (
     <div className="min-h-screen w-full bg-black">
@@ -192,16 +190,11 @@ const MySalesPage = () => {
           </span>
           <div className="flex items-center gap-[10px]">
             {Object.values(CardGrade).map((grade) => {
-              const count    = gradeCounts[grade] || 0;
-              const isActive = selectedGrade === grade;
+              const count = gradeCounts[grade] || 0;
               return (
-                <button
-                  key={grade}
-                  onClick={() => setSelectedGrade(isActive ? null : grade)}
-                  className={`text-xs transition-opacity ${isActive ? "" : "opacity-50 hover:opacity-80"}`}
-                >
+                <div key={grade} className="text-xs">
                   <Badge grade={grade} count={count} />
-                </button>
+                </div>
               );
             })}
           </div>
