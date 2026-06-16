@@ -32,7 +32,8 @@ const useAuthStore = create(
       setAccessToken: (accessToken) => set({ accessToken }),
 
       // 로그아웃 또는 인증 만료 시 전체 초기화
-      clearAuth: () => set({ user: null, accessToken: null }),
+      clearAuth: () =>
+        set({ user: null, accessToken: null, showLoggedInToast: false }),
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
       setShowLoggedInToast: (value) => set({ showLoggedInToast: value }),
