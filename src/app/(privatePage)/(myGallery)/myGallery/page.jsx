@@ -10,7 +10,7 @@ import Search from '@/components/commons/Input/Search';
 
 import { Genre, CardGrade } from '@/constants/enums';
 import useAuthStore from '@/store/authStore';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import myGalleryService from '@/libs/service/myGalleryService';
 import { notFound, useRouter } from 'next/navigation';
@@ -66,8 +66,13 @@ const MyGallery = () => {
           <span className="text-gray-300">
             {yearMonth.year}년 {yearMonth.month}월
           </span>
-          <Button size="lg" onClick={() => router.push('/cardCreate')}>
-            포토카드 생성하기 ({count || 0}/3)
+          <Button
+            size="lg"
+            isThick={false}
+            onClick={() => router.push('/cardCreate')}
+            disabled={count === 0}
+          >
+            포토카드 생성하기 ({count || 3}/3)
           </Button>
         </div>
       </Title>

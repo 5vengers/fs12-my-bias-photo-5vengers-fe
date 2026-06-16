@@ -11,19 +11,21 @@
 const Button = ({
   children,
   size = 'full',
-  isThick = true,
+  isThick = false,
   disabled = false,
   btnType = 'button',
   type = 'pri',
   ...props
 }) => {
   // true 면 thick, false 면 thin
-  const thickness = ['h-[43px]', 'h-[52px]'];
+  const thickness = ['h-[60px]', 'h-[80px]'];
 
   // 기본 lg
   const sizing = {
     sm: 'w-[150px]',
-    lg: 'w-[520px]',
+    md: 'w-[340px]',
+    lg: 'w-[440px]',
+    xl: 'w-[520px]',
     full: 'w-full',
   };
 
