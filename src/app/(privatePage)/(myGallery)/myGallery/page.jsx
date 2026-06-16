@@ -56,7 +56,7 @@ const MyGallery = () => {
 
   if (error || isCountError || isLogError) return notFound();
 
-  const count = remainCount(log?.count);
+  const remain = remainCount(log?.count);
   const yearMonth = curDate();
 
   return (
@@ -70,9 +70,9 @@ const MyGallery = () => {
             size="lg"
             isThick={false}
             onClick={() => router.push('/cardCreate')}
-            disabled={count === 0}
+            disabled={remain === 0 || isLogPending || isLogError}
           >
-            포토카드 생성하기 ({count || 3}/3)
+            포토카드 생성하기 ({isLogPending ? '-' : remain}/3)
           </Button>
         </div>
       </Title>
@@ -143,8 +143,7 @@ const MyGallery = () => {
               <Card.Image
                 src={c.imageUrl}
                 alt={`포토카드 ${c.name}`}
-                width={360}
-                height={270}
+                priority={i === 0}
               />
               <Card.InfoLayout>
                 <Card.Info nickname={c.nickname}>

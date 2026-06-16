@@ -12,5 +12,5 @@ export const curDate = () => {
 export const remainCount = (count) => {
   const MAX_COUNT = 3;
 
-  return MAX_COUNT - count;
+  return Math.max(MAX_COUNT - (count ?? 0));
 };
