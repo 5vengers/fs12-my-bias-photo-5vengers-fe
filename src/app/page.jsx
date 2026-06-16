@@ -1,7 +1,16 @@
+import { Suspense } from 'react';
 import MainPage from '@/components/MainPage/MainPage';
+import LoggedInToast from '@/components/MainPage/LoggedInToast';
 
 const Home = () => {
-  return <MainPage />;
+  return (
+    <>
+      <Suspense fallback={null}>
+        <LoggedInToast />
+      </Suspense>
+      <MainPage />
+    </>
+  );
 };
 
 export default Home;
