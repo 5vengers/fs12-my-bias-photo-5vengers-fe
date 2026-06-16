@@ -11,14 +11,14 @@ function FormStep({ card, onBack }) {
     COMMON: 'text-main',
     RARE: 'text-blue',
     SUPER_RARE: 'text-purple',
-    LAGENDERY: 'text-pink',
+    LAGENDARY: 'text-pink',
   };
   const [quantity, setQuantity] = useState(1);
-  const grade = card.photoCard.grade;
   if (!card) return null;
+  const grade = card.photoCard.grade;
 
   const handleCancel = () => {
-    setStep('gallery');
+    onBack?.();
   };
 
   const handleSell = () => {
@@ -57,7 +57,7 @@ function FormStep({ card, onBack }) {
               <div className="h-5 w-[2px] bg-[var(--gray300)]" />
 
               {/* 장르 */}
-              <span className="text-[24px] leading-none font-bold text-[var(--gray300)]">
+              <span className="text-[24px] leading-none font-bold text-gray-300">
                 {card.photoCard.genre}
               </span>
             </div>

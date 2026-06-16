@@ -1,8 +1,8 @@
 const GRADE_COLORS = {
-  COMMON: '#555555',
-  RARE: '#2A6AFF', // 예시 블루
-  SUPER_RARE: '#8B2AFF', // 예시 퍼플
-  LEGENDARY: '#FF2A6A', // 요청하신 Pink
+  COMMON: 'text-main',
+  RARE: 'text-blue',
+  SUPER_RARE: 'text-purple',
+  LAGENDARY: 'text-pink',
 };
 
 const GradeText = ({ grade }) => {
