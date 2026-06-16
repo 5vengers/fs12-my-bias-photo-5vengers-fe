@@ -2,6 +2,9 @@ import Image from 'next/image';
 import SoldOut from '@/assets/images/img-soldout.png';
 
 const CardImage = ({ src, alt, state = 'sale' }) => {
+  const fallbackSrc = '/placeholder.jpg';
+  const safeSrc = src?.trim() ? src : fallbackSrc;
+
   return (
     <div className="relative h-[270px] w-[360px]">
       {state === 'soldOut' && (
@@ -17,10 +20,11 @@ const CardImage = ({ src, alt, state = 'sale' }) => {
       )}
       <Image
         className="object-cover"
-        src={src}
-        alt={alt}
+        src={safeSrc}
+        alt={alt || '카드 이미지'}
         width={360}
         height={270}
+        fill
       />
     </div>
   );
