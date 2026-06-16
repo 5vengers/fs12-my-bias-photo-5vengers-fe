@@ -27,7 +27,7 @@ export default function MarketPageClient() {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold !text-black transition hover:opacity-90"
+          className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold text-black! transition hover:opacity-90"
         >
           나의 포토카드 판매하기 →
         </button>
