@@ -7,6 +7,7 @@ import alramIcon from '@/assets/icons/ic-alarm-default.svg';
 import styles from './Header.module.css';
 import useAuthStore from '@/store/authStore';
 import { useIsAuthenticated, useLogout } from '@/hooks/useAuth';
+import { useMyPoint } from '@/hooks/usePoint';
 /*
   user = 유저 정보
   isLogin = 로그인이 되어있는지
@@ -15,6 +16,18 @@ const Header = () => {
   const user = useAuthStore((state) => state.user);
   const isLogin = useIsAuthenticated();
   const { mutate: logout } = useLogout();
+
+  const { data: point, isPending, isError } = useMyPoint();
+
+  const pointText = (() => {
+    if (isPending) return '... P';
+    if (isError || typeof point !== 'number' || !Number.isFinite(point)) {
+      return '-- P';
+    }
+
+    return `${point.toLocaleString('ko-KR')} P`;
+  })();
+
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
@@ -26,7 +39,7 @@ const Header = () => {
       <ul className={`flex items-center justify-center gap-[30px] text-sm`}>
         {isLogin ? (
           <>
-            <li>1500 p</li> {/*나중에 Point API와 연결*/}
+            <li className="font-bold text-gray-200">{pointText}</li>
             <li>
               <button type="button" aria-label="알림">
                 <Image src={alramIcon} width={24} height={24} alt="" />

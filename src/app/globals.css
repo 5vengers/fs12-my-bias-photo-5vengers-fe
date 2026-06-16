@@ -39,6 +39,9 @@
   --breakpoint-mobile: 375px;
   --breakpoint-tablet: 744px;
   --breakpoint-desktop: 745px;
+
+  --inset-shadow-xs: 0 0 0 1px var(--white) inset;
+  --height-screen-header: calc(100vh - 82px);
 }
 
 .text-overflow {
