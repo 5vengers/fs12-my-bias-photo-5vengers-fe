@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Toast from '@/components/commons/Toast/Toast';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -41,27 +41,24 @@ const OAuthErrorMessage = () => {
 
 const RegisterSuccessToast = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
-
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-    const registered = searchParams.get('registered');
+    if (searchParams.get('registered') !== 'true') return;
 
-    if (registered === 'true') {
-      setShowToast(true);
+    window.history.replaceState({}, '', '/login');
+    setShowToast(true);
+  }, [searchParams]);
 
-      router.replace('/login', {
-        scroll: false,
-      });
+  useEffect(() => {
+    if (!showToast) return;
 
-      const timer = setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [searchParams, router]);
+    return () => clearTimeout(timer);
+  }, [showToast]);
 
   if (!showToast) return null;
 
