@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { getMyMarketItems } from "@/libs/marketApi";
+import { CardGrade, Genre, MarketStatus } from "@/constants/enums";
 import Search from "@/components/commons/Input/Search";
 import Select from "@/components/commons/Select/Select";
 import Pagination from "@/components/commons/Pagination/Pagination";
@@ -44,8 +45,8 @@ const SALE_TYPE_LABEL = {
 };
 
 const FILTER_OPTIONS = {
-  등급:    ["전체", ...Object.keys(GRADE_LABEL)],
-  장르:    ["전체", ...Object.keys(GENRE_LABEL)],
+  등급:    ["전체", ...Object.values(CardGrade)],
+  장르:    ["전체", ...Object.values(Genre)],
   판매방법: ["전체", "INSTANT", "AUCTION"],
   매진여부: ["전체", "판매중", "판매완료"],
 };
@@ -64,7 +65,7 @@ const CardSkeleton = () => {
 
 /* ─── 카드 컴포넌트 ─── */
 const SaleCard = ({ card, nickname }) => {
-  const isSoldOut = card.status === "SOLD_OUT";
+  const isSoldOut = card.status === MarketStatus.SOLD_OUT;
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
   const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
@@ -106,7 +107,7 @@ const SaleCard = ({ card, nickname }) => {
 }
 
 /* ─── 메인 페이지 ─── */
-export default function MySalesPage() {
+const MySalesPage = () => {
   const user = null;
 
   const [cards, setCards]         = useState([]);
@@ -158,8 +159,8 @@ export default function MySalesPage() {
       if (filterSaleType !== "전체") {
         if ((card.saleType ?? "INSTANT") !== filterSaleType) return false;
       }
-      if (filterSoldOut === "판매중"  && card.status === "SOLD_OUT")  return false;
-      if (filterSoldOut === "판매완료" && card.status !== "SOLD_OUT") return false;
+      if (filterSoldOut === "판매중"  && card.status === MarketStatus.SOLD_OUT) return false;
+      if (filterSoldOut === "판매완료" && card.status !== MarketStatus.SOLD_OUT) return false;
       if (searchQuery) {
         const name = card.myCard?.photoCard?.name ?? "";
         if (!name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
@@ -189,7 +190,7 @@ export default function MySalesPage() {
             <span className="text-white font-bold">(총 {totalQuantity}장)</span>
           </span>
           <div className="flex items-center gap-[10px]">
-            {Object.keys(GRADE_LABEL).map((grade) => {
+            {Object.values(CardGrade).map((grade) => {
               const count    = gradeCounts[grade] || 0;
               const isActive = selectedGrade === grade;
               return (
@@ -300,4 +301,6 @@ export default function MySalesPage() {
       </main>
     </div>
   );
-}
+};
+
+export default MySalesPage;
