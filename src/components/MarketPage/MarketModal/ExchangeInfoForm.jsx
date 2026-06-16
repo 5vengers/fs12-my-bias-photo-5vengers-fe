@@ -89,10 +89,16 @@ function ExchangeInfo() {
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-2">
-        <h3 className="text-[20px] font-bold text-white">교환 희망 설명</h3>
+        <label
+          htmlFor="exchange-description"
+          className="text-[20px] font-bold text-white"
+        >
+          교환 희망 설명
+        </label>
         <textarea
-          className="flex w-full flex-1 shrink-0 resize-none items-start gap-[10px] rounded-[2px] border border-gray-200 bg-gray-500 p-[18px_20px] text-white outline-none"
+          className="flex w-full flex-1 shrink-0 resize-none rounded-[2px] border border-gray-200 bg-gray-500 p-[18px_20px] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           placeholder="교환 희망 설명을 입력하세요"
+          id="exchange-description"
           rows={4}
         />
       </div>
