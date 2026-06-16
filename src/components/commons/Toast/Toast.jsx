@@ -1,21 +1,44 @@
+'use client';
+
 import Image from 'next/image';
-import Alret from '@/assets/icons/ic-alert.svg';
+import AlertIcon from '@/assets/icons/ic-alert.svg';
+import CloselIcon from '@/assets/icons/ic-close.svg'
 
-/*
-    toast ui 를 추가합니다.
-
-    toastType = 'success' or 'error'
-    toastMsg = toast에 들어갈 메시지 
-*/
-
-const Toast = ({ children }) => {
+const Toast = ({
+  children,
+  onClose,
+  toastType = 'success',
+}) => {
   return (
-    <div className="fixed top-[20px] z-[9999] flex flex-col gap-[10px]">
-      <div className="mx-auto my-[0] flex w-fit items-center justify-center rounded-[99px] px-[40px] py-[24px] text-white">
-        <span>
-          <Image src={Alret} width={24} height={24} alt="알람 아이콘" />
-        </span>
+    <div className="fixed top-5 left-1/2 z-[9999] -translate-x-1/2">
+      <div
+        className={`flex items-center gap-3 rounded-full px-6 py-4 text-white shadow-lg ${
+          toastType === 'success'
+            ? 'bg-green-600'
+            : 'bg-red-600'
+        }`}
+      >
+        <Image
+          src={AlertIcon}
+          width={20}
+          height={20}
+          alt="알림"
+        />
+
         <span>{children}</span>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="ml-2 text-lg"
+        >
+          <Image
+          src={CloselIcon}
+          width={20}
+          height={20}
+          alt="닫힘"
+        />
+        </button>
       </div>
     </div>
   );

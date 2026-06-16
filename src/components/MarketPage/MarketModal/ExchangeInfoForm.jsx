@@ -9,11 +9,13 @@ function ExchangeInfo() {
   return (
     <div className="mt-20 mb-20 flex flex-col">
       <div className="mb-13 border-b-2 pb-2 text-[23px] font-bold text-white">
+      <div className="mb-13 border-b-2 pb-2 text-[23px] font-bold text-white">
         교환 희망 정보
       </div>
       <div className="flex gap-8">
         {/* 등급 */}
         <div className="flex flex-col gap-2">
+          <h3 className="text-[20px] font-bold text-white">등급</h3>
           <h3 className="text-[20px] font-bold text-white">등급</h3>
           <Select size="md" desc="등급을 선택해 주세요" value={grade}>
             <Select.Option value="" onChange={handleGradeChange}>

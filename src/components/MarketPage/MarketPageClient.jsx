@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { GRADE_OPTIONS, GENRE_OPTIONS } from '@/constants/marketOptions';
+import { GRADE_OPTIONS, GENRE_OPTIONS } from '@/constants/marketOptions';
 import Image from 'next/image';
 import { useState } from 'react';
 import SearchIcon from '../../assets/icons/ic-search.svg';
@@ -63,10 +64,28 @@ export default function MarketPageClient() {
                 {option.label}
               </Select.Option>
             ))}
+            {GRADE_OPTIONS.map((option) => (
+              <Select.Option
+                key={option.value}
+                value={option.value}
+                onChange={handleGradeChange}
+              >
+                {option.label}
+              </Select.Option>
+            ))}
           </Select>
 
           {/* 장르 */}
           <Select size="noLine" desc="장르" value={genre}>
+            {GENRE_OPTIONS.map((option) => (
+              <Select.Option
+                key={option.value}
+                value={option.value}
+                onChange={setGenre}
+              >
+                {option.label}
+              </Select.Option>
+            ))}
             {GENRE_OPTIONS.map((option) => (
               <Select.Option
                 key={option.value}
