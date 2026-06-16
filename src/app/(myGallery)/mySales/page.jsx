@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { getMyMarketItems } from "@/libs/marketApi";
+import mySalesService from "@/libs/service/mySalesService";
 import { CardGrade, Genre, MarketStatus } from "@/constants/enums";
 import useAuthStore from "@/store/authStore";
 import Search from "@/components/commons/Input/Search";
@@ -130,7 +130,7 @@ const MySalesPage = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await getMyMarketItems(user.id);
+        const data = await mySalesService.getMyMarketItems();
         setCards(data);
       } catch (err) {
         setError(err.message);
