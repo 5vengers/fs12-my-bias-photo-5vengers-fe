@@ -37,9 +37,14 @@ export default function MarketPageClient() {
         <div className="flex items-center gap-12">
           {/* 검색 */}
           <div className="flex h-[50px] w-[320px] items-center justify-between rounded-[2px] border border-gray-200 bg-black px-5">
+            <label htmlFor="market-search" className="sr-only">
+              검색
+            </label>
+
             <input
               type="text"
               placeholder="검색"
+              id="market-search"
               className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
             />
 
