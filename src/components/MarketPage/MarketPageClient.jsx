@@ -12,7 +12,7 @@ export default function MarketPageClient() {
   const [keyword, setKeyword] = useState('');
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
-  const [soldOut, setSoldOut] = useState('');
+  const [soldOut, setSoldOut] = useState('latest');
   const [sort, setSort] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleGradeChange = (value) => {

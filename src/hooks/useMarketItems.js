@@ -17,12 +17,17 @@ export const useMarketItems = () => {
   };
 };
 
-export const useMyCards = () => {
+export const useMyCards = ({ grade, genre, keyword }) => {
   return useQuery({
-    queryKey: ['myCards'],
+    queryKey: ['myCards', grade, genre, keyword],
     queryFn: async () => {
-      const res = await apiClient.get('/api/myGallery');
-      console.log(res);
+      const res = await apiClient.get('/api/myGallery', {
+        params: {
+          ...(grade && { grade }),
+          ...(genre && { genre }),
+          ...(keyword && { keyword }),
+        },
+      });
       return res.data.data.cards;
     },
   });

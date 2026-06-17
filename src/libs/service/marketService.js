@@ -1,8 +1,16 @@
 import apiClient from '../apiClient';
 
 /**
- * 마켓 목록 조회
- * @param {number} pageParam 페이지 번호
+ * 마켓 목록 조회 (필터 + 정렬 + 검색 + 페이지네이션)
+ *
+ * @param {Object} params
+ * @param {number} params.pageParam 페이지 번호 (기본 1)
+ * @param {string} params.grade 등급 필터
+ * @param {string} params.genre 장르 필터
+ * @param {string} params.soldOut 판매 상태 필터
+ * @param {string} params.sort 정렬 기준 (latest, priceAsc 등)
+ * @param {string} params.keyword 검색어
+ *
  * @returns {Promise<{items: Array, nextPage: number | undefined}>}
  */
 export const getMarketItems = async ({
@@ -19,14 +27,13 @@ export const getMarketItems = async ({
     params: {
       page: pageParam,
       limit: LIMIT,
-      grade,
-      genre,
-      soldOut,
-      sort,
-      keyword,
+      ...(grade && { grade }),
+      ...(genre && { genre }),
+      ...(soldOut && { soldOut }),
+      ...(sort && { sort }),
+      ...(keyword && { keyword }),
     },
   });
-
   const data = response.data.data;
 
   return {

@@ -4,12 +4,15 @@ import SearchIcon from '@/assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import Card from '../../commons/Card/Card';
 import logoImage from '@/assets/images/img-logo.svg';
-import { useMyCards } from '@/hooks/queries/useMarketItems';
+import { useMyCards } from '@/hooks/useMarketItems';
 
 function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
-  const { data: myCards = [] } = useMyCards();
-  console.log('myCards value:', myCards);
-
+  const { data: myCards = [] } = useMyCards({
+    grade,
+    genre,
+    keyword,
+  });
+  const [keyword, setKeyword] = useState('');
   return (
     <div className="flex h-full flex-col">
       <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-gray-300">
@@ -24,6 +27,8 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
           <input
             type="text"
             placeholder="검색"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
           />
 
