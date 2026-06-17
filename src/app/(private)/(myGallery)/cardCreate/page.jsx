@@ -10,6 +10,11 @@ import FormField from '@/components/commons/FormField/FormField';
 import { Genre, CardGrade } from '@/constants/enums';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import myGalleryService from '@/libs/service/myGalleryService';
+import useCardStore from '@/store/cardStore';
+import { curDate, remainCount } from '@/libs/myGalleryUtils';
+import useCreationLog from '@/hooks/useCreationLog';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,18 +27,46 @@ const PhotoCardCreate = () => {
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [file, setFile] = useState(null);
 
-  const [cardName, setCardName] = useState('');
+  const [fileName, setFileName] = useState('');
 
-  const [isCreating, setIsCreating] = useState(false);
+  const { setCardName, setCardGrade } = useCardStore((state) => state.actions);
 
   const router = useRouter();
 
-  // 추후 로딩 추가
+  // 카드 데이터 store 에 저장
+  const setCardData = () => {
+    setCardName(name);
+    setCardGrade(grade);
+  };
+
+  // 생성 함수
+  const { mutate: createCard, isPending: isCreating } = useMutation({
+    mutationFn: (formData) => myGalleryService.createMyCard(formData),
+    onSuccess: (result) => {
+      setCardData();
+
+      if (!result.success) {
+        router.push('/result?type=create&status=fail&domain=card');
+        return;
+      }
+
+      router.push('/result?type=create&status=success&domain=card');
+    },
+    onError: () => {
+      setCardData();
+      router.push('/result?type=create&status=fail&domain=card');
+    },
+  });
+
+  // 생성 로그 가져오기
+  const {
+    data: log,
+    isPending: isLogPending,
+    error: isLogError,
+  } = useCreationLog();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setIsCreating(true);
 
     const data = {
       name,
@@ -47,7 +80,6 @@ const PhotoCardCreate = () => {
     // image 파일 같이 보내기 위해 formData 사용
     const formData = new FormData();
     if (!file) {
-      setIsCreating(false);
       return;
     }
 
@@ -57,40 +89,27 @@ const PhotoCardCreate = () => {
       const value = data[key];
       formData.append(key, value);
     });
-
-    try {
-      const res = await fetch(`${API_URL}/api/myGallery/create`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!res.ok) {
-        // 실패로 보낸다?
-        return;
-      }
-
-      const result = await res.json();
-      // error 처리 추가 예정
-
-      if (!result.success) {
-        // 여기도 실패로 보낸다?
-        router.push('/result?type=create&status=fail&domain=card');
-        return;
-      }
-    } catch (error) {
-      router.push('/result?type=create&status=fail&domain=card');
-      throw error;
-    } finally {
-      setIsCreating(false);
-    }
-
-    // 추후 포토카드 생성 완료 페이지로 route 되어야 함
-    router.push('/result?type=create&status=success&domain=card');
+    createCard(formData);
   };
+
+  const remain = log?.count !== null ? remainCount(log?.count) : '-';
+  const yearMonth = curDate();
 
   return (
     <div className="mx-auto my-0 w-[1480px] py-[60px]">
-      <Title text="포토카드 생성" />
+      <Title text="포토카드 생성">
+        <div className="justify-items flex items-end gap-[10px]">
+          <div className="font-baskin">
+            <span className="text-main text-[40px]">{remain}</span>
+            <span className="text-[28px] font-normal">/3</span>
+          </div>
+          <div>
+            <span className="text-gray-300">
+              ({yearMonth.year}년 {yearMonth.month}월)
+            </span>
+          </div>
+        </div>
+      </Title>
       <div className="mx-auto my-0 w-[520px] py-[60px]">
         <form className="flex flex-col gap-[65px]">
           <FormField label={'포토카드 이름'} labelFor={'card-name'}>
@@ -158,7 +177,7 @@ const PhotoCardCreate = () => {
               className="mt-[20px] flex items-center justify-between"
             >
               <p className="h-[60px] min-w-[360px] cursor-pointer rounded-xs border border-gray-200 px-[18px] py-[20px] text-gray-300">
-                {cardName === '' ? '사진 업로드' : cardName}
+                {fileName === '' ? '사진 업로드' : fileName}
               </p>
               <input
                 type="file"
@@ -168,7 +187,7 @@ const PhotoCardCreate = () => {
                 onChange={(e) => {
                   const selectFile = e.target.files?.[0] ?? null;
                   setFile(selectFile);
-                  setCardName(selectFile?.name ?? '');
+                  setFileName(selectFile?.name ?? '');
                 }}
                 className="hidden"
               />

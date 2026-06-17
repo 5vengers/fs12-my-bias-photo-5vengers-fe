@@ -14,7 +14,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import myGalleryService from '@/libs/service/myGalleryService';
 import { notFound, useRouter } from 'next/navigation';
-import { curDate, remainCount } from '@/libs/dateUtils';
+import { curDate, remainCount, replaceImage } from '@/libs/myGalleryUtils';
+import useCreationLog from '@/hooks/useCreationLog';
 
 const MyGallery = () => {
   const user = useAuthStore((state) => state.user);
@@ -45,10 +46,7 @@ const MyGallery = () => {
     data: log,
     isPending: isLogPending,
     error: isLogError,
-  } = useQuery({
-    queryKey: ['creationLog'],
-    queryFn: myGalleryService.getCreationLog,
-  });
+  } = useCreationLog();
 
   if (error || isCountError || isLogError) return notFound();
 
@@ -137,7 +135,7 @@ const MyGallery = () => {
             <Card key={`card-${i}`} isLogo>
               <Card.Title>{c.name}</Card.Title>
               <Card.Image
-                src={c.imageUrl}
+                src={replaceImage(c.imageUrl)}
                 alt={`포토카드 ${c.name}`}
                 priority={i === 0}
               />

@@ -29,10 +29,10 @@ const useValidation = () => {
     }
 
     if (type === 'text') {
-      if (value.length > 30) {
+      if (value.length > 20) {
         setError({
           isError: true,
-          errMsg: '포토카드 이름은 30자를 초과할 수 없습니다.',
+          errMsg: '포토카드 이름은 20자를 초과할 수 없습니다.',
         });
 
         return;

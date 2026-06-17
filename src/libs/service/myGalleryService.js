@@ -32,7 +32,11 @@ const getCreationLog = async () => {
   return response.data.data;
 };
 
-const createMyCard = async () => {};
+const createMyCard = async (data) => {
+  const response = await apiClient.post(BASE_URL + '/create', data);
+
+  return response.data;
+};
 
 const myGalleryService = {
   getMyGallery,
