@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import GradeText from '@/components/commons/Badge/GradeText';
-import { useMarketItemDetail } from '@/hooks/useMarket';
+import { useMarketItemDetail, usePurchaseMarketItem } from '@/hooks/useMarket';
 import QuantityStepper from './QuantityStepper';
 
 const DetailRow = ({ label, children }) => {
@@ -16,8 +17,11 @@ const DetailRow = ({ label, children }) => {
 };
 
 const MarketDetailPageClient = ({ itemId }) => {
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
   const { data: item, isPending, isError } = useMarketItemDetail(itemId);
+  const { mutate: purchaseMarketItem, isPending: isPurchasePending } =
+    usePurchaseMarketItem();
 
   if (isPending) {
     return <main className="px-[220px] py-[80px] text-white">로딩 중...</main>;
@@ -34,6 +38,24 @@ const MarketDetailPageClient = ({ itemId }) => {
   const remainingQuantity = item.quantity - item.soldQuantity;
 
   const totalPrice = item.pricePerCard * quantity;
+
+  // 구매 버튼 클릭 시 호출되는 함수
+  const handlePurchase = () => {
+    purchaseMarketItem(
+      {
+        itemId,
+        quantity,
+      },
+      {
+        onSuccess: () => {
+          router.push('/result?domain=card&type=buy&status=success');
+        },
+        onError: () => {
+          router.push('/result?domain=card&type=buy&status=fail');
+        },
+      },
+    );
+  };
 
   return (
     <main className="min-h-screen bg-black px-[220px] pt-[36px] pb-[160px] text-white">
@@ -108,9 +130,11 @@ const MarketDetailPageClient = ({ itemId }) => {
 
           <button
             type="button"
-            className="bg-main mt-[30px] flex h-[60px] w-full items-center justify-center rounded-[2px] text-[18px] font-bold text-black"
+            onClick={handlePurchase}
+            disabled={isPurchasePending || remainingQuantity < 1}
+            className="bg-main mt-[30px] flex h-[60px] w-full items-center justify-center rounded-[2px] text-[18px] font-bold text-black disabled:bg-gray-400 disabled:text-gray-300"
           >
-            포토카드 구매하기
+            {isPurchasePending ? '구매 중...' : '포토카드 구매하기'}
           </button>
         </aside>
       </section>
