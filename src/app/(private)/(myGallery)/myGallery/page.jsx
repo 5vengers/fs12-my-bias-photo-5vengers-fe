@@ -146,7 +146,11 @@ const MyGallery = () => {
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
-                <Card.SaleInfo title={'가격'} type={'point'} count={c.price} />
+                <Card.SaleInfo
+                  title={'가격'}
+                  type={'point'}
+                  count={Number(c.price).toLocaleString('ko-KR')}
+                />
                 <Card.SaleInfo title={'수량'} count={c.quantity} />
               </Card.SaleInfoLayout>
             </Card>
