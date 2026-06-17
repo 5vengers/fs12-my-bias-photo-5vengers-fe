@@ -4,7 +4,7 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import MarketCard from './MarketCard';
 import { useMarketItems } from '@/hooks/queries/useMarketItems';
 
-export default function MarketListPage(grade, genre, soldOut, sort) {
+export default function MarketListPage({ grade, genre, soldOut, sort }) {
   const {
     allItems,
     fetchNextPage,

@@ -19,7 +19,7 @@ const useMouseOut = ({ setIsOpen }) => {
   }, []);
 
   const isMouseOut = (e) => {
-    if (!ref.current.contains(e.target)) {
+    if (ref.current && !ref.current.contains(e.target)) {
       setIsOpen(false);
     }
   };

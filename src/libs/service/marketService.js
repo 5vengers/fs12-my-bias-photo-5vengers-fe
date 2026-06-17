@@ -23,7 +23,15 @@ export const getMarketItems = async ({ pageParam = 1 }) => {
   };
 };
 
+<<<<<<< HEAD
 export const createMarketItem = async (data) => {
   const res = await apiClient.post('/api/market/items', data);
   return res.data;
+=======
+// 마켓 아이템 상세 조회
+export const getMarketItemDetail = async (itemId) => {
+  const response = await apiClient.get(`/api/market/items/${itemId}`);
+
+  return response.data.data;
+>>>>>>> eb8f88222c86b1a7896b36adc07c9e9e4e1aa0a0
 };
