@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getMarketItems } from '@/libs/marketService';
+import { getMarketItems } from '@/libs/service/marketService';
 
 export const useMarketItems = () => {
   const query = useInfiniteQuery({

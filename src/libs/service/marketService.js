@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../apiClient';
 
 /**
  * 마켓 목록 조회
@@ -21,4 +21,11 @@ export const getMarketItems = async ({ pageParam = 1 }) => {
     items: data.items,
     nextPage: data.hasNext ? pageParam + 1 : undefined,
   };
+};
+
+// 마켓 아이템 상세 조회
+export const getMarketItemDetail = async (itemId) => {
+  const response = await apiClient.get(`/api/market/items/${itemId}`);
+
+  return response.data.data;
 };
