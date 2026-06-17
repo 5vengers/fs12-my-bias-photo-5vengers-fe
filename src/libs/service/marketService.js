@@ -22,3 +22,8 @@ export const getMarketItems = async ({ pageParam = 1 }) => {
     nextPage: data.hasNext ? pageParam + 1 : undefined,
   };
 };
+
+export const createMarketItem = async (data) => {
+  const res = await apiClient.post('/api/market/items', data);
+  return res.data;
+};

@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { getMarketItems } from '@/libs/service/marketService';
+import { getMarketItems, createMarketItem } from '@/libs/service/marketService';
 import apiClient from '@/libs/apiClient';
+import { useMutation } from '@tanstack/react-query';
 
 export const useMarketItems = () => {
   const query = useInfiniteQuery({
@@ -23,7 +24,14 @@ export const useMyCards = () => {
     queryFn: async () => {
       const res = await apiClient.get('/api/myGallery');
       console.log(res);
-      return res.data.data;
+      return res.data.data.cards;
     },
   });
 };
+
+export function useCreateMarketItem(options = {}) {
+  return useMutation({
+    mutationFn: createMarketItem,
+    ...options,
+  });
+}

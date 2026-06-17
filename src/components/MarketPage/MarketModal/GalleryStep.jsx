@@ -110,24 +110,19 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
         {myCards.map((card) => (
           <div key={card.name} onClick={() => onSelect(card)}>
             <Card>
-              <Card.Image
-                src={card.photoCard.imageUrl}
-                alt={card.photoCard.name}
-              />
-              <Card.Title className="mt-5 mb-[0px]">
-                {card.photoCard.name}
-              </Card.Title>
+              <Card.Image src={card.imageUrl} alt={card.name} />
+              <Card.Title className="mt-5 mb-[0px]">{card.name}</Card.Title>
               <Card.InfoLayout>
                 <Card.Info nickname={'닉네임'}>
-                  <Card.Grade>{card.photoCard.grade}</Card.Grade>
-                  <span className="text-gray-300">{card.photoCard.genre}</span>
+                  <Card.Grade>{card.grade}</Card.Grade>
+                  <span className="text-gray-300">{card.genre}</span>
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
                 <Card.SaleInfo
                   title={'가격'}
                   type={'point'}
-                  count={card.photoCard.price}
+                  count={card.price}
                 />
                 <Card.SaleInfo title={'수량'} count={card.quantity} />
               </Card.SaleInfoLayout>
