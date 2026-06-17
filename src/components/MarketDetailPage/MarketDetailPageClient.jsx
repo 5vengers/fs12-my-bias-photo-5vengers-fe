@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import GradeText from '@/components/commons/Badge/GradeText';
 import { useMarketItemDetail } from '@/hooks/useMarket';
@@ -19,14 +19,6 @@ const MarketDetailPageClient = ({ itemId }) => {
   const [quantity, setQuantity] = useState(1);
   const { data: item, isPending, isError } = useMarketItemDetail(itemId);
 
-  const remainingQuantity = item ? item.quantity - item.soldQuantity : 0;
-
-  const totalPrice = useMemo(() => {
-    if (!item) return 0;
-
-    return item.pricePerCard * quantity;
-  }, [item, quantity]);
-
   if (isPending) {
     return <main className="px-[220px] py-[80px] text-white">로딩 중...</main>;
   }
@@ -39,8 +31,9 @@ const MarketDetailPageClient = ({ itemId }) => {
     );
   }
 
-  const photoCard = item.myCard?.photoCard;
-  const sellerNickname = item.seller?.nickname;
+  const remainingQuantity = item.quantity - item.soldQuantity;
+
+  const totalPrice = item.pricePerCard * quantity;
 
   return (
     <main className="min-h-screen bg-black px-[220px] pt-[36px] pb-[160px] text-white">
@@ -48,16 +41,16 @@ const MarketDetailPageClient = ({ itemId }) => {
         마켓플레이스
       </p>
 
-      <p className="border-b border-gray-500 py-[30px] text-[16px] leading-[1.6] text-gray-200">
-        {photoCard?.description || '등록된 설명이 없습니다.'}
-      </p>
+      <h1 className="font-baskin border-b border-gray-200 pb-[20px] text-[46px] font-normal">
+        {item.title || '포토카드 상세'}
+      </h1>
 
       <section className="mt-[60px] grid grid-cols-[minmax(0,2fr)_440px] gap-[60px]">
         <div className="relative aspect-[4/3] w-full bg-gray-500">
-          {photoCard?.imageUrl ? (
+          {item?.imageUrl ? (
             <Image
-              src={photoCard.imageUrl}
-              alt={photoCard.name || '포토카드 이미지'}
+              src={item.imageUrl}
+              alt={item.title || '포토카드 이미지'}
               fill
               priority
               className="object-cover"
@@ -75,17 +68,17 @@ const MarketDetailPageClient = ({ itemId }) => {
               <GradeText grade={item.grade} />
               <span className="text-[24px] text-gray-400">|</span>
               <span className="text-[24px] font-bold text-gray-300">
-                {photoCard?.genre}
+                {item.genre}
               </span>
             </div>
 
             <span className="text-[24px] font-bold underline">
-              {sellerNickname}
+              {item.sellerNickname}
             </span>
           </div>
 
           <p className="border-b border-gray-500 py-[30px] text-[16px] leading-[1.6] text-gray-200">
-            {photoCard?.description}
+            {item.description}
           </p>
 
           <div className="flex flex-col gap-[18px] border-b border-gray-500 py-[28px]">
