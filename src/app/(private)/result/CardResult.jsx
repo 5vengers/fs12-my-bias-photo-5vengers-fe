@@ -2,7 +2,6 @@
 
 import ResultContent from '@/components/ResultPage/ResultContent';
 import useCardStore from '@/store/cardStore.js';
-import { useEffect } from 'react';
 import { useShallow } from 'zustand/shallow';
 
 const CardResult = ({ config }) => {
@@ -17,14 +16,7 @@ const CardResult = ({ config }) => {
     })),
   );
 
-  const { reset } = useCardStore((state) => state.actions);
-
-  /* 전역 변수 card 정보 삭제 */
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, [reset]);
+  const reset = useCardStore((state) => state.actions.reset);
 
   // message 값 변환 (카드 정보 없으면 title, status만)
   const handleCardInfo = () => {
@@ -46,6 +38,7 @@ const CardResult = ({ config }) => {
         info={handleCardInfo()}
         link={link}
         isSuccess={isSuccess}
+        onUnmount={reset}
       />
     </>
   );

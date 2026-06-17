@@ -15,17 +15,23 @@ const SelectContext = createContext(null);
   value = select 에 표사될 값. 빈 값이면 desc 표시
   onChange = onChange 함수 context api 사용
 */
-const SelectMain = ({ children, desc, size = 'lg', onChange }) => {
+const SelectMain = ({
+  children,
+  desc,
+  size = 'lg',
+  onChange,
+  isError = false,
+}) => {
   // size에 따라 style 변경
   const sizeStyle = {
-    noLine: 'w-fit',
+    noLine: 'w-fit font-bold gap-[10px]',
     xs: 'w-[180px] h-[50px]',
     sm: 'w-[345px]',
     md: 'w-[440px]',
     lg: 'w-[520px]',
   };
   const buttonStyle = {
-    noLine: 'font-bold gap-[10px]',
+    noLine: 'border-transparent',
     xs: 'border border-white px-[20px] py-[13px]',
     sm: 'border border-white px-[20px] py-[18px]',
     md: 'border border-white px-[20px] py-[18px]',
@@ -49,7 +55,7 @@ const SelectMain = ({ children, desc, size = 'lg', onChange }) => {
       <div ref={ref} className={`relative ${sizeStyle[size]}`}>
         <button
           type="button"
-          className={`flex w-full items-center justify-between transition ${buttonStyle[size] || buttonStyle.lg}`}
+          className={`flex w-full items-center justify-between transition ${buttonStyle[size] || buttonStyle.lg} ${isError ? 'border-red!' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
         >
           {selected !== '' ? selected : `${desc}`}{' '}

@@ -1,8 +1,11 @@
+'use client';
+
 import Button from '../commons/Button/Button';
 import Link from 'next/link';
 
 import { LINK_NAME } from '@/app/(private)/result/result.config';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 /**
  * title = 해당 행동의 제목 (포토카드 생성 등)
@@ -10,7 +13,7 @@ import { useRouter } from 'next/navigation';
  * link = 이동할 link
  * isSuccess = 성공 or 실패 (boolean)
  */
-const ResultContent = ({ title, info = '', link, isSuccess }) => {
+const ResultContent = ({ title, info = '', link, isSuccess, onUnMount }) => {
   const router = useRouter();
 
   // 받침이 있는지 없는지 확인합니다.
@@ -34,6 +37,12 @@ const ResultContent = ({ title, info = '', link, isSuccess }) => {
 
     return `${LINK_NAME[linkName]}${isSuccess ? ' 확인하기' : `${charFix} 돌아가기`}`;
   };
+
+  useEffect(() => {
+    return () => {
+      onUnMount?.();
+    };
+  }, [onUnMount]);
 
   return (
     <div className="h-screen-header mx-auto flex w-[520px] flex-col items-center justify-center gap-[60px]">
