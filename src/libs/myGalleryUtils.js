@@ -18,6 +18,10 @@ export const remainCount = (count) => {
 };
 
 export const replaceImage = (image) => {
+  if (!image) {
+    return image;
+  }
+
   if (image[0] === '/') {
     const replaceUrl = BASE_URL + image;
     console.log(replaceUrl);

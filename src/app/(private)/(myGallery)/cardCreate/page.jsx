@@ -33,17 +33,12 @@ const PhotoCardCreate = () => {
 
   const router = useRouter();
 
-  // 카드 데이터 store 에 저장
-  const setCardData = () => {
-    setCardName(name);
-    setCardGrade(grade);
-  };
-
   // 생성 함수
   const { mutate: createCard, isPending: isCreating } = useMutation({
     mutationFn: (formData) => myGalleryService.createMyCard(formData),
-    onSuccess: (result) => {
-      setCardData();
+    onSuccess: (result, variables) => {
+      setCardName(variables.get('name'));
+      setCardGrade(variables.get('grade'));
 
       if (!result.success) {
         router.push('/result?type=create&status=fail&domain=card');
@@ -52,8 +47,10 @@ const PhotoCardCreate = () => {
 
       router.push('/result?type=create&status=success&domain=card');
     },
-    onError: () => {
-      setCardData();
+    onError: (error, variables) => {
+      setCardName(variables.get('name'));
+      setCardGrade(variables.get('grade'));
+
       router.push('/result?type=create&status=fail&domain=card');
     },
   });

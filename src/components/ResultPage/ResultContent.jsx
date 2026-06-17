@@ -42,7 +42,7 @@ const ResultContent = ({ title, info = '', link, isSuccess, onUnMount }) => {
     return () => {
       onUnMount?.();
     };
-  }, []);
+  }, [onUnMount]);
 
   return (
     <div className="h-screen-header mx-auto flex w-[520px] flex-col items-center justify-center gap-[60px]">
