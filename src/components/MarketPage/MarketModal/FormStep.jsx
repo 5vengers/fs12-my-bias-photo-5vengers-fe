@@ -30,6 +30,10 @@ function FormStep({ card, onBack }) {
       router.replace('/result?type=sell&status=success&domain=card');
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
     },
+    onError: (err) => {
+      console.error('판매 실패:', err);
+      router.replace('/result?type=sell&status=fail&domain=card');
+    },
   });
 
   useEffect(() => {
