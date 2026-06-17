@@ -27,7 +27,7 @@ export default function MarketPageClient() {
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold !text-black transition hover:opacity-90"
+          className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold text-black! transition hover:opacity-90"
         >
           나의 포토카드 판매하기 →
         </button>
@@ -37,9 +37,14 @@ export default function MarketPageClient() {
         <div className="flex items-center gap-12">
           {/* 검색 */}
           <div className="flex h-[50px] w-[320px] items-center justify-between rounded-[2px] border border-gray-200 bg-black px-5">
+            <label htmlFor="market-search" className="sr-only">
+              검색
+            </label>
+
             <input
               type="text"
               placeholder="검색"
+              id="market-search"
               className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
             />
 
@@ -58,10 +63,28 @@ export default function MarketPageClient() {
                 {option.label}
               </Select.Option>
             ))}
+            {GRADE_OPTIONS.map((option) => (
+              <Select.Option
+                key={option.value}
+                value={option.value}
+                onChange={handleGradeChange}
+              >
+                {option.label}
+              </Select.Option>
+            ))}
           </Select>
 
           {/* 장르 */}
           <Select size="noLine" desc="장르" value={genre}>
+            {GENRE_OPTIONS.map((option) => (
+              <Select.Option
+                key={option.value}
+                value={option.value}
+                onChange={setGenre}
+              >
+                {option.label}
+              </Select.Option>
+            ))}
             {GENRE_OPTIONS.map((option) => (
               <Select.Option
                 key={option.value}

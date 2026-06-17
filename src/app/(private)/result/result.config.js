@@ -4,8 +4,8 @@ export const RESULT_CONFIG = {
   card: {
     sell: {
       title: '판매 등록',
-      success: { link: '/myGallery' },
-      fail: { link: '/market' },
+      success: { link: '/market' },
+      fail: { link: '/myGallery' },
     },
     buy: {
       title: '구매',
@@ -41,7 +41,7 @@ export const VALID_STATUS_TYPE = ['success', 'fail'];
 
 export const LINK_NAME = {
   myGallery: '마이갤러리',
-  marketPlace: '마켓플레이스',
+  market: '마켓플레이스',
   mySales: '나의 판매 포토카드',
   login: '로그인',
   register: '회원가입',
