@@ -7,8 +7,6 @@ import logoImage from '@/assets/images/img-logo.svg';
 import { useMyCards } from '@/hooks/queries/useMarketItems';
 
 function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
-  console.log('GalleryStep render');
-
   const { data: myCards = [] } = useMyCards();
   console.log('myCards value:', myCards);
 
@@ -108,12 +106,12 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
 
       <div className="custom-scrollbar grid flex-1 grid-cols-2 gap-4 overflow-y-auto">
         {myCards.map((card) => (
-          <div key={card.name} onClick={() => onSelect(card)}>
+          <div key={card.id} onClick={() => onSelect(card)}>
             <Card>
               <Card.Image src={card.imageUrl} alt={card.name} />
               <Card.Title className="mt-5 mb-[0px]">{card.name}</Card.Title>
               <Card.InfoLayout>
-                <Card.Info nickname={'닉네임'}>
+                <Card.Info nickname={card.nickname}>
                   <Card.Grade>{card.grade}</Card.Grade>
                   <span className="text-gray-300">{card.genre}</span>
                 </Card.Info>

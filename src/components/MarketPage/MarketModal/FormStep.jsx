@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-
+import { useRouter } from 'next/navigation';
 import apiClient from '@/libs/apiClient';
 import MinusIcon from '@/assets/icons/ic-minus.svg';
 import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
 import { useCreateMarketItem } from '@/hooks/queries/useMarketItems';
+import { useQueryClient } from '@tanstack/react-query';
 
 function FormStep({ card, onBack }) {
   const textColor = {
@@ -21,14 +22,13 @@ function FormStep({ card, onBack }) {
   const [exchangeGenre, setExchangeGenre] = useState('');
   const [exchangeDescription, setExchangeDescription] = useState('');
   const isLoadingMax = maxQuantity === null;
+  const router = useRouter();
   const grade = card.grade;
 
   const { mutate, isPending } = useCreateMarketItem({
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['marketItems'],
-      });
-      onBack?.();
+    onSuccess: (data) => {
+      router.replace('/result?type=sell&status=success&domain=card');
+      queryClient.invalidateQueries({ queryKey: ['marketItems'] });
     },
   });
 
@@ -39,10 +39,10 @@ function FormStep({ card, onBack }) {
 
     async function fetchMax() {
       try {
-        const res = await apiClient.get(`/api/myCards/${card.id}/max`);
+        const res = await apiClient.get(`/api/market/items/${card.id}/max`);
 
         if (isMounted) {
-          setMaxQuantity(res.data.maxQuantity);
+          setMaxQuantity(res.data.data);
         }
       } catch (err) {
         console.error(err);
@@ -103,10 +103,10 @@ function FormStep({ card, onBack }) {
     mutate({
       myCardId: card.id,
       quantity: Number(quantity),
-      pricePerCard: Number(price),
-      wantedGrade: exchangeGrade || null,
-      wantedGenre: exchangeGenre || null,
-      wantedDescription: exchangeDescription || null,
+      price_per_card: Number(price),
+      wanted_grade: exchangeGrade || null,
+      wanted_genre: exchangeGenre || null,
+      wanted_description: exchangeDescription || null,
     });
   };
 
@@ -148,7 +148,7 @@ function FormStep({ card, onBack }) {
 
             {/* 오른쪽: 닉네임 */}
             <span className="text-[24px] leading-none font-bold text-white underline decoration-solid">
-              {'닉네임'}
+              {card.nickname}
             </span>
           </div>
 

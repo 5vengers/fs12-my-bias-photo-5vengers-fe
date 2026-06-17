@@ -18,7 +18,6 @@ export const useMarketItems = () => {
 };
 
 export const useMyCards = () => {
-  console.log('useMyCards HOOK CALLED');
   return useQuery({
     queryKey: ['myCards'],
     queryFn: async () => {
