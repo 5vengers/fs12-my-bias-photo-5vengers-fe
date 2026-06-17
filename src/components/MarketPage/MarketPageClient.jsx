@@ -9,6 +9,7 @@ import MarketListPage from '@/components/MarketPage/MarketListPage';
 import SellModal from '@/components/MarketPage/MarketModal/ModalSell';
 
 export default function MarketPageClient() {
+  const [keyword, setKeyword] = useState('');
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
   const [soldOut, setSoldOut] = useState('');
@@ -45,6 +46,8 @@ export default function MarketPageClient() {
               type="text"
               placeholder="검색"
               id="market-search"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
               className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
             />
 
@@ -76,15 +79,6 @@ export default function MarketPageClient() {
 
           {/* 장르 */}
           <Select size="noLine" desc="장르" value={genre}>
-            {GENRE_OPTIONS.map((option) => (
-              <Select.Option
-                key={option.value}
-                value={option.value}
-                onChange={setGenre}
-              >
-                {option.label}
-              </Select.Option>
-            ))}
             {GENRE_OPTIONS.map((option) => (
               <Select.Option
                 key={option.value}
@@ -127,6 +121,7 @@ export default function MarketPageClient() {
         </Select>
       </div>
       <MarketListPage
+        keyword={keyword}
         grade={grade}
         genre={genre}
         soldOut={soldOut}

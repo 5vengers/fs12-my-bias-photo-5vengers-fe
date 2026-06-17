@@ -5,13 +5,25 @@ import apiClient from '../apiClient';
  * @param {number} pageParam 페이지 번호
  * @returns {Promise<{items: Array, nextPage: number | undefined}>}
  */
-export const getMarketItems = async ({ pageParam = 1 }) => {
+export const getMarketItems = async ({
+  pageParam = 1,
+  grade,
+  genre,
+  soldOut,
+  sort,
+  keyword,
+}) => {
   const LIMIT = 6;
 
   const response = await apiClient.get('/api/market/items', {
     params: {
       page: pageParam,
       limit: LIMIT,
+      grade,
+      genre,
+      soldOut,
+      sort,
+      keyword,
     },
   });
 
