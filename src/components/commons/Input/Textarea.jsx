@@ -2,7 +2,7 @@
 
 import useValidation from '@/hooks/useValidation';
 
-const Textarea = ({ externalError, setValue }) => {
+const Textarea = ({ externalError, setValue, id }) => {
   const { validation, error } = useValidation();
 
   const displayError = externalError ?? error;
@@ -10,8 +10,8 @@ const Textarea = ({ externalError, setValue }) => {
   return (
     <>
       <textarea
-        name="textarea-input"
-        id="textarea-input"
+        name={id}
+        id={id}
         className={`h-[180px] w-full border px-[20px] py-[12px] focus:bg-gray-500 ${displayError.isError ? 'border-red' : 'border-white'}`}
         placeholder="포토카드 설명을 입력해주세요."
         onChange={(e) => {

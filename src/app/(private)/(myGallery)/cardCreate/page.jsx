@@ -72,10 +72,11 @@ const PhotoCardCreate = () => {
 
   const validate = () => {
     const errors = {};
+    const isBlank = (v) => typeof v === 'string' && v.trim() === '';
 
-    if (!name) {
+    if (!name || isBlank(name)) {
       errors.name = '필수 입력사항입니다.';
-    } else if (name.length > 20) {
+    } else if (name.trim().length > 20) {
       errors.name = '포토 카드 이름은 20자 이하이어야 합니다.';
     }
 
@@ -105,7 +106,7 @@ const PhotoCardCreate = () => {
       errors.file = '필수 입력사항입니다.';
     }
 
-    if (!description) {
+    if (!description || isBlank(description)) {
       errors.description = '필수 입력사항입니다.';
     }
 
@@ -160,7 +161,7 @@ const PhotoCardCreate = () => {
     }
   };
 
-  const remain = log?.count !== null ? remainCount(log?.count) : '-';
+  const remain = log?.count !== null ? '-' : remainCount(log?.count);
   const yearMonth = curDate();
 
   return (
