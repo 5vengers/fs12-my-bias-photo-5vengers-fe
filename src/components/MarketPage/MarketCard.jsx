@@ -1,5 +1,6 @@
-import Card from '../../components/commons/Card/Card';
+import Link from 'next/link';
 import Image from 'next/image';
+import Card from '@/components/commons/Card/Card';
 import logoImage from '@/assets/images/img-logo.svg';
 
 function MarketCard({ item }) {
