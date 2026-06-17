@@ -41,6 +41,9 @@ const MarketDetailPageClient = ({ itemId }) => {
 
   // 구매 버튼 클릭 시 호출되는 함수
   const handlePurchase = () => {
+    if (isPurchasePending) return;
+    if (quantity < 1 || quantity > remainingQuantity) return;
+
     purchaseMarketItem(
       {
         itemId,
@@ -131,7 +134,12 @@ const MarketDetailPageClient = ({ itemId }) => {
           <button
             type="button"
             onClick={handlePurchase}
-            disabled={isPurchasePending || remainingQuantity < 1}
+            disabled={
+              isPurchasePending ||
+              remainingQuantity < 1 ||
+              quantity < 1 ||
+              quantity > remainingQuantity
+            }
             className="bg-main mt-[30px] flex h-[60px] w-full items-center justify-center rounded-[2px] text-[18px] font-bold text-black disabled:bg-gray-400 disabled:text-gray-300"
           >
             {isPurchasePending ? '구매 중...' : '포토카드 구매하기'}
