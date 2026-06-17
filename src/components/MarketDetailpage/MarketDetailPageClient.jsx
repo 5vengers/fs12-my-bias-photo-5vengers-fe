@@ -115,6 +115,30 @@ const MarketDetailPageClient = ({ itemId }) => {
           </button>
         </aside>
       </section>
+      <section className="mt-[80px]">
+        <div className="flex items-center justify-between border-b border-gray-200 pb-[20px]">
+          <h2 className="text-[32px] font-bold">교환 희망 정보</h2>
+
+          <button
+            type="button"
+            className="bg-main h-[50px] w-[280px] rounded-[2px] text-[16px] font-bold text-black"
+          >
+            포토카드 교환하기
+          </button>
+        </div>
+
+        <p className="mt-[40px] text-[18px] font-bold text-white">
+          {item.wantedDescription}
+        </p>
+
+        <div className="mt-[20px] flex items-center gap-[12px]">
+          <GradeText grade={item.wantedGrade} />
+          <span className="text-gray-400">|</span>
+          <span className="text-[18px] font-bold text-gray-300">
+            {item.wantedGenre}
+          </span>
+        </div>
+      </section>
     </main>
   );
 };
