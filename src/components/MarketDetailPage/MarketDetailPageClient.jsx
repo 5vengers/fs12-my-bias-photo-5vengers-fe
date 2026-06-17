@@ -35,18 +35,6 @@ const MarketDetailPageClient = ({ itemId }) => {
 
   const totalPrice = item.pricePerCard * quantity;
 
-  if (isPending) {
-    return <main className="px-[220px] py-[80px] text-white">로딩 중...</main>;
-  }
-
-  if (isError || !item) {
-    return (
-      <main className="px-[220px] py-[80px] text-white">
-        포토카드 정보를 불러오지 못했습니다.
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-black px-[220px] pt-[36px] pb-[160px] text-white">
       <p className="font-baskin mb-[30px] text-[24px] text-gray-300">
