@@ -24,7 +24,6 @@ export const replaceImage = (image) => {
 
   if (image[0] === '/') {
     const replaceUrl = BASE_URL + image;
-    console.log(replaceUrl);
     return replaceUrl;
   }
   return image;

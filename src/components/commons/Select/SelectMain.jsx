@@ -44,7 +44,6 @@ const SelectMain = ({
   const [selected, setSelected] = useState('');
 
   const handleChange = (v) => {
-    console.log(v);
     // 기본적으로 ui 값 변화는 이 곳에서 담당
     setSelected(v);
     // option 값 선택으로 밖에서 state 관리할때는 이 곳에서 담당
