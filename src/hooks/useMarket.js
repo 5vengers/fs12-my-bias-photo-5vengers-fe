@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import marketService from '@/libs/service/marketService';
 
 export const MARKET_QUERY_KEYS = {
-  DETAIL: (itemId) => ['marketItems', itemId],
+  DETAIL: (itemId) => ['marketItems', 'detail', itemId],
 };
 
 export const useMarketItemDetail = (itemId) => {

@@ -5,6 +5,8 @@ export const metadata = {
   description: '마켓플레이스 포토카드 상세 구매 페이지',
 };
 
-export default function Page({ params }) {
-  return <MarketDetailPageClient itemId={params.itemId} />;
+export default async function Page({ params }) {
+  const { itemId } = await params;
+
+  return <MarketDetailPageClient itemId={itemId} />;
 }
