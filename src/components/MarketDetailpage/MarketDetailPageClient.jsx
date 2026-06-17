@@ -48,19 +48,25 @@ const MarketDetailPageClient = ({ itemId }) => {
         마켓플레이스
       </p>
 
-      <h1 className="font-baskin border-b border-gray-200 pb-[20px] text-[46px] font-normal">
-        {photoCard?.name}
-      </h1>
+      <p className="border-b border-gray-500 py-[30px] text-[16px] leading-[1.6] text-gray-200">
+        {photoCard?.description || '등록된 설명이 없습니다.'}
+      </p>
 
       <section className="mt-[60px] grid grid-cols-[minmax(0,2fr)_440px] gap-[60px]">
-        <div className="relative aspect-[4/3] w-full">
-          <Image
-            src={photoCard?.imageUrl}
-            alt={photoCard?.name}
-            fill
-            priority
-            className="object-cover"
-          />
+        <div className="relative aspect-[4/3] w-full bg-gray-500">
+          {photoCard?.imageUrl ? (
+            <Image
+              src={photoCard.imageUrl}
+              alt={photoCard.name || '포토카드 이미지'}
+              fill
+              priority
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-gray-300">
+              이미지가 없습니다
+            </div>
+          )}
         </div>
 
         <aside>
