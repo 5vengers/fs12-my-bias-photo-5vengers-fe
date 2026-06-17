@@ -29,3 +29,15 @@ export const getMarketItemDetail = async (itemId) => {
 
   return response.data.data;
 };
+
+// 마켓 아이템 구매
+export const purchaseMarketItem = async ({ itemId, quantity }) => {
+  const response = await apiClient.post(
+    `/api/market/items/${itemId}/purchase`,
+    {
+      quantity,
+    },
+  );
+
+  return response.data.data;
+};
