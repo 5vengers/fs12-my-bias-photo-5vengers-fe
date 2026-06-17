@@ -6,19 +6,10 @@ const GRADE_COLORS = {
 };
 
 const GradeText = ({ grade }) => {
-  const color = GRADE_COLORS[grade] || '#555555';
+  const color = GRADE_COLORS[grade] || 'text-gray-500';
 
   return (
-    <span
-      style={{
-        color: color,
-        fontFamily: '"Noto Sans KR", sans-serif',
-        fontSize: '24px',
-        fontStyle: 'normal',
-        fontWeight: '700',
-        lineHeight: 'normal',
-      }}
-    >
+    <span className={`font-noto-sans-kr text-2xl font-bold ${colorClass}`}>
       {grade}
     </span>
   );

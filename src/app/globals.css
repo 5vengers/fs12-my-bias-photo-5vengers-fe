@@ -91,7 +91,7 @@
   background: var(--gray500);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #5a5a5a;
+  background-color: var(--gray400);
   border-radius: 2px;
   height: 180px;
 }
