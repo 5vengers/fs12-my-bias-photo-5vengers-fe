@@ -1,7 +1,7 @@
 /*
   children = 버튼에 들어갈 text 및 html
-  size = 버튼 사이즈 'lg, 'sm' (기본 'lg')
-  isThick = 버튼 두껍기 (기본 true)
+  size = 버튼 사이즈 'full', 'lg', 'sm' (기본 'full')
+  isThick = 버튼 두껍기 (기본 false)
   disabled = 버튼 활성화 (기본 false)
   btnType = 버튼 타입 'button', 'submit' (기본 'button')
   type = 버튼 색 타입 'pri' = 노란색, 'sec' = 검은색 (기본 'pri')
@@ -10,27 +10,30 @@
 
 const Button = ({
   children,
-  size = 'lg',
-  isThick = true,
+  size = 'full',
+  isThick = false,
   disabled = false,
   btnType = 'button',
   type = 'pri',
   ...props
 }) => {
   // true 면 thick, false 면 thin
-  const thickness = ['h-[43px]', 'h-[52px]'];
+  const thickness = ['h-[60px]', 'h-[80px]'];
 
   // 기본 lg
   const sizing = {
     sm: 'w-[150px]',
-    lg: 'w-full max-w-[520px]',
+    md: 'w-[340px]',
+    lg: 'w-[440px]',
+    xl: 'w-[520px]',
+    full: 'w-full',
   };
 
   // 기본 pri (노란색)
   const typeColor = {
     pri: 'bg-main text-black',
     sec: 'bg-black text-white border border-white',
-    google: 'bg-white text-black border border-gray-300'
+    google: 'bg-white text-black border border-gray-300',
   };
 
   return (

@@ -54,7 +54,7 @@ const PasswordInput = ({
     <div>
       <div className="relative flex items-center justify-between">
         <input
-          className={`mt-[10px] w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${displayError.isError ? 'border-red' : ''}`}
+          className={`w-full border border-gray-200 bg-black px-[20px] py-[18px] text-white focus:outline-none ${sizeStyle[size]} ${displayError.isError ? 'border-red' : ''}`}
           id={id}
           value={password}
           type={showPassword ? 'text' : 'password'}
@@ -67,7 +67,7 @@ const PasswordInput = ({
         />
         <span
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute top-[30px] right-[20px] cursor-pointer"
+          className="absolute top-[20px] right-[20px] cursor-pointer"
         >
           {showPassword ? (
             <Image

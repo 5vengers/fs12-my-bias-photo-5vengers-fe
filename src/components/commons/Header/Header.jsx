@@ -22,8 +22,8 @@ const Header = () => {
   const pointText = (() => {
     if (isPending) return '... P';
     if (isError || typeof point !== 'number' || !Number.isFinite(point)) {
-  return '-- P';
-}
+      return '-- P';
+    }
 
     return `${point.toLocaleString('ko-KR')} P`;
   })();
@@ -32,7 +32,13 @@ const Header = () => {
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
         <Link href="/">
-          <Image src={Logo} width={140} height={25} alt="최애의 포토 로고" />
+          <Image
+            src={Logo}
+            width={140}
+            height={25}
+            alt="최애의 포토 로고"
+            priority
+          />
         </Link>
       </div>
 

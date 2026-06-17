@@ -1,24 +1,15 @@
 const GRADE_COLORS = {
-  COMMON: '#555555',
-  RARE: '#2A6AFF', // 예시 블루
-  SUPER_RARE: '#8B2AFF', // 예시 퍼플
-  LEGENDARY: '#FF2A6A', // 요청하신 Pink
+  COMMON: 'text-main',
+  RARE: 'text-blue',
+  SUPER_RARE: 'text-purple',
+  LAGENDARY: 'text-pink',
 };
 
 const GradeText = ({ grade }) => {
-  const color = GRADE_COLORS[grade] || '#555555';
+  const color = GRADE_COLORS[grade] || 'text-gray-500';
 
   return (
-    <span
-      style={{
-        color: color,
-        fontFamily: '"Noto Sans KR", sans-serif',
-        fontSize: '24px',
-        fontStyle: 'normal',
-        fontWeight: '700',
-        lineHeight: 'normal',
-      }}
-    >
+    <span className={`font-noto-sans-kr text-2xl font-bold ${colorClass}`}>
       {grade}
     </span>
   );

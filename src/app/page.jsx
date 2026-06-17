@@ -1,3 +1,16 @@
-export default function Home() {
-  return <div>메인 화면</div>;
-}
+import { Suspense } from 'react';
+import MainPage from '@/components/MainPage/MainPage';
+import LoggedInToast from '@/components/MainPage/LoggedInToast';
+
+const Home = () => {
+  return (
+    <>
+      <Suspense fallback={null}>
+        <LoggedInToast />
+      </Suspense>
+      <MainPage />
+    </>
+  );
+};
+
+export default Home;

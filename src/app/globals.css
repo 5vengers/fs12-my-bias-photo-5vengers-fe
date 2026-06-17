@@ -34,6 +34,14 @@
 
   --font-noto: var(--font-noto-sans-kr);
   --font-baskin: var(--font-baskin-robbins);
+
+  /* breakpoints */
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 744px;
+  --breakpoint-desktop: 745px;
+
+  --inset-shadow-xs: 0 0 0 1px var(--white) inset;
+  --height-screen-header: calc(100vh - 82px);
 }
 
 .text-overflow {
@@ -50,6 +58,18 @@
   content: '|';
   margin-left: 10px;
   color: var(--gray400);
+}
+
+/* grade button — border·color·background는 JS에서 동적 주입 */
+.grade-button {
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 3px 10px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
 .input-h-scroll::-webkit-outer-spin-button,
@@ -79,6 +99,16 @@
 .wrapper {
 }
 
+/* 등급 텍스트 색상 */
+.grade-common    { color: var(--main);    }
+.grade-rare      { color: #00D1FF;        }
+.grade-super-rare { color: var(--purple); }
+.grade-legendary { color: #FF7B00;        }
+
+/* 판매 유형 텍스트 색상 */
+.sale-auction { color: var(--purple); }
+.sale-instant { color: #00D1FF;       }
+
 /* 스크롤바 */
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -88,10 +118,31 @@
   background: var(--gray500);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #5a5a5a;
+  background-color: var(--gray400);
   border-radius: 2px;
   height: 180px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #7a7a7a;
+}
+
+/* 랜딩 페이지 애니메이션 */
+@keyframes floatUp {
+  0%   { transform: translateY(0px); opacity: 1; }
+  80%  { opacity: 0.8; }
+  100% { transform: translateY(-160px); opacity: 0; }
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.3) translateY(20px); opacity: 0; }
+  60%  { transform: scale(1.15) translateY(-6px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes boxShake {
+  0%,100% { transform: rotate(0deg); }
+  20%     { transform: rotate(-8deg); }
+  40%     { transform: rotate(8deg); }
+  60%     { transform: rotate(-5deg); }
+  80%     { transform: rotate(5deg); }
 }
