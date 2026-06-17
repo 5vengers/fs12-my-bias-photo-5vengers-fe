@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { executeRefresh } from '@/libs/apiClient';
+import useAuthStore from '@/store/authStore';
 
 const OAuthCallbackPage = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const OAuthCallbackPage = () => {
 
     executeRefresh()
       .then(() => {
+        useAuthStore.getState().setShowLoggedInToast(true);
         router.replace('/');
       })
       .catch((err) => {

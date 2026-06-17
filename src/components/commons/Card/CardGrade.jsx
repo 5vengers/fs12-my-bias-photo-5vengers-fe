@@ -3,7 +3,7 @@ const CardGrade = ({ children }) => {
     COMMON: 'text-main',
     RARE: 'text-blue',
     SUPER_RARE: 'text-purple',
-    LAGENDERY: 'text-pink',
+    LEGENDARY: 'text-pink',
   };
 
   return (
