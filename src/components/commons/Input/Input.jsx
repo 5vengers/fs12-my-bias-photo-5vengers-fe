@@ -38,8 +38,6 @@ const Input = ({
               ? value.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '')
               : value;
 
-          console.log(filterValue);
-
           setValue(filterValue);
           validation(validationType || type, filterValue);
         }}

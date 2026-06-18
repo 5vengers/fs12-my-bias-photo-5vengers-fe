@@ -16,7 +16,6 @@ import useCardStore from '@/store/cardStore';
 import { curDate, remainCount } from '@/libs/myGalleryUtils';
 import useCreationLog from '@/hooks/useCreationLog';
 import { cardCreateValidate } from '@/libs/formValidate';
-import { NextDataPathnameNormalizer } from 'next/dist/server/normalizers/request/next-data';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
