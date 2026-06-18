@@ -42,23 +42,25 @@ const SelectMain = ({
   const { ref } = useMouseOut({ setIsOpen });
 
   const [selected, setSelected] = useState('');
+  const [selectedLabel, setSelectedLabel] = useState('');
 
-  const handleChange = (v) => {
+  const handleChange = (value, label) => {
     // 기본적으로 ui 값 변화는 이 곳에서 담당
-    setSelected(v);
+    setSelected(value);
+    setSelectedLabel(label);
     // option 값 선택으로 밖에서 state 관리할때는 이 곳에서 담당
-    onChange?.(v);
+    onChange?.(value);
   };
 
   return (
-    <SelectContext.Provider value={{ selected, handleChange }}>
+    <SelectContext.Provider value={{ selected, selectedLabel, handleChange }}>
       <div ref={ref} className={`relative ${sizeStyle[size]}`}>
         <button
           type="button"
           className={`flex w-full items-center justify-between transition ${buttonStyle[size] || buttonStyle.lg} ${isError ? 'border-red!' : ''}`}
           onClick={() => setIsOpen(!isOpen)}
         >
-          {selected !== '' ? selected : `${desc}`}{' '}
+          {selectedLabel || desc}
           {isOpen ? (
             <Image src={UpIcon} alt="옵션 닫기" width={24} height={24} />
           ) : (
