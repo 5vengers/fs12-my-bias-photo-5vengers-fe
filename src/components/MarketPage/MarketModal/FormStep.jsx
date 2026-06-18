@@ -6,8 +6,7 @@ import MinusIcon from '@/assets/icons/ic-minus.svg';
 import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
 import { useCreateMarketItem } from '@/hooks/useMarketItems';
-import { useQueryClient } from '@tanstack/react-query';
-
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
 function FormStep({ card, onBack }) {
   const textColor = {
     COMMON: 'text-main',
@@ -146,7 +145,8 @@ function FormStep({ card, onBack }) {
 
               {/* 장르 */}
               <span className="text-[24px] leading-none font-bold text-gray-300">
-                {card.genre}
+                {GENRE_OPTIONS.find((g) => g.value === card.genre)?.label ??
+                  card.genre}
               </span>
             </div>
 

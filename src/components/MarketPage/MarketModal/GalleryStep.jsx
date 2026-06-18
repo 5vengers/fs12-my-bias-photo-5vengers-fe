@@ -5,7 +5,7 @@ import Select from '@/components/commons/Select/Select';
 import Card from '../../commons/Card/Card';
 import logoImage from '@/assets/images/img-logo.svg';
 import { useMyCards } from '@/hooks/useMarketItems';
-
+import { GENRE_OPTIONS, GRADE_OPTIONS } from '@/constants/marketOptions';
 function GalleryStep({
   onSelect,
   grade,
@@ -46,42 +46,23 @@ function GalleryStep({
             <Image src={SearchIcon} alt="검색" width={20} height={20} />
           </span>
         </div>
+
         {/* 등급 */}
         <Select size="noLine" desc="등급" onChange={handleGradeChange}>
-          <Select.Option value="">전체 등급</Select.Option>
-
-          <Select.Option value="COMMON">COMMON</Select.Option>
-
-          <Select.Option value="RARE">RARE</Select.Option>
-
-          <Select.Option value="SUPER_RARE">SUPER RARE</Select.Option>
-
-          <Select.Option value="LEGENDARY">LEGENDARY</Select.Option>
+          {GRADE_OPTIONS.map((option) => (
+            <Select.Option key={option.value} value={option.value}>
+              {option.label}
+            </Select.Option>
+          ))}
         </Select>
 
         {/* 장르 */}
         <Select size="noLine" desc="장르" onChange={setGenre}>
-          <Select.Option value="">전체 장르</Select.Option>
-
-          <Select.Option value="ALBUM">앨범</Select.Option>
-
-          <Select.Option value="BENEFIT">특전</Select.Option>
-
-          <Select.Option value="FAN_SIGN">팬싸</Select.Option>
-
-          <Select.Option value="SEASON_GREETING">시즌그리팅</Select.Option>
-
-          <Select.Option value="FAN_MEETING">팬미팅</Select.Option>
-
-          <Select.Option value="CONCERT">콘서트</Select.Option>
-
-          <Select.Option value="MD">MD</Select.Option>
-
-          <Select.Option value="COLLAB">콜라보</Select.Option>
-
-          <Select.Option value="FAN_CLUB">팬클럽</Select.Option>
-
-          <Select.Option value="ETC">기타</Select.Option>
+          {GENRE_OPTIONS.map((option) => (
+            <Select.Option key={option.value} value={option.value}>
+              {option.label}
+            </Select.Option>
+          ))}
         </Select>
       </div>
 
@@ -96,7 +77,11 @@ function GalleryStep({
               <Card.InfoLayout>
                 <Card.Info nickname={card.nickname}>
                   <Card.Grade>{card.grade}</Card.Grade>
-                  <span className="text-gray-300">{card.genre}</span>
+                  <span className="text-gray-300">
+                    {' '}
+                    {GENRE_OPTIONS.find((g) => g.value === card.genre)?.label ??
+                      item.genre}
+                  </span>
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
