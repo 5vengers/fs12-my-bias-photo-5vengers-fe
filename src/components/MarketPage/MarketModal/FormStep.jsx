@@ -22,6 +22,7 @@ function FormStep({ card, onBack }) {
   const [exchangeDescription, setExchangeDescription] = useState('');
   const isLoadingMax = maxQuantity === null;
   const router = useRouter();
+  const queryClient = useQueryClient();
   const grade = card.grade;
 
   const { mutate, isPending } = useCreateMarketItem({
