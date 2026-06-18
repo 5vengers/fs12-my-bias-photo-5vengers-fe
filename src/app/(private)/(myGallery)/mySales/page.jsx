@@ -184,9 +184,9 @@ const MySalesPage = () => {
 
         {/* 통계 박스 */}
         <div className="w-[650px] min-h-[95px] border border-white/15 rounded py-[14px] px-5 flex flex-col justify-between gap-2.5">
-          <span className="text-white/70 text-sm font-medium">
+          <span className="text-[#DDD] text-2xl font-bold">
             {user?.nickname ?? "회원"}님이 보유한 포토카드&nbsp;
-            <span className="text-white font-bold">(총 {totalQuantity}장)</span>
+            <span className="text-[#A4A4A4] text-[20px] font-normal w-[55px] h-[29px] inline-block text-right">({totalQuantity}장)</span>
           </span>
           <div className="flex items-center gap-[10px]">
             {Object.values(CardGrade).map((grade) => {

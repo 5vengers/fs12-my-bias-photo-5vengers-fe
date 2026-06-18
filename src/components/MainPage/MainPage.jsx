@@ -334,6 +334,12 @@ const RandomBoxSection = () => {
                 <span className="text-main font-bold">{pad(time.m)}분 {pad(time.s)}초</span>
               </p>
 
+              {earnedPoint !== null && (
+                <p className="text-white/35 text-[11px] mb-4">
+                  이 포인트는 예시입니다. 실제 획득 가능한 포인트가 아닙니다.
+                </p>
+              )}
+
               {/* 선물상자 */}
               <div className="flex justify-center gap-10 relative z-20">
                 {BOXES.map(({ ribbonClass, bow, shadow }, i) => {
