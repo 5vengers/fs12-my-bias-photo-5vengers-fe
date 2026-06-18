@@ -65,21 +65,35 @@ const CardSkeleton = () => {
 }
 
 /* ─── 카드 컴포넌트 ─── */
+const getBadge = (card) => {
+  if (card.status === MarketStatus.SOLD_OUT)
+    return { label: "판매 완료", className: "bg-black/70 text-gray-400 border border-gray-400/40" };
+  if (card.exchangeProposals?.length > 0)
+    return { label: "교환 제시 대기 중", className: "bg-black/70 text-[#A78BFA] border border-[#A78BFA]/40" };
+  return { label: "판매 중", className: "bg-black/70 text-[#00C8FF] border border-[#00C8FF]/40" };
+};
+
 const SaleCard = ({ card, nickname }) => {
   const isSoldOut = card.status === MarketStatus.SOLD_OUT;
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
   const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
   const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
   const saleType  = card.saleType ?? "INSTANT";
+  const badge     = getBadge(card);
 
   return (
     <Card>
       <Card.Title>{cardName}</Card.Title>
-      <Card.Image
-        src={imageUrl}
-        alt={cardName}
-        state={isSoldOut ? "soldOut" : "sale"}
-      />
+      <div className="relative w-full">
+        <Card.Image
+          src={imageUrl}
+          alt={cardName}
+          state={isSoldOut ? "soldOut" : "sale"}
+        />
+        <span className={`absolute top-2 left-2 z-20 rounded px-2 py-[3px] text-[11px] font-semibold ${badge.className}`}>
+          {badge.label}
+        </span>
+      </div>
       <Card.InfoLayout>
         <Card.Info nickname={nickname}>
           <span className={`font-bold text-[11px] ${GRADE_CLASS[card.grade] ?? ""}`}>
