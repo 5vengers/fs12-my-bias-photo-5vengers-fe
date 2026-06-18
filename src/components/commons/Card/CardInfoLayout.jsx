@@ -1,5 +1,5 @@
-const CardInfoLayout = ({ children }) => {
-  return <div className="my-[25px] w-full">{children}</div>;
+const CardInfoLayout = ({ children, className }) => {
+  return <div className={`w-full ${className ?? 'my-[25px]'}`}>{children}</div>;
 };
 
 export default CardInfoLayout;

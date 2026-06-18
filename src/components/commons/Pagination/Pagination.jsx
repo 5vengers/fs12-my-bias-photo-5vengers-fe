@@ -21,7 +21,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
   const pageStyle = 'w-[50px] h-[50px] flex items-center justify-center';
   const disableStyle = 'brightness-50';
   const hoverStyle = 'text-white hover:inset-shadow-xs cursor-pointer';
-  const activeStyle = 'inset-shadow-xs cursor-pointer';
+  const activeStyle = 'border border-white cursor-pointer';
 
   const prevDisabled = currentPage === 1;
   const nextDisabled = currentPage === totalPages;
@@ -71,7 +71,7 @@ const Pagination = ({ currentPage = 1, totalPages = 1, onPageChange }) => {
 
   return (
     <nav aria-label="페이지네이션">
-      <ul ref={ref} className="flex items-center justify-center gap-[10px]">
+      <ul ref={ref} className="inline-flex items-center gap-[20px]">
         <li>
           <button
             type="button"

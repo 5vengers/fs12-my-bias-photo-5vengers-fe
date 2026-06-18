@@ -1,9 +1,8 @@
 'use client';
 
 import Button from '../commons/Button/Button';
-import Link from 'next/link';
 
-import { LINK_NAME } from '@/app/(private)/result/result.config';
+import { LINK_NAME } from '@/app/(main)/(private)/result/result.config';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Card from '@/components/commons/Card/Card';
-import { useMyCards } from '@/hooks/queries/useMarketItems';
+import { useMyCards } from '@/hooks/useMarketItems';
 import CloseIcon from '@/assets/icons/ic-close.svg';
 
 // 교환 요청 모달 컴포넌트

@@ -31,7 +31,7 @@ const SelectMain = ({
     lg: 'w-[520px]',
   };
   const buttonStyle = {
-    noLine: 'border-transparent',
+    noLine: 'border-transparent whitespace-nowrap',
     xs: 'border border-white px-[20px] py-[13px]',
     sm: 'border border-white px-[20px] py-[18px]',
     md: 'border border-white px-[20px] py-[18px]',
@@ -67,7 +67,7 @@ const SelectMain = ({
         </button>
         {isOpen && (
           <div
-            className={`absolute z-[10] my-[5px] flex min-w-[100px] flex-col items-start border border-white bg-black ${size === 'noLine' ? 'w-fit' : 'w-full'}`}
+            className={`absolute z-50 my-[5px] flex min-w-[100px] flex-col items-start border border-white bg-black ${size === 'noLine' ? 'w-fit' : 'w-full'}`}
             onClick={() => setIsOpen(!isOpen)}
           >
             {children}
