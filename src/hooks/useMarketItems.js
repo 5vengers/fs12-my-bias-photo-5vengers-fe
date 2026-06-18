@@ -3,10 +3,10 @@ import { getMarketItems, createMarketItem } from '@/libs/service/marketService';
 import apiClient from '@/libs/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
-export const useMarketItems = () => {
+export const useMarketItems = (params) => {
   const query = useInfiniteQuery({
-    queryKey: ['marketItems'],
-    queryFn: getMarketItems,
+    queryKey: ['marketItems', params],
+    queryFn: ({ pageParam }) => getMarketItems({ pageParam, ...params }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
@@ -17,12 +17,17 @@ export const useMarketItems = () => {
   };
 };
 
-export const useMyCards = () => {
+export const useMyCards = ({ grade, genre, keyword }) => {
   return useQuery({
-    queryKey: ['myCards'],
+    queryKey: ['myCards', grade, genre, keyword],
     queryFn: async () => {
-      const res = await apiClient.get('/api/myGallery');
-      console.log(res);
+      const res = await apiClient.get('/api/myGallery', {
+        params: {
+          ...(grade && { grade }),
+          ...(genre && { genre }),
+          ...(keyword && { keyword }),
+        },
+      });
       return res.data.data.cards;
     },
   });

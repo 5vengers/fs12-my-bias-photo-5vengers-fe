@@ -5,7 +5,7 @@ import apiClient from '@/libs/apiClient';
 import MinusIcon from '@/assets/icons/ic-minus.svg';
 import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
-import { useCreateMarketItem } from '@/hooks/queries/useMarketItems';
+import { useCreateMarketItem } from '@/hooks/useMarketItems';
 import { useQueryClient } from '@tanstack/react-query';
 
 function FormStep({ card, onBack }) {
