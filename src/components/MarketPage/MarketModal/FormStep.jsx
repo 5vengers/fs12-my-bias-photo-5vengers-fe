@@ -7,6 +7,8 @@ import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
 import { useCreateMarketItem } from '@/hooks/useMarketItems';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
+import { useQueryClient } from '@tanstack/react-query';
+
 function FormStep({ card, onBack }) {
   const textColor = {
     COMMON: 'text-main',
