@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import Card from '@/components/commons/Card/Card';
 import { useMyCards } from '@/hooks/queries/useMarketItems';
@@ -13,7 +12,6 @@ const ExchangeRequestModal = ({
   onSubmit,
   isPending = false,
 }) => {
-  const [selectedCard, setSelectedCard] = useState(null);
   const { data: myCards = [], isPending: isCardsPending } = useMyCards();
 
   if (!isOpen) return null;
@@ -50,7 +48,7 @@ const ExchangeRequestModal = ({
                 key={card.id}
                 type="button"
                 disabled={isPending}
-                onClick={() => setSelectedCard(card)}
+                onClick={() => onSubmit(card.id)}
                 className={`text-left disabled:opacity-50 ${
                   selectedCard?.id === card.id
                     ? 'outline-main outline outline-2'
@@ -75,34 +73,6 @@ const ExchangeRequestModal = ({
           </div>
         )}
       </div>
-      {selectedCard && (
-        <section className="mt-[40px] border-t border-gray-400 pt-[30px]">
-          <h3 className="mb-[20px] text-[24px] font-bold text-white">
-            선택한 포토카드
-          </h3>
-
-          <div className="grid grid-cols-[240px_1fr] gap-[40px]">
-            <div className="relative aspect-[4/3] w-full">
-              <Image
-                src={selectedCard.imageUrl}
-                alt={selectedCard.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="flex flex-col justify-center gap-[12px] text-white">
-              <p className="text-[24px] font-bold">{selectedCard.name}</p>
-              <p className="text-[18px] text-gray-300">
-                {selectedCard.grade} | {selectedCard.genre}
-              </p>
-              <p className="text-[18px] text-gray-300">
-                수량 {selectedCard.quantity}
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
     </div>
   );
 };
