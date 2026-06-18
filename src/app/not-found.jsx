@@ -11,7 +11,12 @@ const notFound = () => {
         <span className="text-main">페이지</span>를 찾을 수{' '}
         <span className="text-gray-300">없습니다.</span>
       </h1>
-      <Button type="sec" btnType="" size="lg" onClick={() => router.back()}>
+      <Button
+        type="sec"
+        btnType="button"
+        size="lg"
+        onClick={() => router.back()}
+      >
         이전으로 돌아가기
       </Button>
     </div>
