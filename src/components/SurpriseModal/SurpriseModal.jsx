@@ -13,7 +13,7 @@ import Point from '@/assets/images/img-point-lg.png';
 import { useOpenPointBox } from '@/hooks/usePoint';
 import { useSurpriseModalStore } from '@/store/supriseStore';
 
-const TARGET_TIME = 30 * 1000;
+const TARGET_TIME = 60 * 60 * 1000; // 1 시간
 const SAVED_TIME_KEY = 'point_time';
 
 const Timer = ({ time }) => {
@@ -27,8 +27,10 @@ const Timer = ({ time }) => {
 
 const SurpriseModal = () => {
   const isLogin = useIsAuthenticated();
+
   const { isOpen, close, setCanGetPoint } = useSurpriseModalStore();
 
+  // timer target ref
   const targetTimeRef = useRef(null);
 
   const [remainTime, setRemainTime] = useState('00분 00초');
@@ -43,10 +45,13 @@ const SurpriseModal = () => {
   const imageSrc = [Box1, Box2, Box3];
 
   const startTimer = (startTime) => {
+    // ref 값이 있으면 해당 값 clear
     if (targetTimeRef.current) clearInterval(targetTimeRef.current);
 
+    // local 값 설정하기 (interval 돌 때 동안)
     localStorage.setItem(SAVED_TIME_KEY, String(startTime));
 
+    // time ref 에 interval 값 설정
     targetTimeRef.current = setInterval(() => {
       const now = Date.now();
       const diff = startTime + TARGET_TIME - now;
@@ -74,8 +79,10 @@ const SurpriseModal = () => {
       return;
     }
 
+    // local 값 받아오기
     const savedTime = localStorage.getItem(SAVED_TIME_KEY);
 
+    // local 값 있으면 값에 따라 보상 받을 수 있는지 없는지 판별 후 timer 도 start 하기
     if (savedTime) {
       const startTime = Number(savedTime);
       const diff = startTime + TARGET_TIME - Date.now();
