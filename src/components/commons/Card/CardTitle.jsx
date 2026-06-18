@@ -5,7 +5,7 @@ const CardTitle = ({ children, className = '' }) => {
     <div
       className={`w-full ${hasCustomMarginBottom ? '' : 'mb-[10px]'} ${className}`}
     >
-      <p className="overflow-hidden text-[22px] font-bold text-ellipsis whitespace-nowrap text-white">
+      <p className="overflow-hidden text-[22px] font-bold text-ellipsis whitespace-nowrap text-white outline-none">
         {children}
       </p>
     </div>

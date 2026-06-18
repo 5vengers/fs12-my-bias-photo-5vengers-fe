@@ -4,13 +4,13 @@ import SearchIcon from '@/assets/icons/ic-search.svg';
 const Search = ({ size, ...props }) => {
   const sizeStyle = {
     sm: 'px-[20px] py-[11px] text-sm w-[200px]',
-    md: 'px-[20px] py-[13px] text-sm w-[320px]',
+    md: 'px-[20px] py-[13px] text-sm w-[320px] h-[50px] rounded-[2px] bg-black border-[#DDD]',
     lg: 'px-[20px] py-[11px] w-[345px]',
   };
 
   return (
     <div
-      className={`flex items-center justify-between border border-gray-200 text-white ${sizeStyle[size]}`}
+      className={`flex items-center justify-between gap-[10px] border border-gray-200 text-white ${sizeStyle[size]}`}
     >
       <input
         className="w-[90%]"

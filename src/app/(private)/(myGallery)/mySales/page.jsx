@@ -69,33 +69,42 @@ const getBadge = (card) => {
   if (card.status === MarketStatus.SOLD_OUT)
     return { label: "판매 완료", className: "bg-black/70 text-gray-400 border border-gray-400/40" };
   if (card.exchangeProposals?.length > 0)
-    return { label: "교환 제시 대기 중", className: "bg-black/70 text-[#A78BFA] border border-[#A78BFA]/40" };
+    return { label: "교환 제시 대기 중", className: "bg-black/70 text-[#FACC15] border border-[#FACC15]/40" };
   return { label: "판매 중", className: "bg-black/70 text-[#00C8FF] border border-[#00C8FF]/40" };
 };
 
 const SaleCard = ({ card, nickname }) => {
   const isSoldOut = card.status === MarketStatus.SOLD_OUT;
   const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
-  const cardName  = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
-  const imageUrl  = card.myCard?.photoCard?.imageUrl ?? "/images/img-image1.png";
+  const cardName       = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
+  const creatorNickname = card.myCard?.photoCard?.creator?.nickname ?? nickname;
+  const rawUrl    = card.myCard?.photoCard?.imageUrl ?? "";
+  const imageUrl  = rawUrl.startsWith('http://localhost')
+    ? new URL(rawUrl).pathname
+    : (rawUrl || "/images/img-image1.png");
   const saleType  = card.saleType ?? "INSTANT";
   const badge     = getBadge(card);
 
   return (
-    <Card>
-      <Card.Title>{cardName}</Card.Title>
+    <Card isLogo>
       <div className="relative w-full">
         <Card.Image
           src={imageUrl}
           alt={cardName}
           state={isSoldOut ? "soldOut" : "sale"}
         />
-        <span className={`absolute top-2 left-2 z-20 rounded px-2 py-[3px] text-[11px] font-semibold ${badge.className}`}>
-          {badge.label}
-        </span>
+        {!isSoldOut && (
+          <span className={`absolute top-2 left-2 z-20 rounded px-2 py-[3px] text-[11px] font-semibold ${badge.className}`}>
+            {badge.label}
+          </span>
+        )}
       </div>
-      <Card.InfoLayout>
-        <Card.Info nickname={nickname}>
+      <Card.Title className="mt-[10px]">{cardName}</Card.Title>
+      <Card.InfoLayout className="mt-[10px] mb-0">
+        <Card.Info
+          nickname={creatorNickname}
+          className="mb-[5px] flex w-full items-center justify-between border-b border-gray-400 pb-[10px]"
+        >
           <span className={`font-bold text-[11px] ${GRADE_CLASS[card.grade] ?? ""}`}>
             {GRADE_LABEL[card.grade] ?? card.grade}
           </span>
@@ -130,7 +139,7 @@ const MySalesPage = () => {
   const [error, setError]         = useState(null);
 
   const [currentPage, setCurrentPage]       = useState(1);
-  const PAGE_SIZE = 9;
+  const PAGE_SIZE = 12;
 
   const [searchQuery, setSearchQuery]       = useState("");
   const [filterGrade, setFilterGrade]       = useState("전체");
@@ -192,15 +201,15 @@ const MySalesPage = () => {
     <div className="min-h-screen w-full bg-black">
       <main className="max-w-[1920px] mx-auto px-[220px] py-10">
 
-        <h1 className="text-white text-[28px] font-bold mb-8">
+        <h1 className="font-baskin text-[46px] font-normal tracking-[-1.38px] text-white border-b border-white pb-[20px] mb-[30px]">
           나의 판매 포토카드
         </h1>
 
         {/* 통계 박스 */}
-        <div className="w-[650px] min-h-[95px] border border-white/15 rounded py-[14px] px-5 flex flex-col justify-between gap-2.5">
-          <span className="text-[#DDD] text-2xl font-bold">
+        <div className="w-[650px] min-h-[95px] py-[14px] flex flex-col justify-between gap-2.5">
+          <span className="text-[#DDD] text-2xl font-bold whitespace-nowrap">
             {user?.nickname ?? "회원"}님이 보유한 포토카드&nbsp;
-            <span className="text-[#A4A4A4] text-[20px] font-normal w-[55px] h-[29px] inline-block text-right">({totalQuantity}장)</span>
+            <span className="text-[#A4A4A4] text-[20px] font-normal">({totalQuantity}장)</span>
           </span>
           <div className="flex items-center gap-[10px]">
             {Object.values(CardGrade).map((grade) => {
@@ -217,56 +226,58 @@ const MySalesPage = () => {
         <div className="w-full h-px bg-white/10 my-10" />
 
         {/* 검색 + 필터 */}
-        <div className="flex items-center gap-4 mb-8">
-          <Search size="sm" onChange={(e) => setSearchQuery(e.target.value)} />
+        <div className="flex items-center gap-[20px] mb-8">
+          <Search size="md" onChange={(e) => setSearchQuery(e.target.value)} />
 
-          <Select
-            size="noLine"
-            desc="등급"
-            value={filterGrade !== "전체" ? (GRADE_LABEL[filterGrade] ?? filterGrade) : ""}
-          >
-            {FILTER_OPTIONS["등급"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterGrade}>
-                {GRADE_LABEL[opt] ?? opt}
-              </Select.Option>
-            ))}
-          </Select>
+          <div className="inline-flex items-start gap-[30px]">
+            <Select
+              size="noLine"
+              desc="등급"
+              value={filterGrade !== "전체" ? (GRADE_LABEL[filterGrade] ?? filterGrade) : ""}
+            >
+              {FILTER_OPTIONS["등급"].map((opt) => (
+                <Select.Option key={opt} value={opt} onChange={setFilterGrade}>
+                  {GRADE_LABEL[opt] ?? opt}
+                </Select.Option>
+              ))}
+            </Select>
 
-          <Select
-            size="noLine"
-            desc="장르"
-            value={filterGenre !== "전체" ? (GENRE_LABEL[filterGenre] ?? filterGenre) : ""}
-          >
-            {FILTER_OPTIONS["장르"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterGenre}>
-                {GENRE_LABEL[opt] ?? opt}
-              </Select.Option>
-            ))}
-          </Select>
+            <Select
+              size="noLine"
+              desc="장르"
+              value={filterGenre !== "전체" ? (GENRE_LABEL[filterGenre] ?? filterGenre) : ""}
+            >
+              {FILTER_OPTIONS["장르"].map((opt) => (
+                <Select.Option key={opt} value={opt} onChange={setFilterGenre}>
+                  {GENRE_LABEL[opt] ?? opt}
+                </Select.Option>
+              ))}
+            </Select>
 
-          <Select
-            size="noLine"
-            desc="판매방법"
-            value={filterSaleType !== "전체" ? (SALE_TYPE_LABEL[filterSaleType] ?? filterSaleType) : ""}
-          >
-            {FILTER_OPTIONS["판매방법"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterSaleType}>
-                {SALE_TYPE_LABEL[opt] ?? opt}
-              </Select.Option>
-            ))}
-          </Select>
+            <Select
+              size="noLine"
+              desc="판매방법"
+              value={filterSaleType !== "전체" ? (SALE_TYPE_LABEL[filterSaleType] ?? filterSaleType) : ""}
+            >
+              {FILTER_OPTIONS["판매방법"].map((opt) => (
+                <Select.Option key={opt} value={opt} onChange={setFilterSaleType}>
+                  {SALE_TYPE_LABEL[opt] ?? opt}
+                </Select.Option>
+              ))}
+            </Select>
 
-          <Select
-            size="noLine"
-            desc="매진여부"
-            value={filterSoldOut !== "전체" ? filterSoldOut : ""}
-          >
-            {FILTER_OPTIONS["매진여부"].map((opt) => (
-              <Select.Option key={opt} value={opt} onChange={setFilterSoldOut}>
-                {opt}
-              </Select.Option>
-            ))}
-          </Select>
+            <Select
+              size="noLine"
+              desc="매진여부"
+              value={filterSoldOut !== "전체" ? filterSoldOut : ""}
+            >
+              {FILTER_OPTIONS["매진여부"].map((opt) => (
+                <Select.Option key={opt} value={opt} onChange={setFilterSoldOut}>
+                  {opt}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
         </div>
 
         {error && (
@@ -296,8 +307,8 @@ const MySalesPage = () => {
           </div>
         )}
 
-        {!isLoading && totalPages > 1 && (
-          <div className="mt-12 mb-8">
+        {!isLoading && filteredCards.length > 0 && (
+          <div className="mt-12 mb-8 flex justify-center">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
