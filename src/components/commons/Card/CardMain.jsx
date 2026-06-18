@@ -10,7 +10,7 @@ const CardMain = ({ children, isLogo = false }) => {
       {children}
       {isLogo && (
         <Image
-          className="mt-[15px]"
+          className="mt-auto pt-[15px]"
           src={Logo}
           width={100}
           height={18}
