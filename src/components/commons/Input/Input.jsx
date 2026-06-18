@@ -32,8 +32,14 @@ const Input = ({
         placeholder={placeholder}
         value={value}
         onChange={(e) => {
-          setValue(e.target.value);
-          validation(validationType || type, e.target.value);
+          const value = e.target.value;
+          const filterValue =
+            type === 'number'
+              ? value.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '')
+              : value;
+
+          setValue(filterValue);
+          validation(validationType || type, filterValue);
         }}
         onBlur={(e) => validation(validationType || type, e.target.value)}
         {...props}

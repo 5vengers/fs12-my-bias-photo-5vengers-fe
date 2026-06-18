@@ -15,7 +15,7 @@ import myGalleryService from '@/libs/service/myGalleryService';
 import useCardStore from '@/store/cardStore';
 import { curDate, remainCount } from '@/libs/myGalleryUtils';
 import useCreationLog from '@/hooks/useCreationLog';
-import useValidation from '@/hooks/useValidation';
+import { cardCreateValidate } from '@/libs/formValidate';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -34,10 +34,6 @@ const PhotoCardCreate = () => {
   const [formErrors, setFormErrors] = useState({});
 
   const { setCardName, setCardGrade } = useCardStore((state) => state.actions);
-
-  const gradeValidate = useValidation();
-  const genreValidate = useValidation();
-  const fileValidate = useValidation();
 
   const router = useRouter();
 
@@ -70,59 +66,9 @@ const PhotoCardCreate = () => {
     error: isLogError,
   } = useCreationLog();
 
-  const validate = () => {
-    const errors = {};
-    const isBlank = (v) => typeof v === 'string' && v.trim() === '';
-
-    if (!name || isBlank(name)) {
-      errors.name = '필수 입력사항입니다.';
-    } else if (name.trim().length > 20) {
-      errors.name = '포토 카드 이름은 20자 이하이어야 합니다.';
-    }
-
-    if (!grade) {
-      errors.grade = '필수 입력사항입니다.';
-    }
-
-    if (!genre) {
-      errors.genre = '필수 입력사항입니다.';
-    }
-
-    if (!price) {
-      errors.price = '필수 입력사항입니다.';
-    } else if (price < 1) {
-      errors.price = '포토 카드 가격은 1 P 이상이어야 합니다.';
-    }
-
-    if (!totalQuantity) {
-      errors.totalQuantity = '필수 입력사항입니다.';
-    } else if (totalQuantity < 1) {
-      errors.totalQuantity = '총 수량은 1개 이상이어야 합니다.';
-    } else if (totalQuantity > 10) {
-      errors.totalQuantity = '총 수량은 10개 이하이어야 합니다.';
-    }
-
-    if (!file) {
-      errors.file = '필수 입력사항입니다.';
-    }
-
-    if (!description || isBlank(description)) {
-      errors.description = '필수 입력사항입니다.';
-    }
-
-    return errors;
-  };
-
   // 유효 검증
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const errors = validate();
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
 
     const data = {
       name,
@@ -132,6 +78,13 @@ const PhotoCardCreate = () => {
       price,
       totalQuantity,
     };
+
+    const errors = cardCreateValidate({ ...data, file });
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
 
     // image 파일 같이 보내기 위해 formData 사용
     const formData = new FormData();
@@ -161,7 +114,7 @@ const PhotoCardCreate = () => {
     }
   };
 
-  const remain = log?.count !== null ? '-' : remainCount(log?.count);
+  const remain = log?.count === null ? '-' : remainCount(log?.count);
   const yearMonth = curDate();
 
   return (
@@ -186,6 +139,7 @@ const PhotoCardCreate = () => {
               id="card-name"
               type={'text'}
               placeholder={'포토카드 이름을 입력해주세요'}
+              value={name}
               setValue={(v) => {
                 setName(v);
                 if (formErrors.name) {
@@ -217,7 +171,7 @@ const PhotoCardCreate = () => {
               ))}
             </Select>
             {formErrors.grade && (
-              <p className="text-red text-sm">{formErrors.grade}</p>
+              <span className="text-red text-sm">{formErrors.grade}</span>
             )}
           </FormField>
 
@@ -235,7 +189,7 @@ const PhotoCardCreate = () => {
               ))}
             </Select>
             {formErrors.genre && (
-              <p className="text-red text-sm">{formErrors.genre}</p>
+              <span className="text-red text-sm">{formErrors.genre}</span>
             )}
           </FormField>
 
@@ -244,6 +198,7 @@ const PhotoCardCreate = () => {
               id="card-price"
               type={'number'}
               placeholder={'가격을 입력해 주세요'}
+              value={price}
               setValue={(v) => {
                 setPrice(v);
                 if (formErrors.price) {
@@ -266,6 +221,7 @@ const PhotoCardCreate = () => {
             <Input
               id="card-quantity"
               type={'number'}
+              value={totalQuantity}
               placeholder={'총 발행량을 입력해 주세요'}
               setValue={(v) => {
                 setTotalQuantity(v);
@@ -318,7 +274,7 @@ const PhotoCardCreate = () => {
               </p>
             </label>
             {formErrors.file && (
-              <p className="text-red text-sm">{formErrors.file}</p>
+              <span className="text-red text-sm">{formErrors.file}</span>
             )}
           </div>
 
