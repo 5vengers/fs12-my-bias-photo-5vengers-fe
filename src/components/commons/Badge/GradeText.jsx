@@ -2,7 +2,7 @@ const GRADE_COLORS = {
   COMMON: 'text-main',
   RARE: 'text-blue',
   SUPER_RARE: 'text-purple',
-  LAGENDARY: 'text-pink',
+  LEGENDARY: 'text-pink',
 };
 
 const GradeText = ({ grade }) => {
