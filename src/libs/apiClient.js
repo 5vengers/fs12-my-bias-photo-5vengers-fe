@@ -39,11 +39,11 @@ export const executeRefresh = () => {
       .post('/api/auth/refresh')
       .then((res) => {
         const accessToken = res.data?.data?.accessToken;
-        const user = res.data?.data?.user;
 
-        if (!accessToken || !user)
+        if (!accessToken)
           throw new Error('토큰 재발급 응답이 올바르지 않습니다.');
 
+        const user = useAuthStore.getState().user;
         useAuthStore.getState().setAuth(user, accessToken);
 
         return { accessToken, user };

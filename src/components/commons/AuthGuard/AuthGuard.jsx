@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { useIsAuthenticated } from '@/hooks/useAuth';
+import { useIsAuthenticated, useInitAuth } from '@/hooks/useAuth';
 import useAuthStore from '@/store/authStore';
 
 // ─────────────────────────────────────────────
@@ -24,11 +24,11 @@ export const PrivateGuard = ({ children }) => {
   const user = useAuthStore((state) => state.user);
   const accessToken = useAuthStore((state) => state.accessToken);
   const isAuthenticated = useIsAuthenticated();
+  const { isPending: isRefreshPending } = useInitAuth();
   const router = useRouter();
 
-  // user O + accessToken X = refresh 진행 중
-  // 이 상태에서 isAuthenticated는 false지만 리다이렉트하면 안 됨
-  const isRefreshing = !!user && !accessToken;
+  // user O + accessToken X + refresh 진행 중일 때만 대기
+  const isRefreshing = !!user && !accessToken && isRefreshPending;
 
   useEffect(() => {
     if (hasHydrated && !isRefreshing && !isAuthenticated) {
