@@ -2,9 +2,15 @@
 
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import MarketCard from './MarketCard';
-import { useMarketItems } from '@/hooks/queries/useMarketItems';
+import { useMarketItems } from '@/hooks/useMarketItems';
 
-export default function MarketListPage({ grade, genre, soldOut, sort }) {
+export default function MarketListPage({
+  grade,
+  genre,
+  soldOut,
+  sort,
+  keyword,
+}) {
   const {
     allItems,
     fetchNextPage,
@@ -13,7 +19,7 @@ export default function MarketListPage({ grade, genre, soldOut, sort }) {
     isPending,
     isError,
     error,
-  } = useMarketItems();
+  } = useMarketItems({ grade, genre, soldOut, sort, keyword });
 
   const { observerRef } = useInfiniteScroll({
     loading: isFetchingNextPage,

@@ -11,6 +11,7 @@ export default function ModalSell({ isOpen, onClose }) {
   const [selectedCard, setSelectedCard] = useState(null);
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
+  const [keyword, setKeyword] = useState('');
   const handleGradeChange = (value) => {
     setGrade(value);
   };
@@ -34,6 +35,8 @@ export default function ModalSell({ isOpen, onClose }) {
               setSelectedCard(card);
               setStep('form');
             }}
+            keyword={keyword}
+            setKeyword={setKeyword}
             grade={grade}
             handleGradeChange={handleGradeChange}
             genre={genre}

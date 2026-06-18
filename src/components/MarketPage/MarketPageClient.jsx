@@ -9,10 +9,11 @@ import MarketListPage from '@/components/MarketPage/MarketListPage';
 import SellModal from '@/components/MarketPage/MarketModal/ModalSell';
 
 export default function MarketPageClient() {
+  const [keyword, setKeyword] = useState('');
   const [grade, setGrade] = useState('');
   const [genre, setGenre] = useState('');
   const [soldOut, setSoldOut] = useState('');
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState('latest');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleGradeChange = (value) => {
     setGrade(value);
@@ -45,6 +46,8 @@ export default function MarketPageClient() {
               type="text"
               placeholder="검색"
               id="market-search"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
               className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
             />
 
@@ -53,80 +56,41 @@ export default function MarketPageClient() {
             </span>
           </div>
           {/* 등급 */}
-          <Select size="noLine" desc="등급" value={grade}>
+          <Select size="noLine" desc="등급" onChange={handleGradeChange}>
             {GRADE_OPTIONS.map((option) => (
-              <Select.Option
-                key={option.value}
-                value={option.value}
-                onChange={handleGradeChange}
-              >
-                {option.label}
-              </Select.Option>
-            ))}
-            {GRADE_OPTIONS.map((option) => (
-              <Select.Option
-                key={option.value}
-                value={option.value}
-                onChange={handleGradeChange}
-              >
+              <Select.Option key={option.value} value={option.value}>
                 {option.label}
               </Select.Option>
             ))}
           </Select>
 
           {/* 장르 */}
-          <Select size="noLine" desc="장르" value={genre}>
+          <Select size="noLine" desc="장르" onChange={setGenre}>
             {GENRE_OPTIONS.map((option) => (
-              <Select.Option
-                key={option.value}
-                value={option.value}
-                onChange={setGenre}
-              >
-                {option.label}
-              </Select.Option>
-            ))}
-            {GENRE_OPTIONS.map((option) => (
-              <Select.Option
-                key={option.value}
-                value={option.value}
-                onChange={setGenre}
-              >
+              <Select.Option key={option.value} value={option.value}>
                 {option.label}
               </Select.Option>
             ))}
           </Select>
 
           {/* 매진 여부 */}
-          <Select size="noLine" desc="매진 여부" value={soldOut}>
-            <Select.Option value="" onChange={setSoldOut}>
-              전체 상태
-            </Select.Option>
-            <Select.Option value="ON_SALE" onChange={setSoldOut}>
-              판매중
-            </Select.Option>
-            <Select.Option value="SOLD_OUT" onChange={setSoldOut}>
-              매진
-            </Select.Option>
+          <Select size="noLine" desc="매진 여부" onChange={setSoldOut}>
+            <Select.Option value="">전체 상태</Select.Option>
+            <Select.Option value="SELLING">판매중</Select.Option>
+            <Select.Option value="SOLD_OUT">매진</Select.Option>
           </Select>
         </div>
 
         {/* 오른쪽 정렬 */}
-        <Select size="xs" desc="최신순" value={sort}>
-          <Select.Option value="latest" onChange={setSort}>
-            최신순
-          </Select.Option>
-          <Select.Option value="oldest" onChange={setSort}>
-            오래된순
-          </Select.Option>
-          <Select.Option value="priceAsc" onChange={setSort}>
-            낮은 가격순
-          </Select.Option>
-          <Select.Option value="priceDesc" onChange={setSort}>
-            높은 가격순
-          </Select.Option>
+        <Select size="xs" desc="최신순" onChange={setSort}>
+          <Select.Option value="latest">최신순</Select.Option>
+          <Select.Option value="oldest">오래된순</Select.Option>
+          <Select.Option value="priceAsc">낮은 가격순</Select.Option>
+          <Select.Option value="priceDesc">높은 가격순</Select.Option>
         </Select>
       </div>
       <MarketListPage
+        keyword={keyword}
         grade={grade}
         genre={genre}
         soldOut={soldOut}

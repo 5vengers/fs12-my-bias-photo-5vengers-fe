@@ -4,12 +4,22 @@ import SearchIcon from '@/assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import Card from '../../commons/Card/Card';
 import logoImage from '@/assets/images/img-logo.svg';
-import { useMyCards } from '@/hooks/queries/useMarketItems';
+import { useMyCards } from '@/hooks/useMarketItems';
 
-function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
-  const { data: myCards = [] } = useMyCards();
-  console.log('myCards value:', myCards);
-
+function GalleryStep({
+  onSelect,
+  grade,
+  handleGradeChange,
+  genre,
+  setGenre,
+  keyword,
+  setKeyword,
+}) {
+  const { data: myCards = [] } = useMyCards({
+    grade,
+    genre,
+    keyword,
+  });
   return (
     <div className="flex h-full flex-col">
       <h3 className="font-baskin mb-7 text-[24px] tracking-[-0.72px] text-gray-300">
@@ -21,9 +31,14 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
       <div className="mb-[40px] flex items-center gap-12">
         {/* 검색 */}
         <div className="flex h-[50px] w-[320px] items-center justify-between rounded-[2px] border border-gray-200 bg-black px-5">
+          <label htmlFor="gallery-search" className="sr-only">
+            포토카드 검색
+          </label>
           <input
             type="text"
             placeholder="검색"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             className="w-full bg-transparent text-white placeholder:text-gray-300 focus:outline-none"
           />
 
@@ -32,73 +47,41 @@ function GalleryStep({ onSelect, grade, handleGradeChange, genre, setGenre }) {
           </span>
         </div>
         {/* 등급 */}
-        <Select size="noLine" desc="등급" value={grade}>
-          <Select.Option value="" onChange={handleGradeChange}>
-            전체 등급
-          </Select.Option>
+        <Select size="noLine" desc="등급" onChange={handleGradeChange}>
+          <Select.Option value="">전체 등급</Select.Option>
 
-          <Select.Option value="COMMON" onChange={handleGradeChange}>
-            COMMON
-          </Select.Option>
+          <Select.Option value="COMMON">COMMON</Select.Option>
 
-          <Select.Option value="RARE" onChange={handleGradeChange}>
-            RARE
-          </Select.Option>
+          <Select.Option value="RARE">RARE</Select.Option>
 
-          <Select.Option value="SUPER_RARE" onChange={handleGradeChange}>
-            SUPER RARE
-          </Select.Option>
+          <Select.Option value="SUPER_RARE">SUPER RARE</Select.Option>
 
-          <Select.Option value="LEGENDARY" onChange={handleGradeChange}>
-            LEGENDARY
-          </Select.Option>
+          <Select.Option value="LEGENDARY">LEGENDARY</Select.Option>
         </Select>
 
         {/* 장르 */}
-        <Select size="noLine" desc="장르" value={genre}>
-          <Select.Option value="" onChange={setGenre}>
-            전체 장르
-          </Select.Option>
+        <Select size="noLine" desc="장르" onChange={setGenre}>
+          <Select.Option value="">전체 장르</Select.Option>
 
-          <Select.Option value="앨범" onChange={setGenre}>
-            앨범
-          </Select.Option>
+          <Select.Option value="ALBUM">앨범</Select.Option>
 
-          <Select.Option value="특전" onChange={setGenre}>
-            특전
-          </Select.Option>
+          <Select.Option value="BENEFIT">특전</Select.Option>
 
-          <Select.Option value="팬싸" onChange={setGenre}>
-            팬싸
-          </Select.Option>
+          <Select.Option value="FAN_SIGN">팬싸</Select.Option>
 
-          <Select.Option value="시즌그리팅" onChange={setGenre}>
-            시즌그리팅
-          </Select.Option>
+          <Select.Option value="SEASON_GREETING">시즌그리팅</Select.Option>
 
-          <Select.Option value="팬미팅" onChange={setGenre}>
-            팬미팅
-          </Select.Option>
+          <Select.Option value="FAN_MEETING">팬미팅</Select.Option>
 
-          <Select.Option value="콘서트" onChange={setGenre}>
-            콘서트
-          </Select.Option>
+          <Select.Option value="CONCERT">콘서트</Select.Option>
 
-          <Select.Option value="MD" onChange={setGenre}>
-            MD
-          </Select.Option>
+          <Select.Option value="MD">MD</Select.Option>
 
-          <Select.Option value="콜라보" onChange={setGenre}>
-            콜라보
-          </Select.Option>
+          <Select.Option value="COLLAB">콜라보</Select.Option>
 
-          <Select.Option value="팬클럽" onChange={setGenre}>
-            팬클럽
-          </Select.Option>
+          <Select.Option value="FAN_CLUB">팬클럽</Select.Option>
 
-          <Select.Option value="기타" onChange={setGenre}>
-            기타
-          </Select.Option>
+          <Select.Option value="ETC">기타</Select.Option>
         </Select>
       </div>
 

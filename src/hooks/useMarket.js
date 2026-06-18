@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getMarketItemDetail,
   purchaseMarketItem,
+  createExchangeProposal,
 } from '@/libs/service/marketService';
 import { POINT_QUERY_KEYS } from '@/hooks/usePoint';
 
@@ -31,6 +32,22 @@ export const usePurchaseMarketItem = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
       queryClient.invalidateQueries({ queryKey: POINT_QUERY_KEYS.MY_POINT });
+    },
+  });
+};
+
+// 마켓 아이템 교환 제안 생성 훅
+export const useCreateExchangeProposal = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createExchangeProposal,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: MARKET_QUERY_KEYS.DETAIL(variables.itemId),
+      });
+      queryClient.invalidateQueries({ queryKey: ['marketItems'] });
+      queryClient.invalidateQueries({ queryKey: ['myCards'] });
     },
   });
 };

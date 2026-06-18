@@ -4,8 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import GradeText from '@/components/commons/Badge/GradeText';
-import { useMarketItemDetail, usePurchaseMarketItem } from '@/hooks/useMarket';
+import {
+  useCreateExchangeProposal,
+  useMarketItemDetail,
+  usePurchaseMarketItem,
+} from '@/hooks/useMarket';
 import QuantityStepper from './QuantityStepper';
+import ExchangeRequestModal from './ExchangeRequestModal';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -19,6 +24,10 @@ const DetailRow = ({ label, children }) => {
 const MarketDetailPageClient = ({ itemId }) => {
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [isExchangeModalOpen, setIsExchangeModalOpen] = useState(false);
+
+  const { mutate: createExchangeProposal, isPending: isExchangePending } =
+    useCreateExchangeProposal();
   const { data: item, isPending, isError } = useMarketItemDetail(itemId);
   const { mutate: purchaseMarketItem, isPending: isPurchasePending } =
     usePurchaseMarketItem();
@@ -55,6 +64,26 @@ const MarketDetailPageClient = ({ itemId }) => {
         },
         onError: () => {
           router.push('/result?domain=card&type=buy&status=fail');
+        },
+      },
+    );
+  };
+
+  // 교환 제안 제출 시 호출되는 함수
+  const handleExchangeSubmit = (offeredCardId) => {
+    createExchangeProposal(
+      {
+        itemId,
+        offeredCardId,
+      },
+      {
+        onSuccess: () => {
+          setIsExchangeModalOpen(false);
+          router.push('/result?domain=card&type=exchange&status=success');
+        },
+        onError: () => {
+          setIsExchangeModalOpen(false);
+          router.push('/result?domain=card&type=exchange&status=fail');
         },
       },
     );
@@ -152,9 +181,11 @@ const MarketDetailPageClient = ({ itemId }) => {
 
           <button
             type="button"
-            className="bg-main h-[50px] w-[280px] rounded-[2px] text-[16px] font-bold text-black"
+            onClick={() => setIsExchangeModalOpen(true)}
+            disabled={isExchangePending}
+            className="bg-main h-[50px] w-[280px] rounded-[2px] text-[16px] font-bold text-black disabled:bg-gray-400 disabled:text-gray-300"
           >
-            포토카드 교환하기
+            {isExchangePending ? '교환 요청 중...' : '포토카드 교환하기'}
           </button>
         </div>
 
@@ -170,6 +201,12 @@ const MarketDetailPageClient = ({ itemId }) => {
           </span>
         </div>
       </section>
+      <ExchangeRequestModal
+        isOpen={isExchangeModalOpen}
+        onClose={() => setIsExchangeModalOpen(false)}
+        onSubmit={handleExchangeSubmit}
+        isPending={isExchangePending}
+      />
     </main>
   );
 };
