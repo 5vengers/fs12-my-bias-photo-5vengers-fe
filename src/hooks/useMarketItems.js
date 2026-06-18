@@ -17,7 +17,7 @@ export const useMarketItems = (params) => {
   };
 };
 
-export const useMyCards = ({ grade, genre, keyword }) => {
+export const useMyCards = ({ grade, genre, keyword = {} }) => {
   return useQuery({
     queryKey: ['myCards', grade, genre, keyword],
     queryFn: async () => {
