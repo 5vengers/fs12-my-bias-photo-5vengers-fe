@@ -3,6 +3,8 @@ import Card from '@/components/commons/Card/Card';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
 
 function MarketCard({ item }) {
+  const remaining = item.quantity - item.soldQuantity;
+
   return (
     <Link href={`/market/${item.id}`} className="block">
       <Card isLogo>
@@ -23,7 +25,11 @@ function MarketCard({ item }) {
             type={'point'}
             count={item.pricePerCard}
           />
-          <Card.SaleInfo title={'수량'} count={item.quantity} />
+          <Card.SaleInfo
+            title="잔여"
+            type="quantity"
+            count={[remaining, item.quantity]}
+          />
         </Card.SaleInfoLayout>
       </Card>
     </Link>
