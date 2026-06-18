@@ -85,7 +85,7 @@ const MyGallery = () => {
             <Badge
               key={`grade-${g}`}
               grade={g}
-              count={cardCount?.gradeCount[g] || '--'}
+              count={cardCount?.gradeCount[g] || '0'}
             />
           ))}
         </div>
@@ -121,6 +121,7 @@ const MyGallery = () => {
         </Select>
       </div>
 
+      {/* 카드 */}
       {isPending ? (
         <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
           로딩 중 . . .
@@ -158,6 +159,7 @@ const MyGallery = () => {
         </div>
       )}
 
+      {/* 페이지네이션 */}
       {isPending ? (
         ''
       ) : (
