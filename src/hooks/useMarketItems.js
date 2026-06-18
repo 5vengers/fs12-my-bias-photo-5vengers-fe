@@ -3,10 +3,10 @@ import { getMarketItems, createMarketItem } from '@/libs/service/marketService';
 import apiClient from '@/libs/apiClient';
 import { useMutation } from '@tanstack/react-query';
 
-export const useMarketItems = () => {
+export const useMarketItems = (params) => {
   const query = useInfiniteQuery({
-    queryKey: ['marketItems'],
-    queryFn: getMarketItems,
+    queryKey: ['marketItems', params],
+    queryFn: ({ pageParam }) => getMarketItems({ pageParam, ...params }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
