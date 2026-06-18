@@ -21,14 +21,6 @@ export const getMarketItems = async ({
   sort,
   keyword,
 }) => {
-  console.log({
-    grade,
-    genre,
-    soldOut,
-    sort,
-    keyword,
-  });
-
   const LIMIT = 6;
 
   const response = await apiClient.get('/api/market/items', {

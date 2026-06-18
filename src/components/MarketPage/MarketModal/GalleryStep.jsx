@@ -15,7 +15,6 @@ function GalleryStep({
   keyword,
   setKeyword,
 }) {
-  console.log({ keyword, grade, genre });
   const { data: myCards = [] } = useMyCards({
     grade,
     genre,
@@ -32,6 +31,9 @@ function GalleryStep({
       <div className="mb-[40px] flex items-center gap-12">
         {/* 검색 */}
         <div className="flex h-[50px] w-[320px] items-center justify-between rounded-[2px] border border-gray-200 bg-black px-5">
+          <label htmlFor="gallery-search" className="sr-only">
+            포토카드 검색
+          </label>
           <input
             type="text"
             placeholder="검색"
