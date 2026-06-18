@@ -14,7 +14,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import myGalleryService from '@/libs/service/myGalleryService';
 import { notFound, useRouter } from 'next/navigation';
-import { curDate, remainCount } from '@/libs/dateUtils';
+import { curDate, remainCount, replaceImage } from '@/libs/myGalleryUtils';
+import useCreationLog from '@/hooks/useCreationLog';
 
 const MyGallery = () => {
   const user = useAuthStore((state) => state.user);
@@ -45,10 +46,7 @@ const MyGallery = () => {
     data: log,
     isPending: isLogPending,
     error: isLogError,
-  } = useQuery({
-    queryKey: ['creationLog'],
-    queryFn: myGalleryService.getCreationLog,
-  });
+  } = useCreationLog();
 
   if (error || isCountError || isLogError) return notFound();
 
@@ -87,7 +85,7 @@ const MyGallery = () => {
             <Badge
               key={`grade-${g}`}
               grade={g}
-              count={cardCount?.gradeCount[g] || '--'}
+              count={cardCount?.gradeCount[g] || '0'}
             />
           ))}
         </div>
@@ -123,6 +121,7 @@ const MyGallery = () => {
         </Select>
       </div>
 
+      {/* 카드 */}
       {isPending ? (
         <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
           로딩 중 . . .
@@ -137,7 +136,7 @@ const MyGallery = () => {
             <Card key={`card-${i}`} isLogo>
               <Card.Title>{c.name}</Card.Title>
               <Card.Image
-                src={c.imageUrl}
+                src={replaceImage(c.imageUrl)}
                 alt={`포토카드 ${c.name}`}
                 priority={i === 0}
               />
@@ -148,7 +147,11 @@ const MyGallery = () => {
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
-                <Card.SaleInfo title={'가격'} type={'point'} count={c.price} />
+                <Card.SaleInfo
+                  title={'가격'}
+                  type={'point'}
+                  count={Number(c.price).toLocaleString('ko-KR')}
+                />
                 <Card.SaleInfo title={'수량'} count={c.quantity} />
               </Card.SaleInfoLayout>
             </Card>
@@ -156,6 +159,7 @@ const MyGallery = () => {
         </div>
       )}
 
+      {/* 페이지네이션 */}
       {isPending ? (
         ''
       ) : (

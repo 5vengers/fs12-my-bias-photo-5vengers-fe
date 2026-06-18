@@ -12,7 +12,7 @@ const useValidation = () => {
     const regEmail =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
-    if (!value) {
+    if (!value || value === null) {
       setError({
         isError: true,
         errMsg: '필수 입력사항입니다.',
@@ -29,10 +29,10 @@ const useValidation = () => {
     }
 
     if (type === 'text') {
-      if (value.length > 30) {
+      if (value.length > 20) {
         setError({
           isError: true,
-          errMsg: '포토카드 이름은 30자를 초과할 수 없습니다.',
+          errMsg: '포토카드 이름은 20자를 초과할 수 없습니다.',
         });
 
         return;
@@ -74,6 +74,13 @@ const useValidation = () => {
       }
       if (value.length > 20) {
         setError({ isError: true, errMsg: '닉네임은 20자 이하이어야 합니다.' });
+        return;
+      }
+    }
+
+    if (type === 'description') {
+      if (value === '') {
+        setError({ isError: true, errMsg: '포토 카드 설명은 필수입니다.' });
         return;
       }
     }

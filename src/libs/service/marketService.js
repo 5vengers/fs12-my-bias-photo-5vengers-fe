@@ -61,3 +61,27 @@ export const getMarketItemDetail = async (itemId) => {
 
   return response.data.data;
 };
+
+// 마켓 아이템 구매
+export const purchaseMarketItem = async ({ itemId, quantity }) => {
+  const response = await apiClient.post(
+    `/api/market/items/${itemId}/purchase`,
+    {
+      quantity,
+    },
+  );
+
+  return response.data.data;
+};
+
+// 마켓 아이템 교환 제안 생성
+export const createExchangeProposal = async ({ itemId, offeredCardId }) => {
+  const response = await apiClient.post(
+    `/api/market/items/${itemId}/exchanges`,
+    {
+      offeredCardId,
+    },
+  );
+
+  return response.data.data;
+};

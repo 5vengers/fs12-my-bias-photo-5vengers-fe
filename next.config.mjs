@@ -6,11 +6,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        hostname: 'picsum.photos',
       },
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
+        hostname: 'res.cloudinary.com',
       },
     ],
   },

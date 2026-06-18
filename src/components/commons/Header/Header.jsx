@@ -8,12 +8,17 @@ import styles from './Header.module.css';
 import useAuthStore from '@/store/authStore';
 import { useIsAuthenticated, useLogout } from '@/hooks/useAuth';
 import { useMyPoint } from '@/hooks/usePoint';
+import Profile from './Profile';
+import { useState } from 'react';
 /*
   user = 유저 정보
   isLogin = 로그인이 되어있는지
 */
 const Header = () => {
   const user = useAuthStore((state) => state.user);
+
+  const [isOpen, setIsOpen] = useState(false);
+
   const isLogin = useIsAuthenticated();
   const { mutate: logout } = useLogout();
 
@@ -51,8 +56,17 @@ const Header = () => {
                 <Image src={alramIcon} width={24} height={24} alt="" />
               </button>
             </li>
-            <li className="font-baskin text-[18px] font-normal tracking-[-0.54px] text-gray-200">
-              {user?.nickname}
+            <li className="font-baskin relative text-[18px] font-normal tracking-[-0.54px] text-gray-200">
+              <button type="button" onClick={() => setIsOpen(!isOpen)}>
+                {user?.nickname}
+              </button>
+              {isOpen && (
+                <Profile
+                  username={user?.nickname || '회원'}
+                  point={pointText}
+                  setIsOpen={setIsOpen}
+                />
+              )}
             </li>
             <li className={styles.gray}>|</li>
             <li>

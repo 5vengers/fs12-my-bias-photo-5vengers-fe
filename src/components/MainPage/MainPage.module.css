@@ -1,0 +1,39 @@
+/* 플로팅 포인트 — 위치·크기·투명도·딜레이를 CSS 변수로 수신 */
+.floatingPoint {
+  left: var(--left);
+  top: var(--top);
+  font-size: var(--size);
+  opacity: var(--opacity);
+  animation-delay: var(--delay);
+}
+
+/* 알림 섹션 이미지 배경 */
+.notifImage {
+  background-image: var(--bg-url);
+}
+
+/* 선물 상자 래퍼 */
+.box {
+  position: relative;
+  width: 120px;
+  height: 130px;
+  transition: filter 0.3s, transform 0.15s;
+}
+
+.boxActive {
+  cursor: pointer;
+  filter: drop-shadow(0 16px 32px var(--glow-color));
+}
+
+.boxActive:hover {
+  transform: scale(1.08) translateY(-4px);
+}
+
+.boxShaking {
+  animation: boxShake 2s ease-in-out var(--anim-delay) infinite;
+}
+
+.boxDisabled {
+  cursor: not-allowed;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) grayscale(0.6) brightness(0.5);
+}
