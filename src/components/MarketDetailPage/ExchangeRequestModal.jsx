@@ -49,11 +49,7 @@ const ExchangeRequestModal = ({
                 type="button"
                 disabled={isPending}
                 onClick={() => onSubmit(card.id)}
-                className={`text-left disabled:opacity-50 ${
-                  selectedCard?.id === card.id
-                    ? 'outline-main outline outline-2'
-                    : ''
-                }`}
+                className="text-left disabled:opacity-50"
               >
                 <Card>
                   <Card.Image src={card.imageUrl} alt={card.name} />
