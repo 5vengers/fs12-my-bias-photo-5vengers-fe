@@ -35,7 +35,6 @@ export const getMarketItems = async ({
     },
   });
   const data = response.data.data;
-  console.log('데이터->', data);
   return {
     items: data.items,
     nextPage: data.hasNext ? pageParam + 1 : undefined,

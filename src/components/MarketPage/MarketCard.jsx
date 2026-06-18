@@ -4,11 +4,16 @@ import { GENRE_OPTIONS } from '@/constants/marketOptions';
 
 function MarketCard({ item }) {
   const remaining = item.quantity - item.soldQuantity;
+  const isSoldOut = remaining <= 0;
 
   return (
     <Link href={`/market/${item.id}`} className="block">
       <Card isLogo>
-        <Card.Image src={item.imageUrl} alt={item.title} />
+        <Card.Image
+          src={item.imageUrl}
+          alt={item.title}
+          state={isSoldOut ? 'soldOut' : 'sale'}
+        />
         <Card.Title className="mt-5 mb-[0px]">{item.title}</Card.Title>
         <Card.InfoLayout>
           <Card.Info nickname={item.sellerNickname}>
@@ -28,7 +33,7 @@ function MarketCard({ item }) {
           <Card.SaleInfo
             title="잔여"
             type="quantity"
-            count={[remaining, item.quantity]}
+            count={[Math.max(0, remaining), item.quantity]}
           />
         </Card.SaleInfoLayout>
       </Card>

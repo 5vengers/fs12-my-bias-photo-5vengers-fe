@@ -191,7 +191,7 @@ function FormStep({ card, onBack }) {
 
                   <div className="flex flex-col">
                     <div className="text-left text-[20px] font-bold">
-                      / {isLoadingMax ? '...' : maxQuantity}
+                      / {isLoadingMax ? '...' : card.quantity}
                     </div>
 
                     <div className="text-right text-[14px]">
