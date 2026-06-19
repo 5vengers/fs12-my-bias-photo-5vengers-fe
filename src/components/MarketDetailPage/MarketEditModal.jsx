@@ -100,7 +100,10 @@ const MarketEditModal = ({ isOpen, onClose, item, itemId }) => {
               <div className="flex items-center gap-[10px]">
                 <GradeText grade={item.grade} />
                 <span className="text-gray-400">|</span>
-                <span className="font-bold text-gray-300">{item.genre}</span>
+                <span className="font-bold text-gray-300">
+                  {GENRE_OPTIONS.find((g) => g.value === item.genre)?.label ??
+                    item.genre}
+                </span>
               </div>
 
               <span className="font-bold underline">{item.sellerNickname}</span>
