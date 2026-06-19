@@ -8,6 +8,7 @@ import Badge from '@/components/commons/Badge/Badge';
 import Card from '@/components/commons/Card/Card';
 import Search from '@/components/commons/Input/Search';
 
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
 import { Genre, CardGrade } from '@/constants/enums';
 import useAuthStore from '@/store/authStore';
 import { useState } from 'react';
@@ -113,9 +114,13 @@ const MyGallery = () => {
           <Select.Option size={'noLine'} value={''}>
             전체 장르
           </Select.Option>
-          {Object.values(Genre).map((g, i) => (
-            <Select.Option key={`genre-${g}-${i}`} size={'noLine'} value={g}>
-              {g}
+          {GENRE_OPTIONS.map((g, i) => (
+            <Select.Option
+              key={`genre-${g.value}-${i}`}
+              size={'noLine'}
+              value={g.value}
+            >
+              {g.label}
             </Select.Option>
           ))}
         </Select>
@@ -143,7 +148,11 @@ const MyGallery = () => {
               <Card.InfoLayout>
                 <Card.Info nickname={c.nickname}>
                   <Card.Grade>{c.grade}</Card.Grade>
-                  <span className="text-gray-300">{c.genre}</span>
+                  <span className="text-gray-300">
+                    {' '}
+                    {GENRE_OPTIONS.find((g) => g.value === c.genre)?.label ??
+                      c.genre}
+                  </span>
                 </Card.Info>
               </Card.InfoLayout>
               <Card.SaleInfoLayout>
