@@ -3,17 +3,16 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '@/assets/images/img-logo.svg';
-import alramIcon from '@/assets/icons/ic-alarm-default.svg';
+import PointIcon from '@/assets/icons/ico-point.svg';
+import AlramIcon from '@/assets/icons/ic-alarm-default.svg';
 import styles from './Header.module.css';
 import useAuthStore from '@/store/authStore';
 import { useIsAuthenticated, useLogout } from '@/hooks/useAuth';
 import { useMyPoint } from '@/hooks/usePoint';
 import Profile from './Profile';
 import { useState } from 'react';
-/*
-  user = 유저 정보
-  isLogin = 로그인이 되어있는지
-*/
+import { useSurpriseModalStore } from '@/store/supriseStore';
+
 const Header = () => {
   const user = useAuthStore((state) => state.user);
 
@@ -23,6 +22,14 @@ const Header = () => {
   const { mutate: logout } = useLogout();
 
   const { data: point, isPending, isError } = useMyPoint();
+
+  // 깜짝 모달 관리
+  // open -> 모달 open
+  // canGetPoint => 지금 포인트를 얻을 수 있는지 없는지 판단
+  const { open, canGetPoint } = useSurpriseModalStore();
+
+  const pointbedge =
+    'after:bg-red after:absolute after:top-[-2px] after:right-[-5px] after:z-[10] after:size-[10px] after:rounded-[100%]';
 
   const pointText = (() => {
     if (isPending) return '... P';
@@ -51,9 +58,19 @@ const Header = () => {
         {isLogin ? (
           <>
             <li className="font-bold text-gray-200">{pointText}</li>
-            <li>
+            <li className="flex items-center justify-center">
+              <button
+                type="button"
+                aria-label="포인트 팝업"
+                onClick={open}
+                className={`relative ${canGetPoint ? pointbedge : ''}`}
+              >
+                <Image src={PointIcon} width={20} height={20} alt="포인트" />
+              </button>
+            </li>
+            <li className="flex items-center justify-center">
               <button type="button" aria-label="알림">
-                <Image src={alramIcon} width={24} height={24} alt="" />
+                <Image src={AlramIcon} width={24} height={24} alt="알림" />
               </button>
             </li>
             <li className="font-baskin relative text-[18px] font-normal tracking-[-0.54px] text-gray-200">
