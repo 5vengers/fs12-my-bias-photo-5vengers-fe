@@ -43,7 +43,7 @@ const useValidation = () => {
       if (!regEmail.test(value)) {
         setError({
           isError: true,
-          errMsg: '이메일 형식이 아닙니다.',
+          errMsg: '이메일 형식이 올바르지 않습니다.',
         });
 
         return;
