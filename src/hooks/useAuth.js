@@ -56,7 +56,7 @@ export const useLogin = () => {
     onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
       useAuthStore.getState().setShowLoggedInToast(true);
-      router.replace('/');
+      router.replace('/market');
     },
   });
 };
