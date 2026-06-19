@@ -85,8 +85,11 @@ function FormStep({ card, onBack }) {
   const handleCancel = () => {
     onBack?.();
   };
+
   const handleQuantity = (e) => {
     const value = e.target.value;
+
+    setFormErrors((prev) => ({ ...prev, quantity: '' }));
 
     if (value === '') {
       setQuantity('');
@@ -119,7 +122,7 @@ function FormStep({ card, onBack }) {
       return;
     }
 
-    setFormErrors((prev) => ({ ...prev, quantity: '' }));
+    setFormErrors({ price: '', quantity: '' });
 
     mutate({
       myCardId: card.id,
@@ -214,6 +217,11 @@ function FormStep({ card, onBack }) {
                     </div>
                   </div>
                 </div>
+                {formErrors.quantity && (
+                  <p className="text-red mt-[8px] text-[14px]">
+                    {formErrors.quantity}
+                  </p>
+                )}
               </div>
             </div>
 
