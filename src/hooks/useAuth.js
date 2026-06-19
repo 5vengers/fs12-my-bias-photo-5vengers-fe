@@ -80,6 +80,9 @@ export const useLogout = () => {
     clearAuth();
     queryClient.clear(); // 캐시된 모든 쿼리 초기화
     router.replace('/login?loggedOut=true');
+
+    // point 타이머 제거
+    localStorage.removeItem('point_time');
   };
 
   return useMutation({
