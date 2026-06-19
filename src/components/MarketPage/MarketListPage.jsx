@@ -27,9 +27,7 @@ export default function MarketListPage({
     onIntersect: fetchNextPage,
   });
   if (isPending)
-    return (
-      <div className="p-[20px] text-white">첫 데이터를 불러오는 중...</div>
-    );
+    return <div className="p-[20px] text-white">카드를 불러오는 중...</div>;
   if (isError) {
     console.error(error);
 
@@ -43,11 +41,17 @@ export default function MarketListPage({
 
   return (
     <div className="mt-[70px]">
-      <div className="grid grid-cols-3 gap-[80px]">
-        {allItems.map((item) => (
-          <MarketCard key={item.id} item={item} />
-        ))}
-      </div>
+      {allItems.length === 0 ? (
+        <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
+          검색 결과가 존재하지 않습니다.
+        </div>
+      ) : (
+        <div className="grid grid-cols-3 gap-[80px]">
+          {allItems.map((item) => (
+            <MarketCard key={item.id} item={item} />
+          ))}
+        </div>
+      )}
 
       <div
         ref={observerRef}
