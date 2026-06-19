@@ -51,6 +51,9 @@ export const executeRefresh = () => {
       .catch((err) => {
         console.error('[executeRefresh] 토큰 재발급 실패:', err);
         useAuthStore.getState().clearAuth();
+
+        window.location.href = '/login';
+
         throw err;
       })
       .finally(() => {
@@ -86,6 +89,7 @@ apiClient.interceptors.response.use(
     // INVALID_TOKEN은 재시도 없이 바로 로그아웃
     if (errorCode === 'INVALID_TOKEN') {
       useAuthStore.getState().clearAuth();
+      window.location.href = '/login';
       return Promise.reject(error);
     }
 

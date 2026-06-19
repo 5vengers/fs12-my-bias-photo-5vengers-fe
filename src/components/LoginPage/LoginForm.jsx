@@ -113,7 +113,7 @@ const LoginForm = () => {
     if (!email) {
       errors.email = '필수 입력사항입니다.';
     } else if (!EMAIL_REGEX.test(email)) {
-      errors.email = '이메일 형식이 아닙니다.';
+      errors.email = '이메일 형식이 올바르지 않습니다.';
     }
     if (!password) {
       errors.password = '필수 입력사항입니다.';

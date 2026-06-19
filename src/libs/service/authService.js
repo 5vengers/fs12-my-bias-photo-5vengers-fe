@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import apiClient from '../apiClient.js';
 
 /**
  * refresh는 authService에서 제거
