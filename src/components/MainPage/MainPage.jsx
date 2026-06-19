@@ -31,7 +31,7 @@ const HeroSection = () => {
         <h1 className="text-main text-[56px] font-extrabold mb-11 leading-[1.15] tracking-[-0.02em]">
           나의 최애가 여기에!
         </h1>
-        <Link href="/mySales">
+        <Link href="/market">
           <button className="bg-main text-black border-none rounded-lg py-[18px] px-14 text-base font-bold cursor-pointer transition-opacity duration-200 hover:opacity-85">
             최애 찾으러 가기
           </button>
@@ -422,7 +422,7 @@ const FooterCTASection = () => {
         나의 최애를 지금 찾아보세요!
       </h2>
 
-      <Link href="/mySales">
+      <Link href="/market">
         <button className="bg-main text-black border-none rounded-lg py-[18px] px-16 text-base font-bold cursor-pointer transition-opacity duration-200 hover:opacity-85">
           최애 찾으러 가기
         </button>
