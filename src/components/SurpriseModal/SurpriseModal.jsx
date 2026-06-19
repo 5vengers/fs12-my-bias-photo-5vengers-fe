@@ -10,8 +10,9 @@ import Box1 from '@/assets/images/img-box1.png';
 import Box2 from '@/assets/images/img-box2.png';
 import Box3 from '@/assets/images/img-box3.png';
 import Point from '@/assets/images/img-point-lg.png';
-import { useOpenPointBox } from '@/hooks/usePoint';
+import { useOpenPointBox, usePointTimerInit } from '@/hooks/usePoint';
 import { useSurpriseModalStore } from '@/store/supriseStore';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const TARGET_TIME = 60 * 60 * 1000; // 1 시간
 const SAVED_TIME_KEY = 'point_time';
@@ -30,6 +31,10 @@ const SurpriseModal = () => {
 
   const { isOpen, close, setCanGetPoint } = useSurpriseModalStore();
 
+  const queryClient = useQueryClient();
+  const { mutate: createPoint, isPending, data: point } = useOpenPointBox();
+  const { data: timer } = usePointTimerInit();
+
   // timer target ref
   const targetTimeRef = useRef(null);
 
@@ -40,8 +45,6 @@ const SurpriseModal = () => {
   const [hasReward, setHasReward] = useState(false);
   const [isResult, setIsResult] = useState(false);
 
-  const { mutate: createPoint, isPending, data: point } = useOpenPointBox();
-
   const imageSrc = [Box1, Box2, Box3];
 
   const startTimer = (startTime) => {
@@ -50,6 +53,7 @@ const SurpriseModal = () => {
 
     // local 값 설정하기 (interval 돌 때 동안)
     localStorage.setItem(SAVED_TIME_KEY, String(startTime));
+    queryClient.setQueryData(['timer'], startTime);
 
     // time ref 에 interval 값 설정
     targetTimeRef.current = setInterval(() => {
@@ -81,6 +85,7 @@ const SurpriseModal = () => {
 
     // local 값 받아오기
     const savedTime = localStorage.getItem(SAVED_TIME_KEY);
+    queryClient.setQueryData(['timer'], Number(savedTime));
 
     // local 값 있으면 값에 따라 보상 받을 수 있는지 없는지 판별 후 timer 도 start 하기
     if (savedTime) {

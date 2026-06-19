@@ -28,3 +28,16 @@ export const useOpenPointBox = () => {
     },
   });
 };
+
+export const usePointTimerInit = () => {
+  const isAuthenticated = useIsAuthenticated();
+
+  return useQuery({
+    queryKey: ['timer'],
+    queryFn: () => {
+      const savedTime = localStorage.getItem('point_time');
+      return savedTime ? Number(savedTime) : null;
+    },
+    enabled: isAuthenticated,
+  });
+};

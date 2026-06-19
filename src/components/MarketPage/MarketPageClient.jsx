@@ -20,7 +20,7 @@ export default function MarketPageClient() {
   };
 
   return (
-    <div className="w-full px-[220px] pt-[60px] pb-[220px]">
+    <div className="mx-auto my-0 w-[1480px] py-[60px]">
       <div className="flex items-center justify-between border-b-2 border-gray-100 pb-5">
         <h1 className="font-baskin text-[62px] font-normal tracking-[-1.86px] text-white">
           마켓플레이스
