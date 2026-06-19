@@ -78,7 +78,7 @@ const MyGallery = () => {
             {user?.nickname}님이 보유한 포토카드
           </p>
           <p className="text-lg text-gray-300">
-            ({isCountPending ? '--' : cardCount?.totalCount}장)
+            ({isCountPending ? '00' : cardCount?.totalCount}장)
           </p>
         </div>
         <div className="flex items-center gap-[20px]">
@@ -111,9 +111,6 @@ const MyGallery = () => {
 
         {/* 장르 */}
         <Select size="noLine" desc={'장르'} onChange={setGenre}>
-          <Select.Option size={'noLine'} value={''}>
-            전체 장르
-          </Select.Option>
           {GENRE_OPTIONS.map((g, i) => (
             <Select.Option
               key={`genre-${g.value}-${i}`}
@@ -131,9 +128,11 @@ const MyGallery = () => {
         <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
           로딩 중 . . .
         </div>
-      ) : data?.cards.length === 0 ? (
+      ) : data?.cards.length === 0 || cardCount?.totalCount === 0 ? (
         <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
-          검색 결과가 존재하지 않습니다.
+          {cardCount?.totalCount === 0
+            ? '생성된 카드가 존재하지 않습니다.'
+            : '검색 결과가 존재하지 않습니다.'}
         </div>
       ) : (
         <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
