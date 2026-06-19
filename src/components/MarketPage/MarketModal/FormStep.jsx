@@ -6,6 +6,7 @@ import MinusIcon from '@/assets/icons/ic-minus.svg';
 import PlusIcon from '@/assets/icons/ic-plus.svg';
 import ExchangeInfoForm from './ExchangeInfoForm';
 import { useCreateMarketItem } from '@/hooks/useMarketItems';
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
 import { useQueryClient } from '@tanstack/react-query';
 
 function FormStep({ card, onBack }) {
@@ -147,7 +148,8 @@ function FormStep({ card, onBack }) {
 
               {/* 장르 */}
               <span className="text-[24px] leading-none font-bold text-gray-300">
-                {card.genre}
+                {GENRE_OPTIONS.find((g) => g.value === card.genre)?.label ??
+                  card.genre}
               </span>
             </div>
 
@@ -189,7 +191,7 @@ function FormStep({ card, onBack }) {
 
                   <div className="flex flex-col">
                     <div className="text-left text-[20px] font-bold">
-                      / {isLoadingMax ? '...' : maxQuantity}
+                      / {isLoadingMax ? '...' : card.quantity}
                     </div>
 
                     <div className="text-right text-[14px]">

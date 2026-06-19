@@ -11,8 +11,8 @@ const SelectOption = ({ children, value }) => {
   return (
     <button
       type="button"
-      className="w-full whitespace-nowrap px-[16px] py-[10px] text-sm hover:bg-gray-400"
-      onClick={() => handleChange(value)}
+      className="w-full px-[16px] py-[10px] text-sm whitespace-nowrap hover:bg-gray-400"
+      onClick={() => handleChange(value, children)}
     >
       {children}
     </button>

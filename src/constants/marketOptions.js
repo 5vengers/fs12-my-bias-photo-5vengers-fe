@@ -10,7 +10,7 @@ export const GENRE_OPTIONS = [
   { value: '', label: '전체 장르' },
   { value: 'ALBUM', label: '앨범' },
   { value: 'BENEFIT', label: '특전' },
-  { value: 'FAN_SIGN', label: '팬싸' },
+  { value: 'FANSIGN', label: '팬싸' },
   { value: 'SEASON_GREETING', label: '시즌그리팅' },
   { value: 'FAN_MEETING', label: '팬미팅' },
   { value: 'CONCERT', label: '콘서트' },
