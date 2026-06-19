@@ -76,3 +76,30 @@ export const createExchangeProposal = async ({ itemId, offeredCardId }) => {
 
   return response.data.data;
 };
+
+//  받은 교환 제안 목록 조회
+export const getReceivedExchangeProposals = async () => {
+  const response = await apiClient.get('/api/exchanges/received');
+
+  return response.data.data;
+};
+
+export const approveExchangeProposal = async (exchangeId) => {
+  const response = await apiClient.patch(
+    `/api/exchanges/${exchangeId}/approve`,
+  );
+
+  return response.data.data;
+};
+
+export const rejectExchangeProposal = async (exchangeId) => {
+  const response = await apiClient.patch(`/api/exchanges/${exchangeId}/reject`);
+
+  return response.data.data;
+};
+
+export const deleteMarketItem = async (itemId) => {
+  const response = await apiClient.delete(`/api/market/items/${itemId}`);
+
+  return response.data.data;
+};
