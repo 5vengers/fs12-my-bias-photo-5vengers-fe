@@ -84,6 +84,7 @@ export const getReceivedExchangeProposals = async () => {
   return response.data.data;
 };
 
+// 보낸 교환 제안 목록 조회
 export const approveExchangeProposal = async (exchangeId) => {
   const response = await apiClient.patch(
     `/api/exchanges/${exchangeId}/approve`,
@@ -92,14 +93,23 @@ export const approveExchangeProposal = async (exchangeId) => {
   return response.data.data;
 };
 
+// 교환 제안 거절
 export const rejectExchangeProposal = async (exchangeId) => {
   const response = await apiClient.patch(`/api/exchanges/${exchangeId}/reject`);
 
   return response.data.data;
 };
 
+// 마켓 아이템 삭제
 export const deleteMarketItem = async (itemId) => {
   const response = await apiClient.delete(`/api/market/items/${itemId}`);
+
+  return response.data.data;
+};
+
+// 마켓 아이템 수정
+export const updateMarketItem = async ({ itemId, data }) => {
+  const response = await apiClient.patch(`/api/market/items/${itemId}`, data);
 
   return response.data.data;
 };

@@ -7,6 +7,7 @@ import {
   approveExchangeProposal,
   rejectExchangeProposal,
   deleteMarketItem,
+  updateMarketItem,
 } from '@/libs/service/marketService';
 import { POINT_QUERY_KEYS } from '@/hooks/usePoint';
 
@@ -105,6 +106,21 @@ export const useDeleteMarketItem = () => {
     onSuccess: (_, itemId) => {
       queryClient.invalidateQueries({
         queryKey: MARKET_QUERY_KEYS.DETAIL(itemId),
+      });
+      queryClient.invalidateQueries({ queryKey: ['marketItems'] });
+    },
+  });
+};
+
+// 판매자가 등록한 마켓 판매글 정보를 수정하는 훅
+export const useUpdateMarketItem = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateMarketItem,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: MARKET_QUERY_KEYS.DETAIL(variables.itemId),
       });
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
     },
