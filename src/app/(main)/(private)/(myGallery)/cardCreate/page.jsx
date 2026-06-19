@@ -7,6 +7,7 @@ import Textarea from '@/components/commons/Input/Textarea';
 import Button from '@/components/commons/Button/Button';
 import FormField from '@/components/commons/FormField/FormField';
 
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
 import { Genre, CardGrade } from '@/constants/enums';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -182,9 +183,9 @@ const PhotoCardCreate = () => {
               onChange={handleGenreChange}
               isError={formErrors.genre ? true : false}
             >
-              {Object.values(Genre).map((g, i) => (
-                <Select.Option key={`genre-${g}-${i}`} value={g}>
-                  {g}
+              {GENRE_OPTIONS.map((genre) => (
+                <Select.Option key={genre.value} value={genre.value}>
+                  {genre.label}
                 </Select.Option>
               ))}
             </Select>

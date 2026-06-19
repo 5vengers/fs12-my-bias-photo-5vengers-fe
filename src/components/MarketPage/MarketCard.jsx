@@ -28,7 +28,7 @@ function MarketCard({ item }) {
           <Card.SaleInfo
             title={'가격'}
             type={'point'}
-            count={item.pricePerCard}
+            count={item.pricePerCard.toLocaleString()}
           />
           <Card.SaleInfo
             title="잔여"
