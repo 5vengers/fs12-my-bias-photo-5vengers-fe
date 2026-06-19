@@ -10,6 +10,7 @@ import {
 } from '@/hooks/useMarket';
 import QuantityStepper from './QuantityStepper';
 import ExchangeRequestModal from './ExchangeRequestModal';
+import ExchangeIcon from '@/assets/icons/ic-exchange.svg';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -158,8 +159,17 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
       </section>
 
       <section className="mt-[80px]">
-        <div className="flex items-center justify-between border-b border-gray-200 pb-[20px]">
-          <h2 className="text-[32px] font-bold">교환 희망 정보</h2>
+        <div className="flex items-center justify-between border-b-2 border-gray-200 pb-[10px]">
+          <h2 className="flex items-center gap-[10px] text-[28px] font-bold whitespace-nowrap">
+            <Image
+              src={ExchangeIcon}
+              alt=""
+              width={24}
+              height={24}
+              aria-hidden
+            />
+            교환 희망 정보
+          </h2>
 
           <button
             type="button"

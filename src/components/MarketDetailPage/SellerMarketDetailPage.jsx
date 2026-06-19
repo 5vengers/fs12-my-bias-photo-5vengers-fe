@@ -12,6 +12,7 @@ import {
 } from '@/hooks/useMarket';
 import ExchangeProposalCard from './ExchangeProposalCard';
 import MarketEditModal from './MarketEditModal';
+import ExchangeIcon from '@/assets/icons/ic-exchange.svg';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -123,11 +124,20 @@ const SellerMarketDetailPage = ({ item, itemId }) => {
           </div>
 
           <div className="border-b border-gray-500 py-[28px]">
-            <h2 className="mb-[20px] text-[18px] font-bold text-white">
-              교환 희망 정보
-            </h2>
+            <div className="border-b-2 border-gray-200 pb-[10px]">
+              <h2 className="flex items-center gap-[10px] text-[28px] font-bold whitespace-nowrap text-white">
+                <Image
+                  src={ExchangeIcon}
+                  alt=""
+                  width={24}
+                  height={24}
+                  aria-hidden
+                />
+                교환 희망 정보
+              </h2>
+            </div>
 
-            <div className="flex items-center gap-[12px]">
+            <div className="mt-[32px] flex items-center gap-[12px]">
               <GradeText grade={item.wantedGrade} />
               <span className="text-gray-400">|</span>
               <span className="text-[18px] font-bold text-gray-300">
@@ -135,7 +145,7 @@ const SellerMarketDetailPage = ({ item, itemId }) => {
               </span>
             </div>
 
-            <p className="mt-[24px] text-[15px] leading-[1.6] text-gray-300">
+            <p className="mt-[40px] text-[15px] leading-[1.6] text-gray-300">
               {item.wantedDescription}
             </p>
           </div>
