@@ -10,12 +10,13 @@ import Box1 from '@/assets/images/img-box1.png';
 import Box2 from '@/assets/images/img-box2.png';
 import Box3 from '@/assets/images/img-box3.png';
 import Point from '@/assets/images/img-point-lg.png';
-import { useOpenPointBox, usePointTimerInit } from '@/hooks/usePoint';
+import { useOpenPointBox } from '@/hooks/usePoint';
 import { useSurpriseModalStore } from '@/store/supriseStore';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 const TARGET_TIME = 60 * 60 * 1000; // 1 시간
 const SAVED_TIME_KEY = 'point_time';
+const RESET_TIME = '00분 00초';
 
 const Timer = ({ time }) => {
   return (
@@ -33,12 +34,11 @@ const SurpriseModal = () => {
 
   const queryClient = useQueryClient();
   const { mutate: createPoint, isPending, data: point } = useOpenPointBox();
-  const { data: timer } = usePointTimerInit();
 
   // timer target ref
   const targetTimeRef = useRef(null);
 
-  const [remainTime, setRemainTime] = useState('00분 00초');
+  const [remainTime, setRemainTime] = useState(RESET_TIME);
 
   const [selectBox, setSelectBox] = useState(null);
 
@@ -63,9 +63,7 @@ const SurpriseModal = () => {
       if (diff <= 0) {
         clearInterval(targetTimeRef.current);
         targetTimeRef.current = null;
-        setRemainTime('00분 00초');
-        setCanGetPoint(true);
-        setHasReward(false);
+        handleGetPoint();
         return;
       }
 
@@ -97,9 +95,7 @@ const SurpriseModal = () => {
         startTimer(startTime);
       } else {
         localStorage.removeItem(SAVED_TIME_KEY);
-        setHasReward(false);
-        setRemainTime('00분 00초');
-        setCanGetPoint(true);
+        handleGetPoint();
       }
     } else {
       startTimer(Date.now());
@@ -135,6 +131,14 @@ const SurpriseModal = () => {
         startTimer(Date.now());
       },
     });
+  };
+
+  const handleGetPoint = () => {
+    setIsResult(false);
+    setHasReward(false);
+    setRemainTime(RESET_TIME);
+    setCanGetPoint(true);
+    setSelectBox(null);
   };
 
   return (
