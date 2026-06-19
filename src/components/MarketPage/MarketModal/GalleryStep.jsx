@@ -88,7 +88,7 @@ function GalleryStep({
                 <Card.SaleInfo
                   title={'가격'}
                   type={'point'}
-                  count={card.price}
+                  count={card.price.toLocaleString()}
                 />
                 <Card.SaleInfo title={'수량'} count={card.quantity} />
               </Card.SaleInfoLayout>

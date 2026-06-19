@@ -11,6 +11,7 @@ import {
 import QuantityStepper from './QuantityStepper';
 import ExchangeRequestModal from './ExchangeRequestModal';
 import ExchangeIcon from '@/assets/icons/ic-exchange.svg';
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -70,6 +71,10 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
     );
   };
 
+  // 장르 값을 받아서 라벨을 반환
+  const getGenreLabel = (genre) =>
+    GENRE_OPTIONS.find((option) => option.value === genre)?.label ?? genre;
+
   return (
     <main className="min-h-screen bg-black px-[220px] pt-[36px] pb-[160px] text-white">
       <p className="font-baskin mb-[30px] text-[24px] text-gray-300">
@@ -104,7 +109,7 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
               <GradeText grade={item.grade} />
               <span className="text-[24px] text-gray-400">|</span>
               <span className="text-[24px] font-bold text-gray-300">
-                {item.genre}
+                {getGenreLabel(item.genre)}
               </span>
             </div>
 
@@ -189,7 +194,7 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
           <GradeText grade={item.wantedGrade} />
           <span className="text-gray-400">|</span>
           <span className="text-[18px] font-bold text-gray-300">
-            {item.wantedGenre}
+            {getGenreLabel(item.wantedGenre)}
           </span>
         </div>
       </section>
