@@ -36,7 +36,11 @@ export const usePointTimerInit = () => {
     queryKey: ['timer'],
     queryFn: () => {
       const savedTime = localStorage.getItem('point_time');
-      return savedTime ? Number(savedTime) : null;
+      if (!savedTime) return null;
+
+      const parsed = Number(savedTime);
+
+      return Number.isFinite(parsed) ? parsed : null;
     },
     enabled: isAuthenticated,
   });

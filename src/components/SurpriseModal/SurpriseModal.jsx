@@ -42,7 +42,7 @@ const SurpriseModal = () => {
 
   const [selectBox, setSelectBox] = useState(null);
 
-  const [hasReward, setHasReward] = useState(false);
+  const [hasReward, setHasReward] = useState(true);
   const [isResult, setIsResult] = useState(false);
 
   const imageSrc = [Box1, Box2, Box3];
@@ -83,18 +83,19 @@ const SurpriseModal = () => {
 
     // local 값 받아오기
     const savedTime = localStorage.getItem(SAVED_TIME_KEY);
-    queryClient.setQueryData(['timer'], Number(savedTime));
 
     // local 값 있으면 값에 따라 보상 받을 수 있는지 없는지 판별 후 timer 도 start 하기
     if (savedTime) {
       const startTime = Number(savedTime);
       const diff = startTime + TARGET_TIME - Date.now();
+      queryClient.setQueryData(['timer'], Number(savedTime));
 
       if (diff > 0) {
         setHasReward(true);
         startTimer(startTime);
       } else {
         localStorage.removeItem(SAVED_TIME_KEY);
+        queryClient.setQueryData(['timer'], null);
         handleGetPoint();
       }
     } else {
@@ -127,6 +128,7 @@ const SurpriseModal = () => {
         setIsResult(true);
         setCanGetPoint(false);
         localStorage.removeItem(SAVED_TIME_KEY);
+        queryClient.setQueryData(['timer'], null);
 
         startTimer(Date.now());
       },
