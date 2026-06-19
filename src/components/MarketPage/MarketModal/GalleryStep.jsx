@@ -80,7 +80,7 @@ function GalleryStep({
                   <span className="text-gray-300">
                     {' '}
                     {GENRE_OPTIONS.find((g) => g.value === card.genre)?.label ??
-                      item.genre}
+                      card.genre}
                   </span>
                 </Card.Info>
               </Card.InfoLayout>
