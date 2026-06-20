@@ -16,7 +16,6 @@ import myGalleryService from '@/libs/service/myGalleryService';
 import { notFound, useRouter } from 'next/navigation';
 import { replaceImage } from '@/libs/myGalleryUtils';
 import Chip from '@/components/commons/Chip/Chip';
-import Link from 'next/link';
 
 const SALE_TYPE = {
   SELLING: '판매',
@@ -62,11 +61,11 @@ const MySales = () => {
     queryFn: myGalleryService.getMySalesCount,
   });
 
-  if (error || isCountError) return notFound();
-
   useEffect(() => {
     setPage(1);
   }, [keyword, grade, genre, saleType, status]);
+
+  if (error || isCountError) return notFound();
 
   const handleMoveToMarket = (itemId) => {
     router.push(`/market/${itemId}`);
