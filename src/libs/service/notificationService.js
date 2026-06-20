@@ -1,6 +1,6 @@
-import apiClient from '@/libs/apiClient';
+import apiClient from '../apiClient';
 
-export const notificationApi = {
+export const notificationService = {
   /**
    * 알림 목록 조회 (최신순, 페이지네이션)
    * @returns {{ notifications, pagination, unreadCount }}

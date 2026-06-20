@@ -35,7 +35,7 @@ const useSSE = () => {
         `${BASE_URL}/api/notifications/stream?token=${token}`,
       );
 
-      // 연결 직후 미읽은 알림 수 수신 → 배지 초기화
+      // 연결 직후 미읽은 알림 수 수신 -> 배지 초기화
       es.addEventListener('connected', (e) => {
         try {
           const { unreadCount } = JSON.parse(e.data);
@@ -45,7 +45,7 @@ const useSSE = () => {
         }
       });
 
-      // 실시간 알림 수신 → store prepend
+      // 실시간 알림 수신 -> store prepend
       es.addEventListener('notification', (e) => {
         try {
           const notification = JSON.parse(e.data);
@@ -67,7 +67,7 @@ const useSSE = () => {
           const { accessToken: newToken } = await executeRefresh();
           connect(newToken);
         } catch {
-          // refresh 실패 → executeRefresh 내부에서 clearAuth 처리됨
+          // refresh 실패 -> executeRefresh 내부에서 clearAuth 처리됨
         }
       };
     };
