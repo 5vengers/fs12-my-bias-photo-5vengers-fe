@@ -27,7 +27,7 @@ const OAuthCallbackPage = () => {
     executeRefresh()
       .then(() => {
         useAuthStore.getState().setShowLoggedInToast(true);
-        router.replace('/');
+        router.replace('/market');
       })
       .catch((err) => {
         console.error('[OAuth Callback] executeRefresh 실패:', err);
