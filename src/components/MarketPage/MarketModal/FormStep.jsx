@@ -108,13 +108,16 @@ function FormStep({ card, onBack }) {
       price: '',
       quantity: '',
     };
+    const numericQuantity = Number(quantity);
 
     if (!price) {
       nextErrors.price = '가격을 입력해주세요.';
     }
 
-    if (!quantity || Number(quantity) < 1) {
+    if (!quantity || numericQuantity < 1) {
       nextErrors.quantity = '수량을 입력해주세요.';
+    } else if (maxQuantity !== null && numericQuantity > maxQuantity) {
+      nextErrors.quantity = `최대 ${maxQuantity}장까지 판매할 수 있습니다.`;
     }
 
     if (nextErrors.price || nextErrors.quantity) {
@@ -196,11 +199,17 @@ function FormStep({ card, onBack }) {
                       className="w-full bg-transparent text-center outline-none"
                       value={quantity}
                       onChange={handleQuantity}
+                      aria-invalid={Boolean(formErrors.quantity)}
+                      aria-describedby={
+                        formErrors.quantity
+                          ? 'market-item-quantity-error'
+                          : undefined
+                      }
                     />
                     <button type="button" className="p-2" onClick={increase}>
                       <Image
                         src={PlusIcon}
-                        alt="마이너스"
+                        alt="플러스"
                         width={50}
                         height={50}
                       />
@@ -218,7 +227,10 @@ function FormStep({ card, onBack }) {
                   </div>
                 </div>
                 {formErrors.quantity && (
-                  <p className="text-red mt-[8px] text-[14px]">
+                  <p
+                    id="market-item-quantity-error"
+                    className="text-red mt-[8px] text-[14px]"
+                  >
                     {formErrors.quantity}
                   </p>
                 )}
@@ -239,12 +251,19 @@ function FormStep({ card, onBack }) {
                     }}
                     placeholder="숫자만 입력"
                     className="w-24 bg-transparent text-left text-[20px] font-bold text-white outline-none placeholder:text-[16px] placeholder:font-light placeholder:text-white"
+                    aria-invalid={Boolean(formErrors.price)}
+                    aria-describedby={
+                      formErrors.price ? 'market-item-price-error' : undefined
+                    }
                   />
                   <p className="text-[20px] font-bold text-white">P</p>
                 </div>
 
                 {formErrors.price && (
-                  <p className="text-red mt-[8px] text-[14px]">
+                  <p
+                    id="market-item-price-error"
+                    className="text-red mt-[8px] text-[14px]"
+                  >
                     {formErrors.price}
                   </p>
                 )}
