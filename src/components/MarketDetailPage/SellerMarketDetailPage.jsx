@@ -68,6 +68,8 @@ const SellerMarketDetailPage = ({ item, itemId }) => {
   };
 
   const handleConfirmDelete = () => {
+    if (isDeletePending) return;
+
     deleteMarketItem(itemId, {
       onSuccess: () => {
         setIsDeleteModalOpen(false);
