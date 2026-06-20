@@ -38,7 +38,7 @@ export const cardCreateValidate = (data) => {
   if (!description || isBlank(description)) {
     errors.description = '필수 입력사항입니다.';
   } else if (description.length > 300) {
-    errors.description = '포토카드 설명을 300자를 넘을 수 없습니다.';
+    errors.description = '포토카드 설명은 300자를 넘을 수 없습니다.';
   }
 
   return errors;

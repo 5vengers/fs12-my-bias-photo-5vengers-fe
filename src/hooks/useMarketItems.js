@@ -21,7 +21,7 @@ export const useMyCards = ({ grade, genre, keyword } = {}) => {
   return useQuery({
     queryKey: ['myCards', grade, genre, keyword],
     queryFn: async () => {
-      const res = await apiClient.get('/api/myGallery', {
+      const res = await apiClient.get('/api/mycards/gallery', {
         params: {
           ...(grade && { grade }),
           ...(genre && { genre }),
