@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { notificationService } from '@/service/notificationService';
+import { notificationService } from '@/libs/service/notificationService';
 import useNotificationStore from '@/store/notificationStore';
 
 export const NOTIFICATION_KEYS = {
