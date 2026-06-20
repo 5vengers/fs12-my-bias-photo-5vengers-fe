@@ -143,7 +143,6 @@ const MyGallery = () => {
           {data?.cards.map((c, i) => (
             <Card key={`card-${i}`} isLogo>
               <Card.Image
-                state={c.status === 'SOLD_OUT' ? 'sold_out' : 'sale'}
                 src={replaceImage(c.imageUrl)}
                 alt={`포토카드 ${c.name}`}
                 priority={i === 0}
