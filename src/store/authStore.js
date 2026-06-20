@@ -42,7 +42,7 @@ const useAuthStore = create(
         }),
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
-      setShowLoggedInToast: (value) =>
+      setShowLoggedInToast: (value, variant = 'login') =>
         set({ showLoggedInToast: value, loggedInToastVariant: variant }),
     }),
     {
