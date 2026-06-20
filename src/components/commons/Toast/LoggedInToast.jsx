@@ -6,16 +6,22 @@ import useAuthStore from '@/store/authStore';
 
 const LoggedInToast = () => {
   const [showToast, setShowToast] = useState(false);
+  const [toastVariant, setToastVariant] = useState('login');
+
   const showLoggedInToast = useAuthStore((state) => state.showLoggedInToast);
+  const loggedInToastVariant = useAuthStore(
+    (state) => state.loggedInToastVariant,
+  );
   const setShowLoggedInToast = useAuthStore(
     (state) => state.setShowLoggedInToast,
   );
 
   useEffect(() => {
     if (!showLoggedInToast) return;
+    setToastVariant(loggedInToastVariant);
     setShowLoggedInToast(false);
     setShowToast(true);
-  }, [showLoggedInToast]);
+  }, [showLoggedInToast, loggedInToastVariant]);
 
   useEffect(() => {
     if (!showToast) return;
@@ -31,7 +37,9 @@ const LoggedInToast = () => {
 
   return (
     <Toast toastType="success" onClose={() => setShowToast(false)}>
-      로그인 되었습니다!
+      {toastVariant === 'register'
+        ? '회원가입 및 로그인이 완료되었습니다!'
+        : '로그인 되었습니다!'}
     </Toast>
   );
 };
