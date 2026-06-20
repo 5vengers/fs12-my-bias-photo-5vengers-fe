@@ -7,7 +7,7 @@ import NotificationItem from './NotificationItem';
 /**
  * 알림 드롭다운
  *
- * - 마운트 시 REST API로 최신 5개 조회 → store 동기화
+ * - 마운트 시 REST API로 최신 5개 조회 -> store 동기화
  * - SSE로 실시간 수신된 알림은 store를 통해 자동 반영
  * - 외부 클릭 감지는 NotificationBell의 containerRef에서 처리
  */
