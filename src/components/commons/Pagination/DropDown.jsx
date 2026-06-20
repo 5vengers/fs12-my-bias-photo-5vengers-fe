@@ -20,7 +20,7 @@ const DropDown = ({ isOpen, handleOpen, index, start, end, onChange }) => {
         ...
       </button>
       {isOpen && (
-        <ul className="custom-scrollbar absolute top-[0] flex max-h-[180px] w-full flex-col items-center overflow-y-scroll border border-gray-100 bg-black">
+        <ul className="custom-scrollbar absolute bottom-[0] flex max-h-[180px] w-full flex-col items-center overflow-y-scroll border border-gray-100 bg-black">
           {getPages().map((p, i, pages) => (
             <li key={`drop-page-${i}`}>
               <button

@@ -100,14 +100,26 @@
 }
 
 /* 등급 텍스트 색상 */
-.grade-common    { color: var(--main);    }
-.grade-rare      { color: #00D1FF;        }
-.grade-super-rare { color: var(--purple); }
-.grade-legendary { color: #FF7B00;        }
+.grade-common {
+  color: var(--main);
+}
+.grade-rare {
+  color: #00d1ff;
+}
+.grade-super-rare {
+  color: var(--purple);
+}
+.grade-legendary {
+  color: #ff7b00;
+}
 
 /* 판매 유형 텍스트 색상 */
-.sale-auction { color: var(--purple); }
-.sale-instant { color: #00D1FF;       }
+.sale-auction {
+  color: var(--purple);
+}
+.sale-instant {
+  color: #00d1ff;
+}
 
 /* 스크롤바 */
 
@@ -128,21 +140,49 @@
 
 /* 랜딩 페이지 애니메이션 */
 @keyframes floatUp {
-  0%   { transform: translateY(0px); opacity: 1; }
-  80%  { opacity: 0.8; }
-  100% { transform: translateY(-160px); opacity: 0; }
+  0% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-160px);
+    opacity: 0;
+  }
 }
 
 @keyframes popIn {
-  0%   { transform: scale(0.3) translateY(20px); opacity: 0; }
-  60%  { transform: scale(1.15) translateY(-6px); opacity: 1; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
+  0% {
+    transform: scale(0.3) translateY(20px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15) translateY(-6px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes boxShake {
-  0%,100% { transform: rotate(0deg); }
-  20%     { transform: rotate(-8deg); }
-  40%     { transform: rotate(8deg); }
-  60%     { transform: rotate(-5deg); }
-  80%     { transform: rotate(5deg); }
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  80% {
+    transform: rotate(5deg);
+  }
 }

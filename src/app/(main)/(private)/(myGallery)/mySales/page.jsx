@@ -1,325 +1,230 @@
-"use client";
+'use client';
 
-import { useState, useMemo, useEffect } from "react";
-import mySalesService from "@/libs/service/mySalesService";
-import { CardGrade, Genre, MarketStatus } from "@/constants/enums";
-import useAuthStore from "@/store/authStore";
-import Search from "@/components/commons/Input/Search";
-import Select from "@/components/commons/Select/Select";
-import Pagination from "@/components/commons/Pagination/Pagination";
-import Badge from "@/components/commons/Badge/Badge";
-import Card from "@/components/commons/Card/Card";
+import Title from '@/components/commons/Title/Title';
+import Select from '@/components/commons/Select/Select';
+import Pagination from '@/components/commons/Pagination/Pagination';
+import Badge from '@/components/commons/Badge/Badge';
+import Card from '@/components/commons/Card/Card';
+import Search from '@/components/commons/Input/Search';
 
-/* ─── 등급 ─── */
-const GRADE_LABEL = {
-  COMMON:     "COMMON",
-  RARE:       "RARE",
-  SUPER_RARE: "SUPER RARE",
-  LEGENDARY:  "LEGENDARY",
+import { GENRE_OPTIONS } from '@/constants/marketOptions';
+import { CardGrade } from '@/constants/enums';
+import useAuthStore from '@/store/authStore';
+import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import myGalleryService from '@/libs/service/myGalleryService';
+import { notFound, useRouter } from 'next/navigation';
+import { replaceImage } from '@/libs/myGalleryUtils';
+import Chip from '@/components/commons/Chip/Chip';
+import Link from 'next/link';
+
+const SALE_TYPE = {
+  SELLING: '판매',
+  EXCHANGE: '교환',
 };
 
-const GRADE_CLASS = {
-  COMMON:     "grade-common",
-  RARE:       "grade-rare",
-  SUPER_RARE: "grade-super-rare",
-  LEGENDARY:  "grade-legendary",
+const SOLD_TYPE = {
+  SELLING: '재고 있음',
+  SOLD_OUT: '재고 없음',
 };
 
-/* ─── 장르 ─── */
-const GENRE_LABEL = {
-  ALBUM:           "앨범",
-  BENEFIT:         "특전",
-  FANSIGN:         "팬싸",
-  SEASON_GREETING: "시즌그리팅",
-  FAN_MEETING:     "팬미팅",
-  CONCERT:         "콘서트",
-  MD:              "MD",
-  COLLAB:          "콜라보",
-  FAN_CLUB:        "팬클럽",
-  ETC:             "기타",
-};
-
-/* ─── 판매방법 ─── */
-const SALE_TYPE_LABEL = {
-  INSTANT: "즉시구매",
-  AUCTION: "경매",
-};
-
-const FILTER_OPTIONS = {
-  등급:    ["전체", ...Object.values(CardGrade)],
-  장르:    ["전체", ...Object.values(Genre)],
-  판매방법: ["전체", "INSTANT", "AUCTION"],
-  매진여부: ["전체", "판매중", "판매완료"],
-};
-
-/* ─── 로딩 스켈레톤 ─── */
-const CardSkeleton = () => {
-  return (
-    <div className="flex min-h-[600px] max-w-[440px] flex-col items-center rounded-xs border-[2px] border-white/10 bg-gray-500 p-[40px] animate-pulse">
-      <div className="h-6 bg-white/5 rounded w-[70%] mb-4" />
-      <div className="h-[270px] w-[360px] bg-white/5 mb-4" />
-      <div className="h-4 bg-white/5 rounded w-full mb-2" />
-      <div className="h-4 bg-white/5 rounded w-full" />
-    </div>
-  );
-}
-
-/* ─── 카드 컴포넌트 ─── */
-const getBadge = (card) => {
-  if (card.status === MarketStatus.SOLD_OUT)
-    return { label: "판매 완료", className: "bg-black/70 text-gray-400 border border-gray-400/40" };
-  if (card.exchangeProposals?.length > 0)
-    return { label: "교환 제시 대기 중", className: "bg-black/70 text-[#FACC15] border border-[#FACC15]/40" };
-  return { label: "판매 중", className: "bg-black/70 text-[#00C8FF] border border-[#00C8FF]/40" };
-};
-
-const SaleCard = ({ card, nickname }) => {
-  const isSoldOut = card.status === MarketStatus.SOLD_OUT;
-  const remaining = Math.max(0, (card.quantity ?? 0) - (card.soldQuantity ?? 0));
-  const cardName       = card.myCard?.photoCard?.name ?? `카드 #${card.id}`;
-  const creatorNickname = card.myCard?.photoCard?.creator?.nickname ?? nickname;
-  const rawUrl    = card.myCard?.photoCard?.imageUrl ?? "";
-  const imageUrl  = rawUrl.startsWith('http://localhost')
-    ? new URL(rawUrl).pathname
-    : (rawUrl || "/images/img-image1.png");
-  const saleType  = card.saleType ?? "INSTANT";
-  const badge     = getBadge(card);
-
-  return (
-    <Card isLogo>
-      <div className="relative w-full">
-        <Card.Image
-          src={imageUrl}
-          alt={cardName}
-          state={isSoldOut ? "soldOut" : "sale"}
-        />
-        {!isSoldOut && (
-          <span className={`absolute top-2 left-2 z-20 rounded px-2 py-[3px] text-[11px] font-semibold ${badge.className}`}>
-            {badge.label}
-          </span>
-        )}
-      </div>
-      <Card.Title className="mt-[10px]">{cardName}</Card.Title>
-      <Card.InfoLayout className="mt-[10px] mb-0">
-        <Card.Info
-          nickname={creatorNickname}
-          className="mb-[5px] flex w-full items-center justify-between border-b border-gray-400 pb-[10px]"
-        >
-          <span className={`font-bold text-[11px] ${GRADE_CLASS[card.grade] ?? ""}`}>
-            {GRADE_LABEL[card.grade] ?? card.grade}
-          </span>
-          <span className="text-gray-300">{GENRE_LABEL[card.genre] ?? card.genre}</span>
-        </Card.Info>
-      </Card.InfoLayout>
-      <Card.SaleInfoLayout>
-        {!isSoldOut && (
-          <div className="flex w-full justify-end">
-            <span className={`text-[10px] font-semibold ${saleType === "AUCTION" ? "sale-auction" : "sale-instant"}`}>
-              {SALE_TYPE_LABEL[saleType] ?? "즉시구매"}
-            </span>
-          </div>
-        )}
-        <Card.SaleInfo
-          title="가격"
-          type="point"
-          count={Number(card.pricePerCard).toLocaleString()}
-        />
-        <Card.SaleInfo title="잔여" count={remaining} />
-      </Card.SaleInfoLayout>
-    </Card>
-  );
-}
-
-/* ─── 메인 페이지 ─── */
-const MySalesPage = () => {
+const MySales = () => {
   const user = useAuthStore((state) => state.user);
 
-  const [cards, setCards]         = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError]         = useState(null);
+  const router = useRouter();
 
-  const [currentPage, setCurrentPage]       = useState(1);
-  const PAGE_SIZE = 12;
+  const [keyword, setKeyword] = useState('');
+  const [grade, setGrade] = useState('');
+  const [genre, setGenre] = useState('');
+  const [saleType, setSaleType] = useState('');
+  const [status, setStatus] = useState('');
+  const [page, setPage] = useState(1);
 
-  const [searchQuery, setSearchQuery]       = useState("");
-  const [filterGrade, setFilterGrade]       = useState("전체");
-  const [filterGenre, setFilterGenre]       = useState("전체");
-  const [filterSaleType, setFilterSaleType] = useState("전체");
-  const [filterSoldOut, setFilterSoldOut]   = useState("전체");
+  const { data, isPending, error } = useQuery({
+    queryKey: ['myCards', keyword, grade, genre, saleType, status, page],
+    queryFn: () =>
+      myGalleryService.getMySales({
+        keyword,
+        grade,
+        genre,
+        saleType,
+        status,
+        page,
+      }),
+  });
+
+  const {
+    data: cardCount,
+    isPending: isCountPending,
+    error: isCountError,
+  } = useQuery({
+    queryKey: ['myCards', 'totalCount', 'cardCount'],
+    queryFn: myGalleryService.getMySalesCount,
+  });
+
+  if (error || isCountError) return notFound();
 
   useEffect(() => {
-    if (!user?.id) { setIsLoading(false); return; }
-    (async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await mySalesService.getMyMarketItems();
-        setCards(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [user?.id]);
+    setPage(1);
+  }, [keyword, grade, genre, saleType, status]);
 
-  const gradeCounts = useMemo(() =>
-    cards.reduce((acc, c) => {
-      acc[c.grade] = (acc[c.grade] || 0) + (c.quantity ?? 1);
-      return acc;
-    }, {}),
-  [cards]);
-
-  const totalQuantity = useMemo(() =>
-    cards.reduce((sum, c) => sum + (c.quantity ?? 1), 0),
-  [cards]);
-
-  const filteredCards = useMemo(() => {
-    return cards.filter((card) => {
-      if (filterGrade !== "전체" && card.grade !== filterGrade) return false;
-      if (filterGenre !== "전체" && card.genre !== filterGenre) return false;
-      if (filterSaleType !== "전체") {
-        if ((card.saleType ?? "INSTANT") !== filterSaleType) return false;
-      }
-      if (filterSoldOut === "판매중"  && card.status === MarketStatus.SOLD_OUT) return false;
-      if (filterSoldOut === "판매완료" && card.status !== MarketStatus.SOLD_OUT) return false;
-      if (searchQuery) {
-        const name = card.myCard?.photoCard?.name ?? "";
-        if (!name.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-      }
-      return true;
-    });
-  }, [cards, filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
-  const pagedCards = filteredCards.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-
-  useEffect(() => { setCurrentPage(1); },
-    [filterGrade, filterGenre, filterSaleType, filterSoldOut, searchQuery]);
+  const handleMoveToMarket = (itemId) => {
+    router.push(`/market/${itemId}`);
+  };
 
   return (
-    <div className="min-h-screen w-full bg-black">
-      <main className="max-w-[1920px] mx-auto px-[220px] py-10">
+    <div className="mx-auto my-0 w-[1480px] py-[60px]">
+      <Title text="나의 판매 포토카드" />
 
-        <h1 className="font-baskin text-[46px] font-normal tracking-[-1.38px] text-white border-b border-white pb-[20px] mb-[30px]">
-          나의 판매 포토카드
-        </h1>
-
-        {/* 통계 박스 */}
-        <div className="w-[650px] min-h-[95px] py-[14px] flex flex-col justify-between gap-2.5">
-          <span className="text-[#DDD] text-2xl font-bold whitespace-nowrap">
-            {user?.nickname ?? "회원"}님이 보유한 포토카드&nbsp;
-            <span className="text-[#A4A4A4] text-[20px] font-normal">({totalQuantity}장)</span>
-          </span>
-          <div className="flex items-center gap-[10px]">
-            {Object.values(CardGrade).map((grade) => {
-              const count = gradeCounts[grade] || 0;
-              return (
-                <div key={grade} className="text-xs">
-                  <Badge grade={grade} count={count} />
-                </div>
-              );
-            })}
-          </div>
+      <div className="flex flex-col items-start gap-[20px] border-be border-gray-400 py-[40px]">
+        <div className="flex items-center gap-[10px]">
+          <p className="text-xl font-bold">
+            {user?.nickname}님이 거래 중인 포토카드
+          </p>
+          <p className="text-lg text-gray-300">
+            ({isCountPending ? '00' : cardCount?.totalCount}장)
+          </p>
         </div>
-
-        <div className="w-full h-px bg-white/10 my-10" />
-
-        {/* 검색 + 필터 */}
-        <div className="flex items-center gap-[20px] mb-8">
-          <Search size="md" onChange={(e) => setSearchQuery(e.target.value)} />
-
-          <div className="inline-flex items-start gap-[30px]">
-            <Select
-              size="noLine"
-              desc="등급"
-              value={filterGrade !== "전체" ? (GRADE_LABEL[filterGrade] ?? filterGrade) : ""}
-            >
-              {FILTER_OPTIONS["등급"].map((opt) => (
-                <Select.Option key={opt} value={opt} onChange={setFilterGrade}>
-                  {GRADE_LABEL[opt] ?? opt}
-                </Select.Option>
-              ))}
-            </Select>
-
-            <Select
-              size="noLine"
-              desc="장르"
-              value={filterGenre !== "전체" ? (GENRE_LABEL[filterGenre] ?? filterGenre) : ""}
-            >
-              {FILTER_OPTIONS["장르"].map((opt) => (
-                <Select.Option key={opt} value={opt} onChange={setFilterGenre}>
-                  {GENRE_LABEL[opt] ?? opt}
-                </Select.Option>
-              ))}
-            </Select>
-
-            <Select
-              size="noLine"
-              desc="판매방법"
-              value={filterSaleType !== "전체" ? (SALE_TYPE_LABEL[filterSaleType] ?? filterSaleType) : ""}
-            >
-              {FILTER_OPTIONS["판매방법"].map((opt) => (
-                <Select.Option key={opt} value={opt} onChange={setFilterSaleType}>
-                  {SALE_TYPE_LABEL[opt] ?? opt}
-                </Select.Option>
-              ))}
-            </Select>
-
-            <Select
-              size="noLine"
-              desc="매진여부"
-              value={filterSoldOut !== "전체" ? filterSoldOut : ""}
-            >
-              {FILTER_OPTIONS["매진여부"].map((opt) => (
-                <Select.Option key={opt} value={opt} onChange={setFilterSoldOut}>
-                  {opt}
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-        </div>
-
-        {error && (
-          <div className="p-5 bg-red-500/10 border border-red-500/30 rounded-lg text-[#f87171] text-sm mb-6">
-            ⚠️ {error}
-          </div>
-        )}
-
-        {!user && !isLoading && (
-          <div className="text-center py-20 text-white/40 text-[15px]">
-            로그인 후 나의 판매 포토카드를 확인할 수 있습니다.
-          </div>
-        )}
-
-        <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
-          {isLoading
-            ? Array.from({ length: 9 }).map((_, i) => <CardSkeleton key={i} />)
-            : pagedCards.map((card) => (
-                <SaleCard key={card.id} card={card} nickname={user?.nickname ?? "회원"} />
-              ))
-          }
-        </div>
-
-        {!isLoading && !error && user && filteredCards.length === 0 && (
-          <div className="text-center py-20 text-white/40 text-[15px]">
-            판매 중인 포토카드가 없습니다.
-          </div>
-        )}
-
-        {!isLoading && filteredCards.length > 0 && (
-          <div className="mt-12 mb-8 flex justify-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
+        <div className="flex items-center gap-[20px]">
+          {Object.values(CardGrade).map((g) => (
+            <Badge
+              key={`grade-${g}`}
+              grade={g}
+              count={cardCount?.gradeCount[g] || '0'}
             />
-          </div>
-        )}
+          ))}
+        </div>
+      </div>
 
-      </main>
+      {/* 필터링 */}
+      <div className="flex items-center justify-start gap-[60px] py-[20px]">
+        {/* 검색 */}
+        <Search size={'md'} onChange={(e) => setKeyword(e.target.value)} />
+
+        {/* 등급 */}
+        <Select size="noLine" desc={'등급'} onChange={setGrade}>
+          <Select.Option size={'noLine'} value={''}>
+            전체 등급
+          </Select.Option>
+          {Object.values(CardGrade).map((g, i) => (
+            <Select.Option key={`grade-${g}-${i}`} size={'noLine'} value={g}>
+              {g}
+            </Select.Option>
+          ))}
+        </Select>
+
+        {/* 장르 */}
+        <Select size="noLine" desc={'장르'} onChange={setGenre}>
+          {GENRE_OPTIONS.map((g, i) => (
+            <Select.Option
+              key={`genre-${g.value}-${i}`}
+              size={'noLine'}
+              value={g.value}
+            >
+              {g.label}
+            </Select.Option>
+          ))}
+        </Select>
+
+        {/* 판매방법 */}
+        <Select size="noLine" desc={'판매방법'} onChange={setSaleType}>
+          <Select.Option size={'noLine'} value={''}>
+            판매 방법
+          </Select.Option>
+          {Object.entries(SALE_TYPE).map(([key, value], i) => (
+            <Select.Option
+              key={`sale-type-${key}-${i}`}
+              size={'noLine'}
+              value={key}
+            >
+              {value}
+            </Select.Option>
+          ))}
+        </Select>
+
+        {/* 매진여부 */}
+        <Select size="noLine" desc={'매진여부'} onChange={setStatus}>
+          <Select.Option size={'noLine'} value={''}>
+            매진 여부
+          </Select.Option>
+          {Object.entries(SOLD_TYPE).map(([key, value], i) => (
+            <Select.Option key={`sold-${key}-${i}`} size={'noLine'} value={key}>
+              {value}
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+
+      {/* 카드 */}
+      {isPending ? (
+        <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
+          로딩 중 . . .
+        </div>
+      ) : data?.cards.length === 0 || cardCount?.totalCount === 0 ? (
+        <div className="font-baskin flex h-[480px] w-full items-center justify-center text-xl">
+          {cardCount?.totalCount === 0
+            ? '생성된 카드가 존재하지 않습니다.'
+            : '검색 결과가 존재하지 않습니다.'}
+        </div>
+      ) : (
+        <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
+          {data?.cards.map((c, i) => (
+            <button
+              key={`card-${i}`}
+              type="button"
+              className="text-left"
+              onClick={() => handleMoveToMarket(c.id)}
+              disabled={c.saleType === 'EXCHANGE'}
+            >
+              <Card isLogo>
+                <div className="relative">
+                  {c.remainingQuantity === 0 ? '' : <Chip type={c.saleType} />}
+                  <Card.Image
+                    state={c.remainingQuantity === 0 ? 'soldOut' : 'sale'}
+                    src={replaceImage(c.imageUrl)}
+                    alt={`포토카드 ${c.name}`}
+                    priority={i === 0}
+                  />
+                </div>
+                <Card.InfoLayout>
+                  <Card.Title>{c.name}</Card.Title>
+                  <Card.Info nickname={c.nickname}>
+                    <Card.Grade>{c.grade}</Card.Grade>
+                    <span className="text-gray-300">
+                      {' '}
+                      {GENRE_OPTIONS.find((g) => g.value === c.genre)?.label ??
+                        c.genre}
+                    </span>
+                  </Card.Info>
+                </Card.InfoLayout>
+                <Card.SaleInfoLayout>
+                  <Card.SaleInfo
+                    title={'가격'}
+                    type={'point'}
+                    count={Number(c.price).toLocaleString('ko-KR')}
+                  />
+                  <Card.SaleInfo title={'잔여'} count={c.remainingQuantity} />
+                </Card.SaleInfoLayout>
+              </Card>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* 페이지네이션 */}
+      {isPending ? (
+        ''
+      ) : (
+        <div className="mt-[120px]">
+          <Pagination
+            currentPage={page}
+            totalPages={data?.totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export default MySalesPage;
+export default MySales;
