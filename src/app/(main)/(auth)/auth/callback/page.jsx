@@ -9,14 +9,16 @@ const OAuthCallbackPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const isNewUser = searchParams.get('isNewUser') === 'true';
+
   useEffect(() => {
     const error = searchParams.get('error');
 
     // OAuthError: 구글 로그인 취소 또는 실패
     if (error === 'OAUTH_ERROR') {
-        router.replace('/login?error=oauth');
-        return;
-      }
+      router.replace('/login?error=oauth');
+      return;
+    }
 
     // OAuthConflictError: 동일 이메일 LOCAL 계정 존재
     if (error === 'OAUTH_CONFLICT') {
@@ -26,8 +28,10 @@ const OAuthCallbackPage = () => {
 
     executeRefresh()
       .then(() => {
-        useAuthStore.getState().setShowLoggedInToast(true);
-        router.replace('/');
+        useAuthStore
+          .getState()
+          .setShowLoggedInToast(true, isNewUser ? 'register' : 'login');
+        router.replace('/market');
       })
       .catch((err) => {
         console.error('[OAuth Callback] executeRefresh 실패:', err);

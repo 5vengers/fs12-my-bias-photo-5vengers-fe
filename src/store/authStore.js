@@ -24,6 +24,7 @@ const useAuthStore = create(
       accessToken: null, // 메모리 전용 (persist 대상 제외)
       hasHydrated: false, // localStorage 데이터를 읽어왔는지 여부
       showLoggedInToast: false,
+      loggedInToastVariant: 'login', // 'login' | 'register'
 
       // 로그인 성공 시 user + accessToken 일괄 설정
       setAuth: (user, accessToken) => set({ user, accessToken }),
@@ -33,10 +34,16 @@ const useAuthStore = create(
 
       // 로그아웃 또는 인증 만료 시 전체 초기화
       clearAuth: () =>
-        set({ user: null, accessToken: null, showLoggedInToast: false }),
+        set({
+          user: null,
+          accessToken: null,
+          showLoggedInToast: false,
+          loggedInToastVariant: 'login',
+        }),
       setHasHydrated: (value) => set({ hasHydrated: value }),
 
-      setShowLoggedInToast: (value) => set({ showLoggedInToast: value }),
+      setShowLoggedInToast: (value, variant = 'login') =>
+        set({ showLoggedInToast: value, loggedInToastVariant: variant }),
     }),
     {
       name: 'auth-storage', // localStorage 키 이름

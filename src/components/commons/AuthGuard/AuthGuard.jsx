@@ -45,7 +45,7 @@ export const PrivateGuard = ({ children }) => {
 
 // ─────────────────────────────────────────────
 // GuestGuard: 비로그인 유저만 접근
-// 로그인 상태 -> / 리다이렉트
+// 로그인 상태 -> /market 리다이렉트
 // /auth/callback은 예외: executeRefresh 완료 후 직접 redirect하므로 제외
 // ─────────────────────────────────────────────
 export const GuestGuard = ({ children }) => {
@@ -61,7 +61,7 @@ export const GuestGuard = ({ children }) => {
 
   useEffect(() => {
     if (hasHydrated && !isRefreshing && isAuthenticated && !isOAuthCallback) {
-      router.replace('/');
+      router.replace('/market');
     }
   }, [hasHydrated, isRefreshing, isAuthenticated, router, isOAuthCallback]);
 

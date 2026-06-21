@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import authService from '../libs/authService';
+import authService from '../libs/service/authService.js';
 import { executeRefresh } from '../libs/apiClient';
 import useAuthStore from '../store/authStore';
 
@@ -56,7 +56,7 @@ export const useLogin = () => {
     onSuccess: ({ user, accessToken }) => {
       setAuth(user, accessToken);
       useAuthStore.getState().setShowLoggedInToast(true);
-      router.replace('/');
+      router.replace('/market');
     },
   });
 };

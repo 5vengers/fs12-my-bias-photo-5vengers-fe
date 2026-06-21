@@ -11,7 +11,7 @@ import Search from '@/components/commons/Input/Search';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
 import { Genre, CardGrade } from '@/constants/enums';
 import useAuthStore from '@/store/authStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import myGalleryService from '@/libs/service/myGalleryService';
 import { notFound, useRouter } from 'next/navigation';
@@ -53,6 +53,10 @@ const MyGallery = () => {
 
   const remain = log?.count !== null ? remainCount(log?.count) : '-';
   const yearMonth = curDate();
+
+  useEffect(() => {
+    setPage(1);
+  }, [keyword, grade, genre]);
 
   return (
     <div className="mx-auto my-0 w-[1480px] py-[60px]">
@@ -138,13 +142,13 @@ const MyGallery = () => {
         <div className="mt-[40px] grid grid-cols-3 gap-[80px]">
           {data?.cards.map((c, i) => (
             <Card key={`card-${i}`} isLogo>
-              <Card.Title>{c.name}</Card.Title>
               <Card.Image
                 src={replaceImage(c.imageUrl)}
                 alt={`포토카드 ${c.name}`}
                 priority={i === 0}
               />
               <Card.InfoLayout>
+                <Card.Title>{c.name}</Card.Title>
                 <Card.Info nickname={c.nickname}>
                   <Card.Grade>{c.grade}</Card.Grade>
                   <span className="text-gray-300">

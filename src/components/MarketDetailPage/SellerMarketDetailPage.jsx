@@ -14,6 +14,7 @@ import ExchangeProposalCard from './ExchangeProposalCard';
 import MarketEditModal from './MarketEditModal';
 import ExchangeIcon from '@/assets/icons/ic-exchange.svg';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
+import Modal from '@/components/commons/Modal/Modal';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -27,6 +28,7 @@ const DetailRow = ({ label, children }) => {
 const SellerMarketDetailPage = ({ item, itemId }) => {
   const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { data: receivedExchangeProposals = [], isPending } =
     useReceivedExchangeProposals();
@@ -48,23 +50,29 @@ const SellerMarketDetailPage = ({ item, itemId }) => {
       proposal.marketItemId === item.id && proposal.status === 'WAITING',
   );
 
-  // 판매자가 교환 제시를 승인할 때 실행합니다.
+  // 판매자가 교환 제시를 승인할 때 실행
   const handleApproveExchange = (exchangeId) => {
     approveExchangeProposal(exchangeId);
   };
 
-  // 판매자가 교환 제시를 거절할 때 실행합니다.
+  // 판매자가 교환 제시를 거절할 때 실행
   const handleRejectExchange = (exchangeId) => {
     rejectExchangeProposal(exchangeId);
   };
 
-  // 판매자가 판매글을 내릴 때 실행합니다.
+  // 판매자가 판매글을 삭제할 때 실행
+
   const handleDeleteMarketItem = () => {
     if (isDeletePending) return;
-    if (!window.confirm('판매를 내리시겠습니까?')) return;
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (isDeletePending) return;
 
     deleteMarketItem(itemId, {
       onSuccess: () => {
+        setIsDeleteModalOpen(false);
         router.push('/market');
       },
     });
@@ -211,6 +219,20 @@ const SellerMarketDetailPage = ({ item, itemId }) => {
         item={item}
         itemId={itemId}
       />
+      {isDeleteModalOpen && (
+        <Modal>
+          <Modal.Close onClose={() => setIsDeleteModalOpen(false)} />
+          <Modal.Title>포토카드 판매 내리기</Modal.Title>
+          <Modal.Desc>정말로 판매를 중단하시겠습니까?</Modal.Desc>
+          <Modal.Button
+            size="md"
+            onClick={handleConfirmDelete}
+            disabled={isDeletePending}
+          >
+            {isDeletePending ? '처리 중...' : '판매 내리기'}
+          </Modal.Button>
+        </Modal>
+      )}
     </main>
   );
 };

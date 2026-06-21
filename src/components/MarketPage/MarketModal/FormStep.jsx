@@ -59,6 +59,12 @@ function FormStep({ card, onBack }) {
   };
 
   const handleSell = () => {
+    const nextErrors = {
+      price: '',
+      quantity: '',
+    };
+    const numericQuantity = Number(quantity);
+
     if (!price) {
       setFormErrors((prev) => ({
         ...prev,
@@ -66,10 +72,19 @@ function FormStep({ card, onBack }) {
       }));
       return;
     }
-    if (!quantity || Number(quantity) < 1) {
-      alert('수량을 입력해주세요.');
+
+    if (!quantity || numericQuantity < 1) {
+      nextErrors.quantity = '수량을 입력해주세요.';
+    } else if (maxQuantity !== null && numericQuantity > maxQuantity) {
+      nextErrors.quantity = `최대 ${maxQuantity}장까지 판매할 수 있습니다.`;
+    }
+
+    if (nextErrors.price || nextErrors.quantity) {
+      setFormErrors(nextErrors);
       return;
     }
+
+    setFormErrors({ price: '', quantity: '' });
 
     mutate({
       myCardId: card.id,
