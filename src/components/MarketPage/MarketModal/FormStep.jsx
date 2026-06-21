@@ -22,6 +22,9 @@ function FormStep({ card, onBack }) {
   const [exchangeGrade, setExchangeGrade] = useState('');
   const [exchangeGenre, setExchangeGenre] = useState('');
   const [exchangeDescription, setExchangeDescription] = useState('');
+  const [formErrors, setFormErrors] = useState({
+    price: '',
+  });
   const isLoadingMax = maxQuantity === null;
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -98,7 +101,10 @@ function FormStep({ card, onBack }) {
 
   const handleSell = () => {
     if (!price) {
-      alert('가격을 입력해주세요.');
+      setFormErrors((prev) => ({
+        ...prev,
+        price: '가격을 입력해주세요.',
+      }));
       return;
     }
     if (!quantity || Number(quantity) < 1) {
@@ -204,17 +210,37 @@ function FormStep({ card, onBack }) {
 
             <div className="flex items-center justify-between">
               <div className="text-[20px] text-white">장당 가격</div>
-              <div className="flex h-[50px] w-[242px] shrink-0 items-center justify-between rounded-[2px] border border-gray-200 bg-gray-500 px-5 py-6 text-[20px]">
-                <input
-                  value={price}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^0-9]/g, '');
-                    setPrice(value);
-                  }}
-                  placeholder="숫자만 입력"
-                  className="w-24 bg-transparent text-left text-[20px] font-bold text-white outline-none placeholder:text-[16px] placeholder:font-light placeholder:text-white"
-                ></input>
-                <p className="text-[20px] font-bold text-white">P</p>
+
+              <div className="flex flex-col items-end">
+                <div
+                  className={`flex h-[50px] w-[242px] shrink-0 items-center justify-between rounded-[2px] border bg-gray-500 px-5 py-6 text-[20px] ${
+                    formErrors.price ? 'border-red-500' : 'border-gray-200'
+                  }`}
+                >
+                  <input
+                    value={price}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^0-9]/g, '');
+                      setPrice(value);
+
+                      if (value) {
+                        setFormErrors((prev) => ({
+                          ...prev,
+                          price: '',
+                        }));
+                      }
+                    }}
+                    placeholder="숫자만 입력"
+                    className="w-24 bg-transparent text-left text-[20px] font-bold text-white outline-none placeholder:text-[16px] placeholder:font-light placeholder:text-white"
+                  />
+                  <p className="text-[20px] font-bold text-white">P</p>
+                </div>
+
+                {formErrors.price && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {formErrors.price}
+                  </p>
+                )}
               </div>
             </div>
           </div>
