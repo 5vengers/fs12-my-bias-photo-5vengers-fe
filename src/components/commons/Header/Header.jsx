@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '@/assets/images/img-logo.svg';
 import PointIcon from '@/assets/icons/ico-point.svg';
-import AlramIcon from '@/assets/icons/ic-alarm-default.svg';
 import styles from './Header.module.css';
 import useAuthStore from '@/store/authStore';
 import { useIsAuthenticated, useLogout } from '@/hooks/useAuth';
