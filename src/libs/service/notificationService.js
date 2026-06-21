@@ -1,31 +1,24 @@
 import apiClient from '../apiClient';
 
-export const notificationService = {
-  /**
-   * 알림 목록 조회 (최신순, 페이지네이션)
-   * @returns {{ notifications, pagination, unreadCount }}
-   */
-  getNotifications: async ({ page = 1, limit = 5 } = {}) => {
-    const res = await apiClient.get('/api/notifications', {
-      params: { page, limit },
-    });
-    return res.data.data;
-  },
+// 알림 목록 조회 (최신순, 페이지네이션)
+export const getNotifications = async ({ page = 1, limit = 5 } = {}) => {
+  const response = await apiClient.get('/api/notifications', {
+    params: { page, limit },
+  });
 
-  /**
-   * 전체 읽음 처리
-   */
-  markAllAsRead: async () => {
-    const res = await apiClient.patch('/api/notifications/read');
-    return res.data;
-  },
+  return response.data.data;
+};
 
-  /**
-   * 단일 읽음 처리
-   * @param {number} id
-   */
-  markAsRead: async (id) => {
-    const res = await apiClient.patch(`/api/notifications/${id}/read`);
-    return res.data;
-  },
+// 전체 읽음 처리
+export const markAllAsRead = async () => {
+  const response = await apiClient.patch('/api/notifications/read');
+
+  return response.data;
+};
+
+// 단일 알림 읽음 처리
+export const markAsRead = async (id) => {
+  const response = await apiClient.patch(`/api/notifications/${id}/read`);
+
+  return response.data;
 };
