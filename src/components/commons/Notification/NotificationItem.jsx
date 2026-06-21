@@ -53,17 +53,22 @@ const NotificationItem = ({ notification, onClose }) => {
 
   return (
     <li
-      onClick={handleClick}
       className={`flex min-h-[107px] w-[300px] cursor-pointer items-center justify-center border-b border-gray-500 px-5 ${notification.isRead ? 'bg-transparent' : 'bg-gray-500'}`}
     >
-      <div className="flex h-[67px] w-[260px] flex-col items-start gap-2.5">
-        <p className="font-noto line-clamp-2 w-[260px] text-sm leading-normal font-normal text-white">
-          {notification.message}
-        </p>
-        <span className="font-noto w-[260px] text-xs leading-normal font-light text-gray-300">
-          {notification.timeAgo}
-        </span>
-      </div>
+      <button
+        type="button"
+        onClick={handleClick}
+        className="flex h-full w-full cursor-pointer items-center justify-center px-5 text-left"
+      >
+        <div className="flex h-[67px] w-[260px] flex-col items-start gap-2.5">
+          <p className="font-noto line-clamp-2 w-[260px] text-sm leading-normal font-normal text-white">
+            {notification.message}
+          </p>
+          <span className="font-noto w-[260px] text-xs leading-normal font-light text-gray-300">
+            {notification.timeAgo}
+          </span>
+        </div>
+      </button>
     </li>
   );
 };
