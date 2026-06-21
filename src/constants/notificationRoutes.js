@@ -22,5 +22,10 @@ const ROUTE_MAP = {
 export const getNotificationRoute = (routeType, targetId) => {
   const route = ROUTE_MAP[routeType];
   if (!route) return '/market';
+  if (
+    typeof route === 'function' &&
+    (targetId === null || targetId === undefined)
+  )
+    return '/market';
   return typeof route === 'function' ? route(targetId) : route;
 };
