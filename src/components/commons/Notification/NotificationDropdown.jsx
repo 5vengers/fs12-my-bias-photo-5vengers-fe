@@ -17,63 +17,24 @@ const NotificationDropdown = ({ onClose }) => {
 
   const displayedNotifications = notifications.slice(0, 5);
 
+  const emptyStateClass =
+    'font-noto flex h-[107px] items-center justify-center text-sm text-gray-300';
+
   const renderContent = () => {
     if (isLoading) {
-      return (
-        <div
-          style={{
-            height: '107px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#A4A4A4',
-            fontFamily: '"Noto Sans KR"',
-            fontSize: '14px',
-          }}
-        >
-          로딩 중...
-        </div>
-      );
+      return <div className={emptyStateClass}>로딩 중...</div>;
     }
 
     if (isError) {
-      return (
-        <div
-          style={{
-            height: '107px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#A4A4A4',
-            fontFamily: '"Noto Sans KR"',
-            fontSize: '14px',
-          }}
-        >
-          알림을 불러올 수 없습니다.
-        </div>
-      );
+      return <div className={emptyStateClass}>알림을 불러올 수 없습니다.</div>;
     }
 
     if (displayedNotifications.length === 0) {
-      return (
-        <div
-          style={{
-            height: '107px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#A4A4A4',
-            fontFamily: '"Noto Sans KR"',
-            fontSize: '14px',
-          }}
-        >
-          새로운 알림이 없습니다.
-        </div>
-      );
+      return <div className={emptyStateClass}>새로운 알림이 없습니다.</div>;
     }
 
     return (
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+      <ul className="m-0 list-none p-0">
         {displayedNotifications.map((notification) => (
           <NotificationItem
             key={notification.id}
@@ -86,19 +47,7 @@ const NotificationDropdown = ({ onClose }) => {
   };
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 'calc(100% + 12px)',
-        right: 0,
-        width: '300px',
-        backgroundColor: '#1c1c1c',
-        borderRadius: '4px',
-        overflow: 'hidden',
-        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
-        zIndex: 100,
-      }}
-    >
+    <div className="absolute top-[calc(100%+12px)] right-0 z-[100] w-[300px] overflow-hidden rounded bg-gray-500 shadow-lg">
       {renderContent()}
     </div>
   );
