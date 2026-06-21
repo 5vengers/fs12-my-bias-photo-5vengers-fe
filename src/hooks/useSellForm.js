@@ -62,9 +62,10 @@ export default function useSellForm(card) {
 
     const num = Number(value);
 
-    if (isNaN(num)) return;
+    if (Number.isNaN(num)) return;
 
-    setQuantity(Math.max(1, Math.min(num, maxQuantity)));
+    const limit = maxQuantity ?? Infinity;
+    setQuantity(Math.max(1, Math.min(num, limit)));
   };
   return {
     isLoadingMax,

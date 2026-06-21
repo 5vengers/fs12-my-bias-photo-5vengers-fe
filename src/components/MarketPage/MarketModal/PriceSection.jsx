@@ -3,7 +3,9 @@ import React from 'react';
 function PriceSection({ price, setPrice, formErrors, setFormErrors }) {
   return (
     <div className="flex items-center justify-between">
-      <div className="text-[20px] text-white">장당 가격</div>
+      <label htmlFor="price" className="text-[20px] text-white">
+        장당 가격
+      </label>
 
       <div className="flex flex-col items-end">
         <div
