@@ -1,89 +1,66 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMarkAsRead } from '@/hooks/queries/useNotification';
 import { getNotificationRoute } from '@/constants/notificationRoutes';
+import { getExchangeProposalDetail } from '@/libs/service/marketService';
 
 /**
  * 알림 아이템
  *
  * 클릭 시:
  * 1. 미읽음 상태면 읽음 처리 API 호출 (store는 낙관적 업데이트)
- * 2. routeType + targetId 기반으로 해당 페이지 이동
+ * 2-a. routeType이 EXCHANGE_PROPOSAL이면 targetId(proposalId)로
+ *      getExchangeProposalDetail() 호출해 marketItemId를 조회 후 라우팅
+ *      (targetId가 marketItemId가 아니라 proposalId라서 별도 조회 필요)
+ * 2-b. 그 외(MARKET_ITEM, MY_SELL_CARDS)는 targetId로 바로 라우팅
  * 3. 드롭다운 닫기
  */
 const NotificationItem = ({ notification, onClose }) => {
   const router = useRouter();
   const { mutate: markAsRead } = useMarkAsRead();
+  const [isNavigating, setIsNavigating] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    if (isNavigating) return; // 중복 클릭 방지
+    setIsNavigating(true);
+
     if (!notification.isRead) {
       markAsRead(notification.id);
     }
 
-    const route = getNotificationRoute(
-      notification.routeType,
-      notification.targetId,
-    );
-    router.push(route);
-    onClose();
+    try {
+      // EXCHANGE_PROPOSAL 알림 클릭 시 마켓 상세 페이지로 이동
+      if (notification.routeType === 'EXCHANGE_PROPOSAL') {
+        const { marketItemId } = await getExchangeProposalDetail(
+          notification.targetId,
+        );
+        router.push(`/market/${marketItemId}`);
+      } else {
+        const route = getNotificationRoute(
+          notification.routeType,
+          notification.targetId,
+        );
+        router.push(route);
+      }
+    } catch (err) {
+      console.error('[NotificationItem] 페이지 이동 실패:', err);
+    } finally {
+      onClose();
+    }
   };
 
   return (
     <li
       onClick={handleClick}
-      style={{
-        width: '300px',
-        minHeight: '107px',
-        backgroundColor: notification.isRead ? 'transparent' : '#2b2b2b',
-        borderBottom: '1px solid #333',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '0 20px',
-        boxSizing: 'border-box',
-        listStyle: 'none',
-      }}
+      className={`flex min-h-[107px] w-[300px] cursor-pointer items-center justify-center border-b border-gray-500 px-5 ${notification.isRead ? 'bg-transparent' : 'bg-gray-500'}`}
     >
-      <div
-        style={{
-          display: 'flex',
-          width: '260px',
-          height: '67px',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '10px',
-        }}
-      >
-        <p
-          style={{
-            color: 'var(--white-white, #FFF)',
-            fontFamily: '"Noto Sans KR"',
-            fontSize: '14px',
-            fontWeight: 400,
-            lineHeight: 'normal',
-            width: '260px',
-            margin: 0,
-            // 2줄 이상 넘치면 말줄임
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          }}
-        >
+      <div className="flex h-[67px] w-[260px] flex-col items-start gap-2.5">
+        <p className="font-noto line-clamp-2 w-[260px] text-sm leading-normal font-normal text-white">
           {notification.message}
         </p>
-        <span
-          style={{
-            color: 'var(--gray-gray300, #A4A4A4)',
-            fontFamily: '"Noto Sans KR"',
-            fontSize: '12px',
-            fontWeight: 300,
-            lineHeight: 'normal',
-            width: '260px',
-          }}
-        >
+        <span className="font-noto w-[260px] text-xs leading-normal font-light text-gray-300">
           {notification.timeAgo}
         </span>
       </div>
