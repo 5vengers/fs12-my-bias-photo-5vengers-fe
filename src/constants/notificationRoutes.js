@@ -8,7 +8,8 @@
  * - MY_SELL_CARDS     : 내 판매 목록 페이지
  */
 const ROUTE_MAP = {
-  EXCHANGE_PROPOSAL: (targetId) => `/market/${targetId}`,
+  // EXCHANGE_PROPOSAL은 NotificationItem.jsx에서 직접 처리
+  // (proposalId -> getExchangeProposalDetail -> marketItemId 조회 후 라우팅)
   MARKET_ITEM: (targetId) => `/market/${targetId}`,
   MY_SELL_CARDS: '/myGallery/mySales',
 };

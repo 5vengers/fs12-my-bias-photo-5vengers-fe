@@ -47,6 +47,7 @@ const NotificationItem = ({ notification, onClose }) => {
     } catch (err) {
       console.error('[NotificationItem] 페이지 이동 실패:', err);
     } finally {
+      setIsNavigating(false);
       onClose();
     }
   };
