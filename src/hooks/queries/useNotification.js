@@ -1,5 +1,9 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { notificationService } from '@/libs/service/notificationService';
+import {
+  getNotifications,
+  markAllAsRead,
+  markAsRead,
+} from '@/libs/service/notificationService';
 import useNotificationStore from '@/store/notificationStore';
 
 export const NOTIFICATION_KEYS = {
@@ -17,7 +21,7 @@ export const useNotifications = (params = { page: 1, limit: 5 }) => {
   return useQuery({
     queryKey: NOTIFICATION_KEYS.list(params),
     queryFn: async () => {
-      const data = await notificationService.getNotifications(params);
+      const data = await getNotifications(params);
       setNotifications(data.notifications);
       setUnreadCount(data.unreadCount);
       return data;
@@ -34,7 +38,7 @@ export const useMarkAsRead = () => {
   const markOneReadLocal = useNotificationStore((s) => s.markOneReadLocal);
 
   return useMutation({
-    mutationFn: (id) => notificationService.markAsRead(id),
+    mutationFn: (id) => markAsRead(id),
     onSuccess: (_, id) => {
       markOneReadLocal(id);
     },
@@ -52,7 +56,7 @@ export const useMarkAllAsRead = () => {
   const markAllReadLocal = useNotificationStore((s) => s.markAllReadLocal);
 
   return useMutation({
-    mutationFn: notificationService.markAllAsRead,
+    mutationFn: markAllAsRead,
     onSuccess: () => {
       markAllReadLocal();
     },
