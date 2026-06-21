@@ -10,7 +10,7 @@ import NotificationDropdown from './NotificationDropdown';
 /**
  * 알림 벨 아이콘 + 드롭다운
  *
- * - unreadCount > 0 -> ic-alarm-active.svg 
+ * - unreadCount > 0 -> ic-alarm-active.svg
  * - unreadCount === 0 -> ic-alarm-default.svg
  *
  * 외부 클릭 감지:
@@ -39,20 +39,12 @@ const NotificationBell = () => {
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} style={{ position: 'relative' }}>
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         aria-label={hasUnread ? `알림 (${unreadCount}개 미읽음)` : '알림'}
         onClick={() => setIsOpen((prev) => !prev)}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          cursor: 'pointer',
-        }}
+        className="flex cursor-pointer items-center justify-center border-0 bg-transparent p-0"
       >
         <Image
           src={hasUnread ? alarmActiveIcon : alarmDefaultIcon}
