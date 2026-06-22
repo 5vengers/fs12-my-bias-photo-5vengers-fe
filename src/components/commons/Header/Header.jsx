@@ -43,7 +43,7 @@ const Header = () => {
   return (
     <div className="flex items-center justify-between px-[220px] py-[27px]">
       <div className="cursor-pointer">
-        <Link href="/">
+        <Link href={isLogin ? '/market' : '/'}>
           <Image
             src={Logo}
             width={140}
