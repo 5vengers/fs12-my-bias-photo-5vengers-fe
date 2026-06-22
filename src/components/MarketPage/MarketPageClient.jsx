@@ -2,11 +2,14 @@
 import React from 'react';
 import { GRADE_OPTIONS, GENRE_OPTIONS } from '@/constants/marketOptions';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import Select from '@/components/commons/Select/Select';
 import MarketListPage from '@/components/MarketPage/MarketListPage';
 import SellModal from '@/components/MarketPage/MarketModal/ModalSell';
+import Modal from '@/components/commons/Modal/Modal';
+import { useIsAuthenticated } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 export default function MarketPageClient() {
   const [keyword, setKeyword] = useState('');
@@ -15,8 +18,23 @@ export default function MarketPageClient() {
   const [soldOut, setSoldOut] = useState('');
   const [sort, setSort] = useState('latest');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [pendingItemId, setPendingItemId] = useState(null);
+  const isAuthenticated = useIsAuthenticated();
+  const router = useRouter();
   const handleGradeChange = (value) => {
     setGrade(value);
+  };
+
+  useEffect(() => {}, [isLoginModalOpen]);
+
+  const checkAuth = (callback) => {
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
+    callback?.();
   };
 
   return (
@@ -27,7 +45,9 @@ export default function MarketPageClient() {
         </h1>
         <button
           type="button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            checkAuth(() => setIsModalOpen(true));
+          }}
           className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold text-black! transition hover:opacity-90"
         >
           나의 포토카드 판매하기 →
@@ -95,8 +115,30 @@ export default function MarketPageClient() {
         genre={genre}
         soldOut={soldOut}
         sort={sort}
+        onRequireAuth={(itemId) => {
+          if (!isAuthenticated) {
+            setIsLoginModalOpen(true);
+            setPendingItemId(itemId);
+            return false;
+          }
+          return true;
+        }}
       />
       <SellModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {isLoginModalOpen && (
+        <Modal>
+          <Modal.Close onClose={() => setIsLoginModalOpen(false)} />
+          <Modal.Title>로그인이 필요합니다.</Modal.Title>
+          <Modal.Desc className="text-center whitespace-pre-line">
+            로그인 하시겠습니까?
+            <br />
+            다양한 서비스를 편리하게 이용하실 수 있습니다.
+          </Modal.Desc>
+          <Modal.Button size="sm" onClick={() => router.push('/login')}>
+            확인
+          </Modal.Button>
+        </Modal>
+      )}
     </div>
   );
 }
