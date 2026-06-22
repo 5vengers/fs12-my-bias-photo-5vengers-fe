@@ -49,7 +49,11 @@ const Header = () => {
     <div className="tablet:px-10 tablet:py-6.5 mobile:p-5 flex items-center justify-between px-55 py-7">
       {/* 모바일 메뉴 */}
       <div className="mobile:block hidden">
-        <button type="button" onClick={() => setIsMobileOpen(true)}>
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen(true)}
+          aria-label="모바일 메뉴"
+        >
           <Image src={MenuIcon} alt="햄버거 메뉴" width={24} height={24} />
         </button>
       </div>
@@ -84,7 +88,11 @@ const Header = () => {
               <NotificationBell />
             </li>
             <li className="font-baskin relative text-[18px] font-normal tracking-[-0.54px] text-gray-200">
-              <button type="button" onClick={() => setIsOpen(!isOpen)}>
+              <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="프로필"
+              >
                 {user?.nickname}
               </button>
               {isOpen && (
@@ -102,6 +110,7 @@ const Header = () => {
                 type="button"
                 className="cursor-pointer"
                 onClick={() => logout()}
+                aria-label="로그아웃"
               >
                 로그아웃
               </button>
@@ -137,19 +146,24 @@ const Header = () => {
               >
                 <button
                   type="button"
-                  aria-label="포인트 팝업"
+                  aria-label="모바일 포인트 팝업"
                   onClick={() => {
                     open();
                     setIsMobileOpen(false);
                   }}
-                  className={`relative flex w-full items-center justify-between text-sm font-bold${canGetPoint ? pointbedge : ''}`}
+                  className={`relative flex w-full items-center justify-between text-sm font-bold ${canGetPoint ? pointbedge : ''}`}
                 >
                   포인트 박스 확인{' '}
                   <Image src={PointIcon} width={20} height={20} alt="포인트" />
                 </button>
-                <Link href="/logout" className="text-sm text-gray-500">
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() => logout()}
+                  aria-label="모바일 로그아웃"
+                >
                   로그아웃
-                </Link>
+                </button>
               </Profile>
             ) : (
               <div
