@@ -71,9 +71,9 @@ const RandomBoxSection = () => {
               {/* 모달 */}
               <div className="border-main relative top-[30%] left-1/2 z-10 w-[670px] -translate-x-1/2 rounded-xs border-1 bg-gray-500 px-12 py-9 text-center">
                 {/* 닫기 */}
-                <button className="absolute top-3.5 right-[18px] cursor-pointer border-none bg-transparent text-lg text-white/50">
+                <div className="absolute top-3.5 right-[18px] text-lg text-white/50">
                   ✕
-                </button>
+                </div>
 
                 {/* 제목 */}
                 <h3 className="font-baskin mb-[22px] text-5xl">
@@ -116,7 +116,7 @@ const RandomBoxSection = () => {
                           </div>
                         ) : (
                           /* ── 닫힌 상자 ── */
-                          <div
+                          <button
                             onClick={() => handleBoxClick(i)}
                             style={{
                               '--anim-delay': `${i * 0.4}s`,
@@ -137,7 +137,7 @@ const RandomBoxSection = () => {
                               priority
                               className="h-auto w-32"
                             />
-                          </div>
+                          </button>
                         )}
                       </div>
                     );
