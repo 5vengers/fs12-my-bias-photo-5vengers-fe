@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Logo from '@/assets/images/img-logo.svg';
 import PointIcon from '@/assets/icons/ico-point.svg';
-import AlramIcon from '@/assets/icons/ic-alarm-default.svg';
 import styles from './Header.module.css';
 import useAuthStore from '@/store/authStore';
 import { useIsAuthenticated, useLogout } from '@/hooks/useAuth';
@@ -12,6 +11,7 @@ import { useMyPoint } from '@/hooks/usePoint';
 import Profile from './Profile';
 import { useState } from 'react';
 import { useSurpriseModalStore } from '@/store/supriseStore';
+import NotificationBell from '@/components/commons/Notification/NotificationBell';
 
 const Header = () => {
   const user = useAuthStore((state) => state.user);
@@ -68,10 +68,8 @@ const Header = () => {
                 <Image src={PointIcon} width={20} height={20} alt="포인트" />
               </button>
             </li>
-            <li className="flex items-center justify-center">
-              <button type="button" aria-label="알림">
-                <Image src={AlramIcon} width={24} height={24} alt="알림" />
-              </button>
+            <li>
+              <NotificationBell />
             </li>
             <li className="font-baskin relative text-[18px] font-normal tracking-[-0.54px] text-gray-200">
               <button type="button" onClick={() => setIsOpen(!isOpen)}>
