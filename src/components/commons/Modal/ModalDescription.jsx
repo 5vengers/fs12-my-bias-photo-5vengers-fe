@@ -1,7 +1,7 @@
-const ModalDescription = ({ children }) => {
+const ModalDescription = ({ children, className = '' }) => {
   return (
     <div className="">
-      <p className="text-gray-300">{children}</p>
+      <p className={`text-gray-300 ${className}`}>{children}</p>
     </div>
   );
 };

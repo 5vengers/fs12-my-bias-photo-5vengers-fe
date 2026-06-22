@@ -1,13 +1,22 @@
-import Link from 'next/link';
 import Card from '@/components/commons/Card/Card';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
+import { useRouter } from 'next/navigation';
 
-function MarketCard({ item }) {
+function MarketCard({ item, onRequireAuth }) {
+  const router = useRouter();
+
   const remaining = item.quantity - item.soldQuantity;
   const isSoldOut = remaining <= 0;
 
+  const handleClick = () => {
+    const ok = onRequireAuth?.(item.id);
+    if (!ok) return;
+
+    router.push(`/market/${item.id}`);
+  };
+
   return (
-    <Link href={`/market/${item.id}`} className="block">
+    <div onClick={handleClick} className="block cursor-pointer">
       <Card isLogo>
         <Card.Image
           src={item.imageUrl}
@@ -37,7 +46,7 @@ function MarketCard({ item }) {
           />
         </Card.SaleInfoLayout>
       </Card>
-    </Link>
+    </div>
   );
 }
 
