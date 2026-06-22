@@ -145,7 +145,7 @@ const LoginForm = () => {
     loginError?.response?.data?.message ?? loginError?.message ?? null;
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-black px-4 py-[60px]">
+    <div className="flex h-screen flex-1 flex-col items-center justify-center bg-black px-4 py-[60px]">
       <form
         className="w-full max-w-[520px]"
         onSubmit={(e) => {
@@ -155,13 +155,15 @@ const LoginForm = () => {
       >
         {/* 로고 */}
         <div className="mb-[60px] flex justify-center">
-          <Image
-            src={Logo}
-            width={330}
-            height={60}
-            alt="최애의 포토 로고"
-            priority
-          />
+          <Link href={'/'}>
+            <Image
+              src={Logo}
+              width={330}
+              height={60}
+              alt="최애의 포토 로고"
+              priority
+            />
+          </Link>
         </div>
 
         {/* 이메일 */}
