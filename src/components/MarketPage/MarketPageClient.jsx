@@ -126,7 +126,7 @@ export default function MarketPageClient() {
       />
       <SellModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       {isLoginModalOpen && (
-        <Modal>
+        <Modal className="h-[375px] w-[560px]" overlayClassName="inset-0">
           <Modal.Close onClose={() => setIsLoginModalOpen(false)} />
           <Modal.Title>로그인이 필요합니다.</Modal.Title>
           <Modal.Desc className="text-center whitespace-pre-line">
