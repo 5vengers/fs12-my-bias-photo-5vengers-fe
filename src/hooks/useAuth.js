@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import authService from '../libs/service/authService.js';
 import { executeRefresh } from '../libs/apiClient';
 import useAuthStore from '../store/authStore';
+import useNotificationStore from '@/store/notificationStore.js';
 
 // ─────────────────────────────────────────────
 // Query Keys
@@ -78,6 +79,7 @@ export const useLogout = () => {
 
   const handleLogout = () => {
     clearAuth();
+    useNotificationStore.getState().reset(); // 알림 store 초기화 (SSE는 accessToken null로 useSSE에서 자동 종료)
     queryClient.clear(); // 캐시된 모든 쿼리 초기화
     router.replace('/login?loggedOut=true');
 

@@ -100,6 +100,13 @@ export const rejectExchangeProposal = async (exchangeId) => {
   return response.data.data;
 };
 
+// 교환 제안 단건 조회 (알림 클릭 시 marketItemId 라우팅 용도)
+export const getExchangeProposalDetail = async (exchangeId) => {
+  const response = await apiClient.get(`/api/exchanges/${exchangeId}`);
+
+  return response.data.data;
+};
+
 // 마켓 아이템 삭제
 export const deleteMarketItem = async (itemId) => {
   const response = await apiClient.delete(`/api/market/items/${itemId}`);
