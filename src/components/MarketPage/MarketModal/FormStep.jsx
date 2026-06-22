@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -39,11 +39,12 @@ function FormStep({ card, onBack }) {
   const [formErrors, setFormErrors] = useState({
     price: '',
   });
+  const priceInputRef = useRef(null);
   const router = useRouter();
   const queryClient = useQueryClient();
 
   const grade = card.grade;
-
+  const MAX_PRICE = 2000000000;
   const { setCardName, setCardGrade, setCardCount } = useCardStore(
     (state) => state.actions,
   );
@@ -79,11 +80,9 @@ function FormStep({ card, onBack }) {
     const numericQuantity = Number(quantity);
 
     if (!price) {
-      setFormErrors((prev) => ({
-        ...prev,
-        price: '가격을 입력해주세요.',
-      }));
-      return;
+      nextErrors.price = '가격을 입력해주세요.';
+    } else if (Number(price) > MAX_PRICE) {
+      nextErrors.price = `최대 ${MAX_PRICE.toLocaleString()}P까지 입력 가능합니다.`;
     }
 
     if (!quantity || numericQuantity < 1) {
@@ -94,6 +93,11 @@ function FormStep({ card, onBack }) {
 
     if (nextErrors.price || nextErrors.quantity) {
       setFormErrors(nextErrors);
+
+      if (nextErrors.price) {
+        priceInputRef.current?.focus();
+      }
+
       return;
     }
 
@@ -170,6 +174,7 @@ function FormStep({ card, onBack }) {
               setPrice={setPrice}
               formErrors={formErrors}
               setFormErrors={setFormErrors}
+              inputRef={priceInputRef}
             />
           </div>
         </div>
