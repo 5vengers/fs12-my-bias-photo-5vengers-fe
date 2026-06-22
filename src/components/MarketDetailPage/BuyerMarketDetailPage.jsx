@@ -50,15 +50,15 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
       { itemId, quantity },
       {
         onSuccess: () => {
-          setCardName(item.title);
-          setCardGrade(item.grade);
+          setCardName(item.title ?? '');
+          setCardGrade(item.grade ?? '');
           setCardCount(quantity);
 
           router.push('/result?domain=card&type=buy&status=success');
         },
         onError: () => {
-          setCardName(item.title);
-          setCardGrade(item.grade);
+          setCardName(item.title ?? '');
+          setCardGrade(item.grade ?? '');
           setCardCount(quantity);
 
           router.push('/result?domain=card&type=buy&status=fail');
@@ -73,17 +73,17 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
       { itemId, offeredCardId },
       {
         onSuccess: () => {
-          setCardName(item.title);
-          setCardGrade(item.grade);
-          setCardCount(quantity);
+          setCardName(item.title ?? '');
+          setCardGrade(item.grade ?? '');
+          setCardCount(1);
 
           setIsExchangeModalOpen(false);
           router.push('/result?domain=card&type=exchange&status=success');
         },
         onError: () => {
-          setCardName(item.title);
-          setCardGrade(item.grade);
-          setCardCount(quantity);
+          setCardName(item.title ?? '');
+          setCardGrade(item.grade ?? '');
+          setCardCount(1);
 
           setIsExchangeModalOpen(false);
           router.push('/result?domain=card&type=exchange&status=fail');

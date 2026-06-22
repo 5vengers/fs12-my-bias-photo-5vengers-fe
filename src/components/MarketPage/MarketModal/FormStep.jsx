@@ -50,16 +50,16 @@ function FormStep({ card, onBack }) {
 
   const { mutate: createMarketItem, isPending } = useCreateMarketItem({
     onSuccess: (data) => {
-      setCardName(card.name);
-      setCardGrade(card.grade);
+      setCardName(card.name ?? '');
+      setCardGrade(card.grade ?? '');
       setCardCount(quantity);
 
       router.replace('/result?type=sell&status=success&domain=card');
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
     },
     onError: (err) => {
-      setCardName(card.name);
-      setCardGrade(card.grade);
+      setCardName(card.name ?? '');
+      setCardGrade(card.grade ?? '');
       setCardCount(quantity);
 
       console.error('판매 실패:', err);
