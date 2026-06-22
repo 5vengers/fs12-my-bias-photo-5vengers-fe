@@ -44,7 +44,7 @@ function FormStep({ card, onBack }) {
   const queryClient = useQueryClient();
 
   const grade = card.grade;
-  const MAX_PRICE = 9999999999;
+  const MAX_PRICE = 2000000000;
   const { setCardName, setCardGrade, setCardCount } = useCardStore(
     (state) => state.actions,
   );
