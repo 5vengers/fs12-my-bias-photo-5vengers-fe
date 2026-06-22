@@ -9,6 +9,7 @@ import { GENRE_OPTIONS } from '@/constants/marketOptions';
 import { useQueryClient } from '@tanstack/react-query';
 import PriceSection from './PriceSection';
 import QuantitySection from './QuantitySection';
+import useCardStore from '@/store/cardStore';
 
 function FormStep({ card, onBack }) {
   if (!card) return null;
@@ -43,12 +44,24 @@ function FormStep({ card, onBack }) {
 
   const grade = card.grade;
 
-  const { mutate, isPending } = useCreateMarketItem({
+  const { setCardName, setCardGrade, setCardCount } = useCardStore(
+    (state) => state.actions,
+  );
+
+  const { mutate: createMarketItem, isPending } = useCreateMarketItem({
     onSuccess: (data) => {
+      setCardName(card.name ?? '');
+      setCardGrade(card.grade ?? '');
+      setCardCount(quantity);
+
       router.replace('/result?type=sell&status=success&domain=card');
       queryClient.invalidateQueries({ queryKey: ['marketItems'] });
     },
     onError: (err) => {
+      setCardName(card.name ?? '');
+      setCardGrade(card.grade ?? '');
+      setCardCount(quantity);
+
       console.error('판매 실패:', err);
       router.replace('/result?type=sell&status=fail&domain=card');
     },
@@ -86,14 +99,16 @@ function FormStep({ card, onBack }) {
 
     setFormErrors({ price: '', quantity: '' });
 
-    mutate({
+    const data = {
       myCardId: card.id,
       quantity: Number(quantity),
       price_per_card: Number(price),
       wanted_grade: exchangeGrade || null,
       wanted_genre: exchangeGenre || null,
       wanted_description: exchangeDescription || null,
-    });
+    };
+
+    createMarketItem(data);
   };
 
   return (
