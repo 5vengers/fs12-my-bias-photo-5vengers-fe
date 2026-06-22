@@ -110,7 +110,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-start bg-black px-4 py-[60px]">
+    <div className="flex h-screen flex-1 flex-col items-center justify-center bg-black px-4 py-[60px]">
       <form
         className="w-full max-w-[520px]"
         onSubmit={(e) => {
@@ -120,13 +120,15 @@ const RegisterForm = () => {
       >
         {/* 로고 */}
         <div className="mb-[50px] flex justify-center">
-          <Image
-            src={Logo}
-            width={330}
-            height={60}
-            alt="최애의 포토 로고"
-            priority
-          />
+          <Link href="/">
+            <Image
+              src={Logo}
+              width={330}
+              height={60}
+              alt="최애의 포토 로고"
+              priority
+            />
+          </Link>
         </div>
 
         {/* 이메일 */}

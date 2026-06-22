@@ -35,14 +35,13 @@
   --font-noto: var(--font-noto-sans-kr);
   --font-baskin: var(--font-baskin-robbins);
 
-  /* breakpoints */
-  --breakpoint-mobile: 375px;
-  --breakpoint-tablet: 744px;
-  --breakpoint-desktop: 745px;
-
   --inset-shadow-xs: 0 0 0 1px var(--white) inset;
   --height-screen-header: calc(100vh - 82px);
 }
+
+@custom-variant mobile (@media (max-width: 743px));
+@custom-variant tablet (@media (min-width: 744px) and (max-width: 1023px));
+@custom-variant desktop (@media (min-width: 1024px));
 
 .text-overflow {
   text-overflow: ellipsis;

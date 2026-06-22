@@ -10,19 +10,24 @@ import { useEffect, useRef } from 'react';
 */
 const useMouseOut = ({ setIsOpen }) => {
   const ref = useRef(null);
+  const setIsOpenRef = useRef(setIsOpen);
 
   useEffect(() => {
+    setIsOpenRef.current = setIsOpen;
+  }, [setIsOpen]);
+
+  useEffect(() => {
+    const isMouseOut = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpenRef.current(false);
+      }
+    };
+
     window.addEventListener('mousedown', isMouseOut);
     return () => {
       window.removeEventListener('mousedown', isMouseOut);
     };
   }, []);
-
-  const isMouseOut = (e) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      setIsOpen(false);
-    }
-  };
 
   return { ref };
 };
