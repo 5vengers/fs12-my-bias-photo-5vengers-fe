@@ -12,6 +12,7 @@ import QuantityStepper from './QuantityStepper';
 import ExchangeRequestModal from './ExchangeRequestModal';
 import ExchangeIcon from '@/assets/icons/ic-exchange.svg';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
+import useCardStore from '@/store/cardStore';
 
 const DetailRow = ({ label, children }) => {
   return (
@@ -36,6 +37,10 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
   const remainingQuantity = item.quantity - item.soldQuantity;
   const totalPrice = item.pricePerCard * quantity;
 
+  const { setCardName, setCardGrade, setCardCount } = useCardStore(
+    (state) => state.actions,
+  );
+
   // 구매자가 포토카드 구매 버튼을 눌렀을 때 실행합니다.
   const handlePurchase = () => {
     if (isPurchasePending) return;
@@ -45,9 +50,17 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
       { itemId, quantity },
       {
         onSuccess: () => {
+          setCardName(item.title);
+          setCardGrade(item.grade);
+          setCardCount(quantity);
+
           router.push('/result?domain=card&type=buy&status=success');
         },
         onError: () => {
+          setCardName(item.title);
+          setCardGrade(item.grade);
+          setCardCount(quantity);
+
           router.push('/result?domain=card&type=buy&status=fail');
         },
       },
@@ -60,10 +73,18 @@ const BuyerMarketDetailPage = ({ item, itemId }) => {
       { itemId, offeredCardId },
       {
         onSuccess: () => {
+          setCardName(item.title);
+          setCardGrade(item.grade);
+          setCardCount(quantity);
+
           setIsExchangeModalOpen(false);
           router.push('/result?domain=card&type=exchange&status=success');
         },
         onError: () => {
+          setCardName(item.title);
+          setCardGrade(item.grade);
+          setCardCount(quantity);
+
           setIsExchangeModalOpen(false);
           router.push('/result?domain=card&type=exchange&status=fail');
         },
