@@ -1,13 +1,27 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import Card from '@/components/commons/Card/Card';
 import { GENRE_OPTIONS } from '@/constants/marketOptions';
-
+import { useIsAuthenticated } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import Modal from '../commons/Modal/Modal';
 function MarketCard({ item }) {
+  const isAuthenticated = useIsAuthenticated();
+  const router = useRouter();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const remaining = item.quantity - item.soldQuantity;
   const isSoldOut = remaining <= 0;
 
+  const handleClick = () => {
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
+    router.push(`/market/${item.id}`);
+  };
   return (
-    <Link href={`/market/${item.id}`} className="block">
+    <div onClick={handleClick} className="block cursor-pointer">
       <Card isLogo>
         <Card.Image
           src={item.imageUrl}
@@ -37,7 +51,21 @@ function MarketCard({ item }) {
           />
         </Card.SaleInfoLayout>
       </Card>
-    </Link>
+      {isLoginModalOpen && (
+        <Modal>
+          <Modal.Close onClose={() => setIsLoginModalOpen(false)} />
+          <Modal.Title>로그인이 필요합니다.</Modal.Title>
+          <Modal.Desc className="text-center whitespace-pre-line">
+            로그인 하시겠습니까?
+            <br />
+            다양한 서비스를 편리하게 이용하실 수 있습니다.
+          </Modal.Desc>
+          <Modal.Button size="sm" onClick={() => router.push('/login')}>
+            확인
+          </Modal.Button>
+        </Modal>
+      )}
+    </div>
   );
 }
 
