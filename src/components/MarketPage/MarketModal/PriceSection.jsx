@@ -1,6 +1,12 @@
 import React from 'react';
 
-function PriceSection({ price, setPrice, formErrors, setFormErrors }) {
+function PriceSection({
+  price,
+  setPrice,
+  formErrors,
+  setFormErrors,
+  inputRef,
+}) {
   return (
     <div className="flex items-center justify-between">
       <label htmlFor="price" className="text-[20px] text-white">
@@ -14,12 +20,15 @@ function PriceSection({ price, setPrice, formErrors, setFormErrors }) {
           }`}
         >
           <input
+            ref={inputRef}
             value={price}
             onChange={(e) => {
-              const value = e.target.value.replace(/[^0-9]/g, '');
+              let value = e.target.value.replace(/[^0-9]/g, '');
+              value = value.replace(/^0+/, '');
+
               setPrice(value);
 
-              if (value) {
+              if (formErrors.price) {
                 setFormErrors((prev) => ({
                   ...prev,
                   price: '',
