@@ -26,12 +26,9 @@ export default function MarketPageClient() {
   };
   const [authReady, setAuthReady] = useState(false);
 
-  useEffect(() => {
-    console.log('modal state:', isLoginModalOpen);
-  }, [isLoginModalOpen]);
+  useEffect(() => {}, [isLoginModalOpen]);
 
   const checkAuth = (callback) => {
-    console.log('isAuthenticated:', isAuthenticated);
     if (!isAuthenticated) {
       setIsLoginModalOpen(true);
       return;
@@ -49,7 +46,6 @@ export default function MarketPageClient() {
         <button
           type="button"
           onClick={() => {
-            console.log('clicked');
             checkAuth(() => setIsModalOpen(true));
           }}
           className="bg-main flex h-[60px] w-[440px] items-center justify-center gap-[10px] rounded-[2px] text-[18px] font-bold text-black! transition hover:opacity-90"
