@@ -19,12 +19,12 @@ export default function MarketPageClient() {
   const [sort, setSort] = useState('latest');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [pendingItemId, setPendingItemId] = useState(null);
   const isAuthenticated = useIsAuthenticated();
   const router = useRouter();
   const handleGradeChange = (value) => {
     setGrade(value);
   };
-  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {}, [isLoginModalOpen]);
 
@@ -115,6 +115,14 @@ export default function MarketPageClient() {
         genre={genre}
         soldOut={soldOut}
         sort={sort}
+        onRequireAuth={(itemId) => {
+          if (!isAuthenticated) {
+            setIsLoginModalOpen(true);
+            setPendingItemId(itemId);
+            return false;
+          }
+          return true;
+        }}
       />
       <SellModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       {isLoginModalOpen && (

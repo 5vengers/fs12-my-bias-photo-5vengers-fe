@@ -10,6 +10,7 @@ export default function MarketListPage({
   soldOut,
   sort,
   keyword,
+  onRequireAuth,
 }) {
   const {
     allItems,
@@ -48,7 +49,11 @@ export default function MarketListPage({
       ) : (
         <div className="grid grid-cols-3 gap-[80px]">
           {allItems.map((item) => (
-            <MarketCard key={item.id} item={item} />
+            <MarketCard
+              key={item.id}
+              item={item}
+              onRequireAuth={onRequireAuth}
+            />
           ))}
         </div>
       )}
