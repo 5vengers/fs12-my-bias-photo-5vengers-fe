@@ -5,8 +5,10 @@
 
 const Title = ({ text, children }) => {
   return (
-    <div className="flex items-center justify-between border-b border-white pb-[20px]">
-      <p className="font-(family-name:--font-baskin) text-6xl">{text}</p>
+    <div className="flex items-center justify-between border-b border-white pb-5">
+      <p className="font-baskin tablet:text-5xl mobile:text-[40px] text-6xl">
+        {text}
+      </p>
       {children ? children : ''}
     </div>
   );

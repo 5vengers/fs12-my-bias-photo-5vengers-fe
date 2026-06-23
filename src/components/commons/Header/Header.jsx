@@ -90,6 +90,7 @@ const Header = () => {
             <li className="font-baskin relative text-[18px] font-normal tracking-[-0.54px] text-gray-200">
               <button
                 type="button"
+                onMouseDown={(e) => e.stopPropagation()}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-label="프로필"
               >

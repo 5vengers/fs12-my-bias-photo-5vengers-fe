@@ -18,14 +18,14 @@ const Button = ({
   ...props
 }) => {
   // true 면 thick, false 면 thin
-  const thickness = ['h-[60px]', 'h-[80px]'];
+  const thickness = ['h-15', 'h-20'];
 
   // 기본 lg
   const sizing = {
     sm: 'w-[150px]',
-    md: 'w-[340px]',
-    lg: 'w-[440px]',
-    xl: 'w-[520px]',
+    md: 'w-85',
+    lg: 'w-110 tablet:w-85 mobile:w-full',
+    xl: 'w-130',
     full: 'w-full',
   };
 
