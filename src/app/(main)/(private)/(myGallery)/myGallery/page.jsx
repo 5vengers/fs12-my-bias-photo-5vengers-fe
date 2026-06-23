@@ -63,7 +63,7 @@ const MyGallery = () => {
   return (
     <div className="mobile:py-5 relative mx-auto my-0 flex w-full max-w-370 flex-1 flex-col px-5 py-15">
       <Title text="마이갤러리">
-        <div className="justify-items mobile:fixed mobile:left-2.5 mobile:w-[calc(100% - 20px)] mobile:bottom-10 flex items-end gap-2.5">
+        <div className="mobile:fixed mobile:left-2.5 mobile:w-[calc(100% - 20px)] mobile:bottom-10 flex items-end justify-center gap-2.5">
           <span className="mobile:hidden text-gray-300">
             {yearMonth.year}년 {yearMonth.month}월
           </span>
@@ -78,7 +78,7 @@ const MyGallery = () => {
         </div>
       </Title>
 
-      <div className="flex flex-col items-start gap-5 border-be border-gray-400 py-10">
+      <div className="flex flex-col items-start gap-5 border-b border-gray-400 py-10">
         <div className="flex items-center gap-2.5">
           <p className="mobile:text-sm tablet:text-xl text-2xl font-bold">
             {user?.nickname}님이 보유한 포토카드
