@@ -1,11 +1,15 @@
 'use client';
 
+import Image from 'next/image';
+
 import {
   useNotifications,
   useMarkAllAsRead,
 } from '@/hooks/queries/useNotification';
 import useNotificationStore from '@/store/notificationStore';
 import NotificationItem from './NotificationItem';
+
+import BackIcon from '@/assets/icons/ic-back.svg';
 
 /**
  * 알림 드롭다운
@@ -42,7 +46,7 @@ const NotificationDropdown = ({ onClose }) => {
     }
 
     return (
-      <ul className="m-0 list-none p-0">
+      <ul className="m-0 flex-1 list-none p-0">
         {displayedNotifications.map((notification) => (
           <NotificationItem
             key={notification.id}
@@ -55,9 +59,24 @@ const NotificationDropdown = ({ onClose }) => {
   };
 
   return (
-    <div className="absolute top-[calc(100%+12px)] right-0 z-[100] w-[300px] overflow-hidden rounded bg-gray-500 shadow-lg">
-      <div className="flex items-center justify-between border-b border-gray-500 px-5 py-3">
-        <span className="font-noto text-sm font-medium text-white">알림</span>
+    <div className="mobile:w-full mobile:h-full mobile:top-0 mobile:left-0 absolute top-[calc(100%+12px)] right-0 z-100 flex w-75 flex-col overflow-hidden rounded bg-gray-500 shadow-lg">
+      <div className="mobile:py-5 flex items-center justify-between border-b border-gray-500 px-5 py-3">
+        <button
+          type="button"
+          onClick={() => onClose(false)}
+          className="mobile:block hidden"
+        >
+          <Image
+            src={BackIcon}
+            alt="알림 닫기"
+            width={24}
+            height={24}
+            unoptimized
+          />
+        </button>
+        <span className="font-noto mobile:font-baskin mobile:text-xl text-sm font-medium text-white">
+          알림
+        </span>
         <button
           type="button"
           onClick={() => markAllAsRead()}

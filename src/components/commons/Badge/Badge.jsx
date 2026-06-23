@@ -9,7 +9,7 @@ const Badge = ({ grade, count }) => {
   };
   return (
     <div
-      className={`flex w-fit items-center justify-center gap-[10px] border px-[20px] py-[8px] ${colorCode[grade]}`}
+      className={`tablet:text-sm mobile:text-xs tablet:px-2.5 tablet:py-1.5 flex w-fit items-center justify-center gap-2.5 border px-5 py-2 ${colorCode[grade]}`}
     >
       <span>{grade === 'SUPER_RARE' ? 'SUPER RARE' : grade}</span>
       <span>{count}장</span>

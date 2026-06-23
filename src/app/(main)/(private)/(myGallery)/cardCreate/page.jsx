@@ -121,7 +121,7 @@ const PhotoCardCreate = () => {
   return (
     <div className="mx-auto my-0 w-[1480px] py-[60px]">
       <Title text="포토카드 생성">
-        <div className="justify-items flex items-end gap-[10px]">
+        <div className="flex items-end justify-center gap-[10px]">
           <div className="font-baskin">
             <span className="text-main text-[40px]">{remain}</span>
             <span className="text-[28px] font-normal">/3</span>
@@ -250,10 +250,10 @@ const PhotoCardCreate = () => {
             <p className="font-bold">사진 업로드</p>
             <label
               htmlFor="card-upload"
-              className="mt-[20px] flex items-center justify-between"
+              className="mt-5 flex items-center justify-between whitespace-nowrap"
             >
               <p
-                className={`h-[60px] min-w-[360px] cursor-pointer rounded-xs border px-[18px] py-[20px] text-gray-300 ${formErrors.file ? 'border-red' : 'border-gray-200'}`}
+                className={`text-overflow h-15 w-full max-w-90 cursor-pointer rounded-xs border px-4.5 py-5 text-gray-300 ${formErrors.file ? 'border-red' : 'border-gray-200'}`}
               >
                 {fileName === '' ? '사진 업로드' : fileName}
               </p>
@@ -270,7 +270,7 @@ const PhotoCardCreate = () => {
                 }}
                 className="hidden"
               />
-              <p className="border-main text-main h-[60px] cursor-pointer rounded-xs border bg-black px-[28px] py-[18px]">
+              <p className="border-main text-main h-15 cursor-pointer rounded-xs border bg-black px-7 py-4.5">
                 파일 선택
               </p>
             </label>

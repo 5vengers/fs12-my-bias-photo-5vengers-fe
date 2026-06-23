@@ -54,16 +54,16 @@ const NotificationItem = ({ notification, onClose }) => {
 
   return (
     <li
-      className={`flex min-h-[107px] w-[300px] cursor-pointer items-center justify-center border-b border-gray-500 ${notification.isRead ? 'bg-transparent' : 'bg-gray-500'}`}
+      className={`mobile:w-full flex min-h-[107px] w-[300px] cursor-pointer items-center justify-center border-b border-gray-500 ${notification.isRead ? 'bg-transparent' : 'bg-gray-500'}`}
     >
       <button
         type="button"
         onClick={handleClick}
-        className="flex min-h-[107px] w-full cursor-pointer items-center justify-center px-5 text-left"
+        className="mobile:w-full flex min-h-[107px] w-full cursor-pointer items-center justify-center px-5 text-left"
       >
-        <div className="flex h-[67px] w-[260px] flex-col items-start gap-2.5">
+        <div className="mobile:w-full flex h-[67px] w-[260px] flex-col items-start gap-2.5">
           <p
-            className={`font-noto line-clamp-2 w-[260px] text-sm leading-normal ${
+            className={`font-noto mobile:w-full line-clamp-2 w-[260px] text-sm leading-normal ${
               notification.isRead
                 ? 'font-light text-gray-300'
                 : 'font-normal text-white'
@@ -71,7 +71,7 @@ const NotificationItem = ({ notification, onClose }) => {
           >
             {notification.message}
           </p>
-          <span className="font-noto w-[260px] text-xs leading-normal font-light text-gray-300">
+          <span className="font-noto mobile:w-full w-[260px] text-xs leading-normal font-light text-gray-300">
             {notification.timeAgo}
           </span>
         </div>

@@ -39,7 +39,7 @@ const NotificationBell = () => {
   }, [isOpen]);
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="mobile:static relative">
       <button
         type="button"
         aria-label={hasUnread ? `알림 (${unreadCount}개 미읽음)` : '알림'}
